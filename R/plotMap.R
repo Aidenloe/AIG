@@ -2,6 +2,7 @@
 #' @author Aiden Loe
 #' @export
 #' @exportPattern ("^[^\\.]")
+#' @exportPattern (".")
 #' @importFrom graphics plot
 #' @title plot.logic.map
 #' @param x This is the logic of the object we are goig to plot
@@ -17,7 +18,6 @@
 #' @param xlab The label of the x coordinates
 #' @param ylab The label of the y coordinates
 #' @param cex.lab The size of the labels
-
 
 
 plot.logic.map <- function(x, png=FALSE, v.size=10, height=1000, width=1000, seed=NULL, png_name="map.png" ,vertex.shape="square",vertex.label.cex=0.5 ,layout=layout_with_dh, xlab=".", ylab=".", cex.lab=0.1){
@@ -52,7 +52,6 @@ plot.logic.map <- function(x, png=FALSE, v.size=10, height=1000, width=1000, see
 
 		)
 	}
-
 }
 
 
