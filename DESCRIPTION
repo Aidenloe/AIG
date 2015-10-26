@@ -1,0 +1,11 @@
+Package: AIG
+Type: Package
+Title: Automatic Item Generator
+Version: 0.1
+Date: 2015-10-13
+Author: Aiden Loe
+Maintainer: Aiden Loe <bsl28@cam.ac.uk>
+Description: Creating psychological items based on cognitive models and measuring reliability and validity of items
+License: GPL-3
+Imports: igraph
+LazyData: TRUE
