@@ -73,7 +73,7 @@ plot.logic.map <- function(x, png=FALSE, v.size=10, height=1000, width=1000, see
 #' @param xlab The label of the x coordinates
 #' @param ylab The label of the y coordinates
 #' @param cex.lab The size of the labels
-d
+
 
 plot.multi.map <- function(x, n, v.size, height, width, png=TRUE, layout, vertex.label.cex, vertex.shape, xlab, ylab, cex.lab){
 	for(i in 1:n){

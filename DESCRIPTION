@@ -5,7 +5,10 @@ Version: 0.1
 Date: 2015-10-13
 Author: Aiden Loe
 Maintainer: Aiden Loe <bsl28@cam.ac.uk>
-Description: Creating psychological items based on cognitive models and measuring reliability and validity of items
+Description: Creating psychological items based on cognitive models and
+    measuring reliability and validity of items
 License: GPL-3
-Imports: igraph
+Imports:
+    igraph
 LazyData: TRUE
+RoxygenNote: 5.0.1
