@@ -9,6 +9,8 @@ Description: Creating psychological items based on cognitive models and
     measuring reliability and validity of items
 License: GPL-3
 Imports:
-    igraph
+    igraph,
+    mgcv,
+    stats
 LazyData: TRUE
 RoxygenNote: 5.0.1

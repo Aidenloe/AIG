@@ -1,5 +1,5 @@
-#' @import mgcv
-#' @param
+#' @import mgcv stats
+#' @export
 #' @param nclues This is the number of sentences to make up the item
 #' @param nspread This is the spread of the number of incidentals in total.
 #' @param reverseprob This calculates how you want to divided the comparison terms.
@@ -48,7 +48,7 @@
 #'    # Example using own item set
 #'    library("babynames")
 #'    bNames <- sapply(babynames[,3], as.character)
-#'    compare <- c("taller", "older", "smaller", "bigger","stronger", "weaker")
+#'    compare <- c("taller","shorter, "older", "younger","smaller", "bigger","stronger", "weaker")
 #'
 #'    #Generate items
 #'    lisy(seed=4, nclues=5, nspread=7,reverseprob=.5, Ndist=2,
@@ -209,9 +209,6 @@ lisy <- function( seed=1,
   }
 
 
-
-
-
   infer[,1:3] <- sapply(infer[,1:3], as.numeric)
   (infer <- infer[order(infer[,1], decreasing=TRUE),])
 
@@ -234,7 +231,6 @@ lisy <- function( seed=1,
 
 
   iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]])
-
 
 
   join <- function(clue, thescale, article, forward=TRUE) {
@@ -313,37 +309,3 @@ lisy <- function( seed=1,
 
 }
 ### End Logical Item
-
-### generate item ####
-lisy(seed=4, nclues=5, nspread=5,reverseprob=.5, Ndist=5, incidentals='names',
-     dist="false",itemSet='random',items= NULL, scales = NULL)
-
-# Test with dataset
-library("babynames")
-bNames <- sapply(babynames[,3], as.character)
-compare <- c("taller", "older", "smaller", "bigger","stronger", "weaker")
-
-#Generate item
-lisy(seed=4, nclues=4, nspread=8,reverseprob=.5, Ndist=4, incidentals= 'names',dist="mixed",
-     itemSet='own',items= bNames, scales = compare)
-
-#loop through 30 items
-nitems <- 30
-params <- data.frame(seed=1:nitems,
-                     nclues=ceiling((1:nitems)/20)+3,
-                     nspread=ceiling((1:nitems)/15)+3)
-
-qtable <- NULL
-for (i in 1:nitems) {
-  runs <- lisy(seed=i,
-               nclues=params$nclues[i],
-               nspread=params$nspread[i],
-               reverseprob=.5,  Ndist=4, incidentals='names',
-               dist="mixed",itemSet='own',items= bNames, scales = compare)
-  qtable[[i]] <- runs
-}
-
-qtable
-
-#write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
-
