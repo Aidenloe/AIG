@@ -114,7 +114,9 @@ lisy <- function( seed=1,
     stop("Please make sure that both items and scales are character vectors")
   }
 
-
+  if(nclues == 2 && nspread == 2){
+    stop("There isn't enough names to create the sentences.")
+  }
 
   set.seed(seed)
   p <- paste0
@@ -190,7 +192,6 @@ if(is.null(items)  | is.null(scales)){
   if(nspread > uclues +3 ){ warning("The large combinatorics value of nspread may result in making the distractors obviously wrong. \nSuggest making  nspread at most + 1 > nclues.")}
 
 
-
   clues<- NULL
     while(any(clues[,1] %in% clues[,2]) == FALSE){
       nclues <- sample(nrow(pclues), uclues)
@@ -264,7 +265,7 @@ if(is.null(items)  | is.null(scales)){
 
   if(length(invkeeps)==0) {
     iinvkeeps<- matrix(NA, nrow=0, ncol=2)
-    warning("Please contact package creator if you see this message.\n Probably a bug. ")
+    warning(paste0("This results because all the combinations in the matrix are possible. \n Invalid distractors cannot be created. \n Return only False distractors. \n Caution when studying distractors.\n This is located in question ", seed ,".\n Solution: Try changing seed number or increasing nspread."))
   }
 
   falses  <- cbind(pclues[Nval,2],pclues[Nval,1])
@@ -294,9 +295,11 @@ if(is.null(items)  | is.null(scales)){
   dtype <- c()
   dlist <- NULL
   if(dist=="mixed"){
-    dlist <- rbind(cbind(iinvkeeps, type='invalid'),
-                   cbind(ifalses, type='false'))
+    #warnings appear when there is no invalid distractors
+    suppressWarnings(dlist <- rbind(cbind(iinvkeeps, type='invalid'),
+                   cbind(ifalses, type='false')))
   }
+
 
   if(dist == "false"){
     if(Ndist > uclues | Ndist == uclues) stop("False distractors are only allowed if it is 1 less than the number of clues")
@@ -348,3 +351,4 @@ if(is.null(items)  | is.null(scales)){
   )
 
 }
+
