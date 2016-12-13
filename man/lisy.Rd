@@ -15,19 +15,19 @@ lisy(seed = 1, nclues = 4, nspread = 5, reverseprob = 0.5, Ndist = 4,
 
 \item{nspread}{This is the spread of the number of incidentals in total.}
 
-\item{reverseprob}{This calculates how you want to divided the comparison terms.}
+\item{reverseprob}{This calculates how you want to divide the comparison terms.}
 
 \item{Ndist}{This returns the number of distractors per question.}
 
 \item{incidentals}{This tells the function whether the item features are 'names' or 'objects'.}
 
-\item{dist}{This allows you to select the type of distractors. No. of False distract must be less than No. of clues.}
+\item{dist}{This allows you to select the type of distractors. The number of false distractors must be less than the number of clues.}
 
-\item{itemSet}{This is the choice of itemset you want. If random then the generator will randomly select one (People, Fruits, Superheroes). Change to 'own' if you are using your own item set.}
+\item{itemSet}{This is the choice of itemset you want. If itemset='random' then the generator will randomly select one (People, Fruits, Superheroes). Change itemset='own' if you are using your own item set.}
 
-\item{items}{This inputs your own item type. At least 10.}
+\item{items}{This inputs your own item type. At least 10 items.}
 
-\item{scales}{This is the comparison terms}
+\item{scales}{This is the comparison terms. At least 2 comparison terms (i.e."bigger","smaller")}
 }
 \description{
 This function generates linear syllogistic reasoning items.

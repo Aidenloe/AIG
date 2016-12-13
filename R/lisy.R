@@ -3,13 +3,13 @@
 #' @param seed This generates the same question again from local computer.
 #' @param nclues This is the number of sentences to make up the item
 #' @param nspread This is the spread of the number of incidentals in total.
-#' @param reverseprob This calculates how you want to divided the comparison terms.
+#' @param reverseprob This calculates how you want to divide the comparison terms.
 #' @param Ndist This returns the number of distractors per question.
 #' @param incidentals This tells the function whether the item features are 'names' or 'objects'.
-#' @param dist This allows you to select the type of distractors. No. of False distract must be less than No. of clues.
-#' @param itemSet This is the choice of itemset you want. If random then the generator will randomly select one (People, Fruits, Superheroes). Change to 'own' if you are using your own item set.
-#' @param items This inputs your own item type. At least 10.
-#' @param scales This is the comparison terms
+#' @param dist This allows you to select the type of distractors. The number of false distractors must be less than the number of clues.
+#' @param itemSet This is the choice of itemset you want. If itemset='random' then the generator will randomly select one (People, Fruits, Superheroes). Change itemset='own' if you are using your own item set.
+#' @param items This inputs your own item type. At least 10 items.
+#' @param scales This is the comparison terms. At least 2 comparison terms (i.e."bigger","smaller")
 #' @description This function generates linear syllogistic reasoning items.
 #' @details There are several things to bear in mind. To use own item set, please have at least 10 items within the itemset. In order for scale comparison to make sure. Please ensure that you have at least 2 comparisons. The function will stop if the criteria is not met. The genearation of items are slower if you have a huge item set.
 #'
@@ -411,3 +411,38 @@ lisy <- function( seed=1,
   )
 
 }
+### End Logical Item
+
+### generate item ####
+# lisy(seed=4, nclues=5, nspread=5,reverseprob=.5, Ndist=5, incidentals='names',
+#               dist="false",itemSet='random',items= NULL, scales = NULL)
+#
+# # Test with dataset
+# library("babynames")
+# bNames <- sapply(babynames[,3], as.character)
+# compare <- c("taller","shorter", "older", "younger", "smaller", "bigger","stronger", "weaker")
+#
+# #Generate item
+# lisy(seed=4, nclues=4, nspread=8,reverseprob=.5, Ndist=4, incidentals= 'names',dist="mixed",
+#      itemSet='own',items= bNames, scales = compare)
+#
+# #loop through 30 items
+# nitems <- 30
+# params <- data.frame(seed=1:nitems,
+#                      nclues=ceiling((1:nitems)/20)+3,
+#                      nspread=ceiling((1:nitems)/15)+3)
+#
+# qtable <- NULL
+# for (i in 1:nitems) {
+#   runs <- lisy(seed=i,
+#                nclues=params$nclues[i],
+#                nspread=params$nspread[i],
+#                reverseprob=.5,  Ndist=4, incidentals='names',
+#                dist="mixed",itemSet='own',items= bNames, scales = compare)
+#   qtable[[i]] <- runs
+# }
+#
+# qtable
+
+#write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
+
