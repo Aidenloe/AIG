@@ -34,6 +34,10 @@ This function generates linear syllogistic reasoning items.
 }
 \details{
 There are several things to bear in mind. To use own item set, please have at least 10 items within the itemset. In order for scale comparison to make sure. Please ensure that you have at least 2 comparisons. The function will stop if the criteria is not met. The genearation of items are slower if you have a huge item set.
+
+When nspread and nclue is = 3. This means that there are 3 sentences, and only 3 names. This makes it impossible to generate an invalid distractor. As such, only the false distractors will be created. Since there are only three clues, then 3 false distractors will be created.
+
+When nspread and nclues are the same. All the names of the invalid distractors will be taken from the names that are used in the clues. As nspread value increases, the likelihood of having names not taken from the clues increases.
 }
 \examples{
 \dontrun{
@@ -50,7 +54,7 @@ There are several things to bear in mind. To use own item set, please have at le
  # Use different number of names and clues
  params <- data.frame(seed=1:nitems,
  nclues=ceiling((1:nitems)/20)+3,
- nspread=ceiling((1:nitems)/15)+3)
+ nspread=ceiling((1:nitems)/15)+4)
 
  # Loop through
  qtable <- NULL
