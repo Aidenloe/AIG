@@ -1,5 +1,5 @@
 #' @import mgcv stats
-#' @export
+#' @param seed This generates the same question again from local computer.
 #' @param nclues This is the number of sentences to make up the item
 #' @param nspread This is the spread of the number of incidentals in total.
 #' @param reverseprob This calculates how you want to divided the comparison terms.
@@ -8,7 +8,7 @@
 #' @param dist This allows you to select the type of distractors. No. of False distract must be less than No. of clues.
 #' @param itemSet This is the choice of itemset you want. If random then the generator will randomly select one (People, Fruits, Superheroes). Change to 'own' if you are using your own item set.
 #' @param items This inputs your own item type. At least 10.
-#' @param scale This is the comparison terms
+#' @param scales This is the comparison terms
 #' @description This function generates linear syllogistic reasoning items.
 #' @details There are several things to bear in mind. To use own item set, please have at least 10 items within the itemset. In order for scale comparison to make sure. Please ensure that you have at least 2 comparisons. The function will stop if the criteria is not met. The genearation of items are slower if you have a huge item set.
 #' @author Aiden Loe and Francis Smart
@@ -21,41 +21,41 @@
 #'  Ndist=4, incidentals='names', dist="false",
 #'  itemSet='random',items= NULL, scales = NULL)
 #'
-#'   # Generate 100 items
-#'   nitems <- 100
+#'  # Generate 100 items
+#'  nitems <- 100
 #'
-#'   # Use different number of names and clues
-#'   params <- data.frame(seed=1:nitems,
-#'   nclues=ceiling((1:nitems)/20)+3,
-#'   nspread=ceiling((1:nitems)/15)+3)
+#'  # Use different number of names and clues
+#'  params <- data.frame(seed=1:nitems,
+#'  nclues=ceiling((1:nitems)/20)+3,
+#'  nspread=ceiling((1:nitems)/15)+3)
 #'
-#'   # Loop through
-#'   qtable <- NULL
-#'   for (i in 1:nitems) {
-#'   runs <- lisy(seed=i,
-#'   nclues=params$nclues[i],
-#'   nspread=params$nspread[i],
-#'   reverseprob=.5,  Ndist=4, incidentals='names',
-#'   dist="mixed",itemSet='random',items= NULL, scales = NULL)
-#'   qtable[[i]] <- runs
-#'   }
-#'   qtable
+#'  # Loop through
+#'  qtable <- NULL
+#'  for (i in 1:nitems) {
+#'  runs <- lisy(seed=i,
+#'  nclues=params$nclues[i],
+#'  nspread=params$nspread[i],
+#'  reverseprob=.5,  Ndist=4, incidentals='names',
+#'  dist="mixed",itemSet='random',items= NULL, scales = NULL)
+#'  qtable[[i]] <- runs
+#'  }
+#'  qtable
 #'
-#'   # Save csv file
-#'   write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
+#'  # Save csv file
+#'  write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
 #'
-#'    #############
-#'    # Example using own item set
-#'    library("babynames")
-#'    bNames <- sapply(babynames[,3], as.character)
-#'    compare <- c("taller","shorter, "older", "younger","smaller", "bigger","stronger", "weaker")
+#'  #############
+#'  # Example using own item set
+#'  library("babynames")
+#'  bNames <- sapply(babynames[,3], as.character)
+#'  compare <- c("taller", "older", "smaller", "bigger","stronger", "weaker")
 #'
-#'    #Generate items
-#'    lisy(seed=4, nclues=5, nspread=7,reverseprob=.5, Ndist=2,
-#'    incidentals= 'names',dist="false",
-#'    itemSet='own',items= bNames, scales = compare)
+#'  #Generate items
+#'  lisy(seed=4, nclues=5, nspread=7,reverseprob=.5, Ndist=2,
+#'  incidentals= 'names',dist="false",
+#'  itemSet='own',items= bNames, scales = compare)
 #'
-#'    item
+#'  item
 #' }
 #'
 #'
