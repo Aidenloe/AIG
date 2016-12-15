@@ -12,13 +12,15 @@ lisy(seed = 1, nclues = 4, nspread = 5, distprob = 0.5, Ndist = 4,
 \arguments{
 \item{seed}{This generates the same question again from local computer.}
 
-\item{nclues}{This is the number of sentences to make up the item}
+\item{nclues}{This is the number of sentences to make up the item.}
 
 \item{nspread}{This is the spread of the number of incidentals in total.}
 
 \item{distprob}{This calculates how you much comparison variation you want for the distractors.}
 
 \item{Ndist}{This returns the number of distractors per question.}
+
+\item{incidental}{This tells the function whether the item features are 'names' or 'objects'.}
 
 \item{dist}{This allows you to select the type of distractors. You have three options ('mixed', 'invalid','false'). If dist='false', then the number of false distractors must be less than the number of clues.}
 
@@ -33,11 +35,9 @@ lisy(seed = 1, nclues = 4, nspread = 5, distprob = 0.5, Ndist = 4,
 \item{items}{This inputs your own item type. At least 10 items.}
 
 \item{scales}{This is the comparison terms. At least 2 comparison terms (i.e."bigger","smaller")}
-
-\item{incidentals}{This tells the function whether the item features are 'names' or 'objects'.}
 }
 \description{
-This function generates linear syllogistic reasoning items.
+This function generates linear syllogistic reasoning items.This is for research purposes.
 }
 \details{
 There are several things to bear in mind. To use own item set, please have at least 10 items within the itemset. In order for scale comparison to make sure. Please ensure that you have at least 2 comparisons. The function will stop if the criteria is not met. The genearation of items are slower if you have a huge item set.
@@ -46,7 +46,7 @@ When nspread and nclue is = 3. This means that there are 3 sentences, and only 3
 
 When nspread and nclues are the same. All the names of the invalid distractors will be taken from the names that are used in the clues. As nspread value increases, the likelihood of having names not taken from the clues increases.
 
-When ninfer == 1 and the terms is declared as either forward or backward, then the correct answer will always be the opposite of the comparing statements in the sentence. When ninfer == 2, the correct answer will be in the right direction. 
+When ninfer = 1 and the terms is declared as either 'forward' or 'backward', then the correct answer will always be the opposite of the comparing statements in the sentence. When ninfer = 2, the correct answer will be in the right direction. 
 
 When distprob = 0.5, the distribution of the comparsion terms for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two comparison terms will be used. 
 
@@ -58,11 +58,11 @@ Direct is the direction of the line of thought. If direct = "ob" it means that s
 \dontrun{
 
 #Generate an item
-lisy(seed=4,nclues=5,nspread=5,Ndist=4, incidental='names',dist="false",distprob=.5,
+item <- lisy(seed=4,nclues=5,nspread=5,Ndist=4, incidental='names',dist="false",distprob=.5,
    itemSet='random',direct='of', terms="backward",ninfer = 2,items= NULL,scales = NULL)
    
 #Save csv file
-write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
+write.csv(item, file="~/desktop/test.csv"  )
  
 #Test with data set     
 library("babynames")

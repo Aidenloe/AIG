@@ -11,6 +11,7 @@ License: GPL-3
 Imports:
     igraph,
     mgcv,
-    stats
+    stats,
+    dplyr
 LazyData: TRUE
 RoxygenNote: 5.0.1

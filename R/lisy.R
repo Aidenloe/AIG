@@ -1,13 +1,16 @@
 #' @importFrom mgcv uniquecombs
 #' @importFrom dplyr filter
 #' @importFrom dplyr lag
+#' @importFrom dplyr group_by
+#' @importFrom dplyr sample_n
+#' @importFrom stats rbinom
 #' @export
 #' @param seed This generates the same question again from local computer.
-#' @param nclues This is the number of sentences to make up the item
+#' @param nclues This is the number of sentences to make up the item.
 #' @param nspread This is the spread of the number of incidentals in total.
 #' @param distprob This calculates how you much comparison variation you want for the distractors.  
 #' @param Ndist This returns the number of distractors per question.
-#' @param incidentals This tells the function whether the item features are 'names' or 'objects'.
+#' @param incidental This tells the function whether the item features are 'names' or 'objects'.
 #' @param dist This allows you to select the type of distractors. You have three options ('mixed', 'invalid','false'). If dist='false', then the number of false distractors must be less than the number of clues.
 #' @param itemSet This is the choice of itemset you want. If itemset='random' then the generator will randomly select one (People, Fruits, Superheroes). Change itemset='own' if you are using your own item set.
 #' @param direct This determine if the clues are organised in an ordered("of" = ordered forward / "ob" = ordered backward) or unordered ('alt' = alternative) fashion. 'alt' can only be used when ninfer is 3 or greater. 
@@ -15,14 +18,14 @@
 #' @param ninfer This generate answers that requires a X amount of inference from the items. 
 #' @param items This inputs your own item type. At least 10 items.
 #' @param scales This is the comparison terms. At least 2 comparison terms (i.e."bigger","smaller")
-#' @description This function generates linear syllogistic reasoning items.
+#' @description This function generates linear syllogistic reasoning items.This is for research purposes.
 #' @details There are several things to bear in mind. To use own item set, please have at least 10 items within the itemset. In order for scale comparison to make sure. Please ensure that you have at least 2 comparisons. The function will stop if the criteria is not met. The genearation of items are slower if you have a huge item set.
 #'
 #' When nspread and nclue is = 3. This means that there are 3 sentences, and only 3 names. This makes it impossible to generate an invalid distractor. As such, only the false distractors will be created. Since there are only three clues, then 3 false distractors will be created.
 #'
 #' When nspread and nclues are the same. All the names of the invalid distractors will be taken from the names that are used in the clues. As nspread value increases, the likelihood of having names not taken from the clues increases.
 #' 
-#' When ninfer == 1 and the terms is declared as either forward or backward, then the correct answer will always be the opposite of the comparing statements in the sentence. When ninfer == 2, the correct answer will be in the right direction. 
+#' When ninfer = 1 and the terms is declared as either 'forward' or 'backward', then the correct answer will always be the opposite of the comparing statements in the sentence. When ninfer = 2, the correct answer will be in the right direction. 
 #' 
 #' When distprob = 0.5, the distribution of the comparsion terms for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two comparison terms will be used. 
 #' 
@@ -34,11 +37,11 @@
 #' @examples \dontrun{
 #' 
 #' #Generate an item
-#' lisy(seed=4,nclues=5,nspread=5,Ndist=4, incidental='names',dist="false",distprob=.5,
+#' item <- lisy(seed=4,nclues=5,nspread=5,Ndist=4, incidental='names',dist="false",distprob=.5,
 #'    itemSet='random',direct='of', terms="backward",ninfer = 2,items= NULL,scales = NULL)
 #'    
 #' #Save csv file
-#' write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
+#' write.csv(item, file="~/desktop/test.csv"  )
 #'  
 #' #Test with data set     
 #' library("babynames")
@@ -180,13 +183,14 @@ lisy <- function( seed=1,
     scales <- list(own=matrix(c(scales),nrow=2))
   }
   
+  
   if(incidental == 'objects' && itemSet == 'random'){
     articles <- list(fruit='the', superheroes='the')
   }else if(incidental=="names" && itemSet == 'random'){
     articles <- list(people='')
   }else if(incidental == "objects" && itemSet == 'own'){
     articles <- list(own="the")
-  }else if(incidental == "objects" && itemSet == 'own'){
+  }else if(incidental == "names" && itemSet == 'own'){
     articles <- list(own='')
   }else{
     stop("Please select either 'objects' or 'names'")
@@ -638,50 +642,52 @@ lisy <- function( seed=1,
   }
   
   # Create actual distractors ####
-  # repeat sampling the distractions rows in the dlist matrix that was created previously
+  #repeat sampling the distractions rows in the dlist matrix that was created previously
   if(dist=="mixed"){
     dlist.df <- as.data.frame(dlist)
+    dlist.df
     if(length(unique(dlist.df$type))==2){ #if 2 = "invalid" and "falses" distractor type
-      draw <- dlist.df %>%
-        group_by(type) %>%
-        sample_n(ceiling(Ndist/2), 0.5)  #divide by 2 since there are 2 types of distractors
-      draw <- draw[sample(nrow(draw)),] #randomise position of distractors. 
-      if(Ndist %% 2 == 0){ 
-        dtype <- draw[,3] #type 
+      type <- dlist.df$type
+      dlist.df <- sample_n(group_by(dlist.df,type),ceiling(Ndist/2), 0.5)  #divide by 2 since there are 2 types of distractors
+      dlist.df
+      dlist.df <- dlist.df[sample(nrow(dlist.df)),] #randomise position of distractors.
+      dlist.df
+      if(Ndist %% 2 == 0){
+        dtype <- dlist.df[,3] #type
+        dtype
       }else{
-        dtype <- draw[-nrow(draw),3] # - last row if uneven number 
+        dtype <- dlist.df[-nrow(dlist.df),3] # - last row if uneven number
       }
+      dtype
       dtype <- as.character(as.matrix(dtype))
-      
-    }else{ # if only one distractor type 
-      draw <- dlist.df %>%
-        group_by(type) %>%
-        sample_n(Ndist, 0.5) #do not divide since only one type of distractor
-      dtype <- draw[,3]
+      dtype
+    }else{ # if only one distractor type
+      dlist.df <- as.data.frame(dlist)
+      type <- dlist.df$type
+      dlist.df<- sample_n(group_by(dlist.df,type),Ndist, 0.5) #do not divide since only one type of distractor
+      dtype <- dlist.df[,3]
       dtype <- as.character(as.matrix(dtype))
     }
-    draw <- as.matrix(draw) #convert to matrix 
+    dlist.df <- as.matrix(dlist.df) #convert to matrix
     dreturn<- NULL
     for (i in 1:Ndist){
-      dreturn[i] <- cap(p(join(draw[i,1:2], thescale, article,
+      dreturn[i] <- cap(p(join(dlist.df[i,1:2], thescale, article,
                                forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
     }
     
-  }else{  
+  }else{
     if(Ndist > nrow(dlist)){
       stop("There is not enough invalid distractors. Please change the arg dist to 'mixed' or 'false'")
     }
-    
     draw  <- dlist[sample(nrow(dlist),Ndist),]
     dtype <- draw[,3]
-    for (i in 1:Ndist){    
+    for (i in 1:Ndist){
       dreturn[i] <- cap(p(join(draw[i,1:2], thescale, article,
                                forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
     }
     #if(!is.null(nrow(dlist))) dtype[i] <- dreturn[i] <- '999'
   }
   
-  dtype
   
   
   data.frame(seed=seed,
