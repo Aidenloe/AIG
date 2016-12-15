@@ -1,14 +1,16 @@
-#' @import mgcv stats
+#' @importFrom mgcv uniquecombs
+#' @importFrom dplyr filter
+#' @importFrom dplyr lag
 #' @export
 #' @param seed This generates the same question again from local computer.
 #' @param nclues This is the number of sentences to make up the item
 #' @param nspread This is the spread of the number of incidentals in total.
-#' @param reverseprob This calculates how you want to divide the comparison terms.
+#' @param distprob This calculates how you much comparison variation you want for the distractors.  
 #' @param Ndist This returns the number of distractors per question.
 #' @param incidentals This tells the function whether the item features are 'names' or 'objects'.
-#' @param dist This allows you to select the type of distractors. The number of false distractors must be less than the number of clues.
+#' @param dist This allows you to select the type of distractors. You have three options ('mixed', 'invalid','false'). If dist='false', then the number of false distractors must be less than the number of clues.
 #' @param itemSet This is the choice of itemset you want. If itemset='random' then the generator will randomly select one (People, Fruits, Superheroes). Change itemset='own' if you are using your own item set.
-#' @param labels This determine if the names are organised in an ordered or unordered fashion. 
+#' @param direct This determine if the clues are organised in an ordered("of" = ordered forward / "ob" = ordered backward) or unordered ('alt' = alternative) fashion. 'alt' can only be used when ninfer is 3 or greater. 
 #' @param terms This determine whether you want to use both comparsion terms ('both') or only one type ("forward" or "backward"). 
 #' @param ninfer This generate answers that requires a X amount of inference from the items. 
 #' @param items This inputs your own item type. At least 10 items.
@@ -20,20 +22,31 @@
 #'
 #' When nspread and nclues are the same. All the names of the invalid distractors will be taken from the names that are used in the clues. As nspread value increases, the likelihood of having names not taken from the clues increases.
 #' 
-#' This function only generates items that require 2 inferences, irregardless of the length of the items. 
+#' When ninfer == 1 and the terms is declared as either forward or backward, then the correct answer will always be the opposite of the comparing statements in the sentence. When ninfer == 2, the correct answer will be in the right direction. 
+#' 
+#' When distprob = 0.5, the distribution of the comparsion terms for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two comparison terms will be used. 
+#' 
+#' This function only generates items that requires up to 3 inferences. As the required inferences increases, then number of clues increases. Inference is the implied comparison between sentences which allows you to make select the correct answer.  
+#' 
+#' Direct is the direction of the line of thought. If direct = "ob" it means that solving the items require you work 'ordered backwards'. If it is 'of', it means 'ordered  forwards' and finally if it is 'alt', then it means the clues are not inorder. 
 #' @author Aiden Loe and Francis Smart
 #' @title lisy
 #' @examples \dontrun{
-#'
-#'
-#' Test with dataset
+#' 
+#' #Generate an item
+#' lisy(seed=4,nclues=5,nspread=5,Ndist=4, incidental='names',dist="false",distprob=.5,
+#'    itemSet='random',direct='of', terms="backward",ninfer = 2,items= NULL,scales = NULL)
+#'    
+#' #Save csv file
+#' write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
+#'  
+#' #Test with data set     
 #' library("babynames")
 #' bNames <- sapply(babynames[,3], as.character)
 #' compare <- c("taller","shorter", "older", "younger", "smaller", "bigger","stronger", "weaker")
 #' 
-#' #Generate item
-#' lisy(seed=4, nclues=4, nspread=5,reverseprob=.5, Ndist=4, incidentals= 'names',dist="mixed",
-#'      itemSet='own',labels='unordered',terms="backward",ninfer = 2,items= bNames, scales = compare)
+#' lisy(seed=4, nclues=4, nspread=5,Ndist=4, incidentals= 'names',dist="mixed", distprob=.5, 
+#'      itemSet='own',direct='of',terms="backward",ninfer = 2,items= bNames, scales = compare)
 #'
 #' #loop through 30 items
 #' nitems <- 30
@@ -47,28 +60,28 @@
 #'   runs <- lisy(seed=i,
 #'                nclues=params$nclues[i],
 #'                nspread=params$nspread[i],
-#'               reverseprob=.5,  Ndist=4, incidentals= 'names',dist="mixed",
-#'                itemSet='own',labels='unordered',terms="backward",ninfer = 2,
+#'                Ndist=4, incidentals= 'names',dist="mixed", distprob=.5, 
+#'                itemSet='own',direct='of',terms="backward",ninfer = 2,
 #'                items= bNames, scales = compare)
 #'   qtable[[i]] <- runs
 #' }
 #'
 #' qtable
-#'write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
+#' write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
+#' }
+#'
+#'
 
-#'
-#'
-#'
 
 lisy <- function( seed=1,
                   nclues=4,
                   nspread = 5,
-                  reverseprob=.5,
+                  distprob=.5,
                   Ndist=4,
                   incidentals='names',
                   dist="mixed",
                   itemSet='random',
-                  labels= 'ordered',
+                  direct= 'of',
                   terms = "both",
                   ninfer = 1,
                   items=NULL,
@@ -127,6 +140,35 @@ lisy <- function( seed=1,
     stop("To have 3 inferences you need to generate a minimum of 3 sentence with 4 names ")
   }
   
+  if(direct =="alt" && ninfer==2 | direct =="alt" && ninfer== 1 ){
+    stop("You can't have alternative clues when it is less than ninfer= 3. Increase 'ninfer' value or change arg 'direct' to 'of' or 'ob'.")
+  }
+  
+  if(ninfer > 3){
+    stop("The current generator can only create up to 3 inferences per items.")
+  }
+  
+  
+  
+  # lisy(seed=4,nclues=4,nspread=6,Ndist=5,
+  #      incidentals='names',dist="mixed",distprob=0.5,itemSet='random',direct='ob',
+  #      terms="backward",ninfer = 2,items= NULL,scales = NULL)
+  # 
+  # 
+  #  seed=4
+  #  nclues=4
+  #  nspread=6
+  #  Ndist=5
+  #  incidentals='names'
+  #  dist="mixed"
+  #  distprob=0.5
+  #  itemSet='random'
+  #  direct='ob'
+  #  terms="backward"
+  #  ninfer = 2
+  #  items= NULL
+  #  scales = NULL
+  
   set.seed(seed)
   p <- paste0
   cap <- function(x) paste0(
@@ -157,10 +199,16 @@ lisy <- function( seed=1,
     scales <- list(own=matrix(c(scales),nrow=2))
   }
   
-  if(incidentals == 'objects'){
-    articles <- list(people='', fruit='the', superheroes='the', own = 'the')
+  if(incidentals == 'objects' && itemSet == 'random'){
+    articles <- list(fruit='the', superheroes='the')
+  }else if(incidentals=="names" && itemSet == 'random'){
+    articles <- list(people='')
+  }else if(incidentals == "objects" && itemSet == 'own'){
+    articles <- list(own="the")
+  }else if(incidentals == "objects" && itemSet == 'own'){
+    articles <- list(own='')
   }else{
-    articles <- list(people='', fruit='the', superheroes='the', own = '')
+    stop("Please select either 'objects' or 'names'")
   }
   
   # Choose a random set if the argument of set == random. Here we can change item type
@@ -183,10 +231,18 @@ lisy <- function( seed=1,
   # List of possible clues
   # column wise, ascending order.
   # row wise, second digit always smaller than first digit. So that we can create invalid or false distractors.
+  # pclues determine the direction of the rclues. aka, linear or non linear solving of the items. 
   pclues <- NULL #possible clues
-  
-  for (i in 2:nspread) for (ii in (i-1):1) {
-    pclues <- rbind(pclues, c(i,ii))
+  if(direct=="of" | direct == 'alt'){
+    for (i in 2:nspread) for (ii in (i-1):1) {
+      pclues <- rbind(pclues, c(i,ii))
+    }
+  }else if(direct=='ob'){
+    for (i in 2:nspread) for (ii in (i-1):1) {
+      pclues <- rbind(pclues, c(ii,i))
+    }
+  }else{
+    stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
   }
   pclues
   
@@ -201,8 +257,8 @@ lisy <- function( seed=1,
   #if(nspread == 3 && minsteps == 3){ stop("Please increase nspread in order to find a suitable logical combination")}
   #if(minsteps > 4) {warning("The function may be in an infinite because it cannot find a suitable logical combination. \n Recommend setting minstep of less than 4.")}
   if(nspread > uclues +3 ){ warning("The large combinatorics value of nspread may result in making the distractors obviously wrong. \nSuggest making  nspread at most + 1 > nclues.")}
-  
-  # keep repeating until there is a max 2 inference step. 
+  thought<- "NON-linear"
+  # keep repeating until there is a max 3 inference step. 
   if(ninfer == 2){
     redo <- 1
     while(redo==1){
@@ -215,7 +271,7 @@ lisy <- function( seed=1,
         clues <- uniquecombs(clues)  # keep unique rows only
         any(clues[,1] %in% clues[,2]) == TRUE
       }
-      clues
+      
       # 1 step
       infer <- data.frame(left =pclues[nclues,1],  #nclues first column become left
                           right=pclues[nclues,2],  #nclues second column become right
@@ -224,7 +280,6 @@ lisy <- function( seed=1,
                           stringsAsFactors=FALSE) # don't convert strings to factor
       infer
       minstep <- nrow(infer)
-      
       i <- 1
       # while i is less than nrow() + 1
       while (i< minstep) {
@@ -285,7 +340,6 @@ lisy <- function( seed=1,
       
     }
   }
-  # Generate 1 inference step items. 
   if(ninfer==1){
     clues<- NULL
     #At least one value from the 2nd col exist in the 1st col
@@ -307,7 +361,6 @@ lisy <- function( seed=1,
     (infer)
     
   }
-  
   if(ninfer == 3){
     redo <- 1
     while(redo==1){
@@ -321,6 +374,7 @@ lisy <- function( seed=1,
         any(clues[,1] %in% clues[,2]) == TRUE
       }
       clues
+      nclues
       # 1 step
       infer <- data.frame(left =pclues[nclues,1],  #nclues first column become left
                           right=pclues[nclues,2],  #nclues second column become right
@@ -427,27 +481,15 @@ lisy <- function( seed=1,
   ############ FALSE RESPONSES ##########
   falses  <- cbind(pclues[Nval,2],pclues[Nval,1])
   ifalses <- cbind(itemlist[falses[,1]],itemlist[falses[,2]]) #names
-  reverseprob <- .5
+  
+  infer
   
   
-  #### ###### #### CLUES PROVIDED IN THE SENTENCE ### #### ####
-  #extract the nclues rows based on the random sample of nclues given by user.
-  #the number of sentences
-  if(labels  == "ordered"){
-    clues<- clues[order(clues[,1], decreasing = TRUE),]
-    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]])) # name list
-  }else if(labels == "unordered"){
-    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]])) # name list
-  }else{
-    stop("please declare either 'ordered' or 'unordered' clues")
-  }
-  
-  ##### FUNCTION TO GENERATE SENTENCE #####
+  ##### FUNCTION TO GENERATE ITEM #####
   join <- function(clue, thescale, article, forward=TRUE) {
     if (forward) return(paste0(article, " " ,clue[1], ' is ', thescale[1], ' than ', article ," ", clue[2])) # Going from Big to small value (scale)
     if (!forward) return(paste0(article, " ",clue[2], ' is ', thescale[2], ' than ',article ," ", clue[1])) # Going from Small to big value (scale reversed)
   }
-  
   
   #### GENERATE CORRECT RESPONSE OPTION #####
   (maxsteps <- max(infer$steps))
@@ -455,25 +497,139 @@ lisy <- function( seed=1,
   maxinfer <- maxinferlist[sample(nrow(maxinferlist), 1),] # here you randomly chose one of the max step row
   maxitems <- itemlist[as.numeric(maxinfer[1:2])] # subsuite numbers for names.
   
+  
   if(terms=='both'){
     maxanswer <- cap(p(join(maxitems, thescale, article,
-                            forward=rbinom(1, 1, reverseprob)==1),'.'))
+                            forward=rbinom(1, 1, distprob)==1),'.'))
   }else if(terms == 'forward'){
     maxanswer <- cap(p(join(maxitems, thescale, article,
                             forward=TRUE),'.'))
+    if(ninfer == 1){
+      maxanswer <- cap(p(join(maxitems, thescale, article,
+                              forward=FALSE),'.'))
+    }
+    
   }else if (terms == "backward"){
     maxanswer <- cap(p(join(maxitems, thescale, article,
                             forward=FALSE),'.'))
+    if(ninfer == 1){
+      maxanswer <- cap(p(join(maxitems, thescale, article,
+                              forward=TRUE),'.'))
+    }
   }else{
     stop("Please select declare either 'mixed', 'forward' or 'backward' comparison.")
   }
   
-  # Generate the distractors
+  
+  #### ###### #### CLUES ORDERING IN THE SENTENCE ### #### ####
+  #extract the nclues rows based on the random sample of nclues given by user.
+  #ordering clues forces the sentence clues in a linear fashion. 
+  # compare the position using, infer, clues, and check. 
+  # rclues element correspond to the row position of the connected clues
+  # check correspond to the row position in the clue matrix 
+  # we want to find the position of the clues in the clue matrix 
+  if(direct  == "of"){
+    clues<- clues[order(clues[,1], decreasing = TRUE),]
+    rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
+    (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues]) # search for row positions
+    rclues <- infer[rclues,1:4] #clues 
+    
+    pos    <- paste0(rclues[,1] ,'.',rclues[,2]) #combine left / right #those selected within rclues
+    pos2 <- paste0(clues[,1],'.',clues[,2]) #combine all cclues combination together
+    
+    #search for row order in sequence of pos characters. 
+    # We want to make sure that the clues are not in a ordered fashion.  
+    check<- NULL
+    for(i in pos){
+      (check[i] <- (1:length(pos2))[pos2 %in% i])
+    }
+    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]])) # name list
+  }else if(direct == "ob"){
+    clues<- clues[order(clues[,1], decreasing = TRUE),]
+    rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
+    (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues]) # search for row positions
+    rclues <- infer[rclues,1:4] #clues 
+    pos    <- paste0(rclues[,1] ,'.',rclues[,2]) #combine left / right #those selected within pclues
+    pos2 <- paste0(clues[,1],'.',clues[,2]) #combine all pclues combination together
+    
+    #search for row order in sequence of pos characters. 
+    # We want to make sure that the clues are not in a ordered fashion.  
+    check<- NULL
+    for(i in pos){
+      (check[i] <- (1:length(pos2))[pos2 %in% i])
+    }
+    check <- rev(check)
+    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]])) # name list
+  }else if(direct == "alt"){
+    if(ninfer==3){
+      mixed <- FALSE
+      while(mixed==FALSE){
+        rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
+        
+        (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues]) # search for row positions
+        rclues <- infer[rclues,1:4] #clues 
+        
+        pos    <- paste0(rclues[,1] ,'.',rclues[,2]) #combine left / right #those selected within pclues
+        pos2 <- paste0(clues[,1],'.',clues[,2]) #combine all pclues combination together
+        
+        #search for row order in sequence of pos characters. 
+        # We want to make sure that the clues are not in a ordered fashion.  
+        check<- NULL
+        for(i in pos){
+          (check[i] <- (1:length(pos2))[pos2 %in% i])
+        }
+        if(is.unsorted(check)==TRUE){
+          mixed <- TRUE
+        }
+        if(is.unsorted(check)==FALSE | is.unsorted(rev(check)) == FALSE){
+          clues <-   clues[sample(nrow(clues)),]
+          mixed=FALSE
+        }
+      }
+    }
+    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]])) # name list
+  }else{
+    stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
+  }
+  
+  
+  # CREATE SENTENCE STRUCTURE ####
   q <- 'Clues: '
   dreturn <- c()
   dtype <- c()
   
+  # iclues all come from the same clues now.
+  q <- NULL
+  if(terms=='both'){
+    for (i in 1:nrow(iclues)) {
+      q <- p(q, join(iclues[i,], thescale, article,
+                     forward=rbinom(1, 1, distprob)==1))
+      if (i<nrow(iclues)) q <- p(q, ', ')
+    }
+  }else if(terms == 'forward'){
+    for (i in 1:nrow(iclues)) {
+      q <- p(q, join(iclues[i,], thescale, article,
+                     forward=TRUE))
+      if (i<nrow(iclues)) q <- p(q, ', ')
+    }
+  }else if (terms == "backward"){
+    for (i in 1:nrow(iclues)) {
+      q <- p(q, join(iclues[i,], thescale, article,
+                     forward=FALSE))
+      if (i<nrow(iclues)) q <- p(q, ', ')
+    }
+  }else{
+    stop("Please select declare either 'mixed', 'forward' or 'backward' comparison.")
+  }
+  q
+  q <- p(q, '. Which of the following is implied?')
+  
+  if(Ndist > 5) stop("Please choose a lower number of distractors")
+  q
+  ##### 
+  
   # create matrix of invalid and false ####
+  #select type of distractors 
   dlist <- NULL
   if(dist=="mixed"){
     if(all(is.na(iinvkeeps)) == TRUE){
@@ -500,60 +656,51 @@ lisy <- function( seed=1,
     dlist <- cbind(iinvkeeps, type='invalid')
   }
   
-  # sentence structure ####
-  # iclues all come from the same clues now.
-  q <- NULL
-  if(terms=='both'){
-    for (i in 1:nrow(iclues)) {
-      q <- p(q, join(iclues[i,], thescale, article,
-                     forward=rbinom(1, 1, reverseprob)==1))
-      if (i<nrow(iclues)) q <- p(q, ', ')
-    }
-  }else if(terms == 'forward'){
-    for (i in 1:nrow(iclues)) {
-      q <- p(q, join(iclues[i,], thescale, article,
-                     forward=TRUE))
-      if (i<nrow(iclues)) q <- p(q, ', ')
-    }
-  }else if (terms == "backward"){
-    for (i in 1:nrow(iclues)) {
-      q <- p(q, join(iclues[i,], thescale, article,
-                     forward=FALSE))
-      if (i<nrow(iclues)) q <- p(q, ', ')
-    }
-  }else{
-    stop("Please select declare either 'mixed', 'forward' or 'backward' comparison.")
-  }
-  
-  
-  q <- p(q, '. Which of the following is implied?')
-  
-  if(Ndist > 5) stop("Please choose a lower number of distractors")
-  q
-  itemlist
-  terms="backward"
-  infer
-  clues
-  iclues
-  q
-  infer
-  maxanswer
-  Ndist
-  dlist
-  
+  # Create actual distractors ####
   # repeat sampling the distractions rows in the dlist matrix that was created previously
-  for (i in 1:Ndist){
-    if(length(nrow(dlist))>0) {
-      draw <- sample(nrow(dlist), 1) #randomly draw from the dlist matrix made up of invalid and false
-      dreturn[i] <- cap(p(join(dlist[draw,1:2], thescale, article,
-                               forward=rbinom(1, 1, reverseprob)==1),'.')) # create an incorrect sentence
-      dtype[i] <- dlist[draw,3]
-      dlist <- dlist[-draw,] #minus that row.
-      dlist
-      dreturn
+  if(dist=="mixed"){
+    dlist.df <- as.data.frame(dlist)
+    if(length(unique(dlist.df$type))==2){ #if 2 = "invalid" and "falses" distractor type
+      draw <- dlist.df %>%
+        group_by(type) %>%
+        sample_n(ceiling(Ndist/2), 0.5)  #divide by 2 since there are 2 types of distractors
+      draw <- draw[sample(nrow(draw)),] #randomise position of distractors. 
+      if(Ndist %% 2 == 0){ 
+        dtype <- draw[,3] #type 
+      }else{
+        dtype <- draw[-nrow(draw),3] # - last row if uneven number 
+      }
+      dtype <- as.character(as.matrix(dtype))
+      
+    }else{ # if only one distractor type 
+      draw <- dlist.df %>%
+        group_by(type) %>%
+        sample_n(Ndist, 0.5) #do not divide since only one type of distractor
+      dtype <- draw[,3]
+      dtype <- as.character(as.matrix(dtype))
+    }
+    draw <- as.matrix(draw) #convert to matrix 
+    dreturn<- NULL
+    for (i in 1:Ndist){
+      dreturn[i] <- cap(p(join(draw[i,1:2], thescale, article,
+                               forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
+    }
+    
+  }else{  
+    if(Ndist > nrow(dlist)){
+      stop("There is not enough invalid distractors. Please change the arg dist to 'mixed' or 'false'")
+    }
+    
+    draw  <- dlist[sample(nrow(dlist),Ndist),]
+    dtype <- draw[,3]
+    for (i in 1:Ndist){    
+      dreturn[i] <- cap(p(join(draw[i,1:2], thescale, article,
+                               forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
     }
     #if(!is.null(nrow(dlist))) dtype[i] <- dreturn[i] <- '999'
   }
+  
+  dtype
   
   
   data.frame(seed=seed,
@@ -568,43 +715,10 @@ lisy <- function( seed=1,
              dist4=dreturn[4],
              dtype4=dtype[4],
              dist5=dreturn[5],
-             dtype5=dtype[5]
+             dtype5=dtype[5],
+             clues = t(as.numeric(t(check)))
   )
+  
   
 }
 ### End Logical Item
-
-### generate item ####
-lisy(seed=4,nclues=5,nspread=5,reverseprob=.5,Ndist=4,
-     incidental='names',dist="false",itemSet='random',labels='unordered',
-     terms="backward",ninfer = 2,items= NULL,scales = NULL)
-
-# Test with dataset
-# library("babynames")
-# bNames <- sapply(babynames[,3], as.character)
-# compare <- c("taller","shorter", "older", "younger", "smaller", "bigger","stronger", "weaker")
-# 
-# #Generate item
-# lisy(seed=4, nclues=4, nspread=5,reverseprob=.5, Ndist=4, incidentals= 'names',dist="mixed",
-#      itemSet='own',labels='unordered',terms="backward",ninfer = 2,items= bNames, scales = compare)
-#
-# #loop through 30 items
-# nitems <- 30
-# params <- data.frame(seed=1:nitems,
-#                      nclues=ceiling((1:nitems)/20)+3,
-#                      nspread=ceiling((1:nitems)/15)+4)
-# params$nclues
-# params$nspread
-# qtable <- NULL
-# for (i in 1:nitems) {
-#   runs <- lisy(seed=i,
-#                nclues=params$nclues[i],
-#                nspread=params$nspread[i],
-#               reverseprob=.5,  Ndist=4, incidentals= 'names',dist="mixed",
-#                itemSet='own',labels='unordered',terms="backward",ninfer = 2,
-#                items= bNames, scales = compare)
-#   qtable[[i]] <- runs
-# }
-#
-# qtable
-#write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )

@@ -4,9 +4,10 @@
 \alias{lisy}
 \title{lisy}
 \usage{
-lisy(seed = 1, nclues = 4, nspread = 5, reverseprob = 0.5, Ndist = 4,
+lisy(seed = 1, nclues = 4, nspread = 5, distprob = 0.5, Ndist = 4,
   incidentals = "names", dist = "mixed", itemSet = "random",
-  items = NULL, scales = NULL)
+  direct = "of", terms = "both", ninfer = 1, items = NULL,
+  scales = NULL)
 }
 \arguments{
 \item{seed}{This generates the same question again from local computer.}
@@ -15,15 +16,21 @@ lisy(seed = 1, nclues = 4, nspread = 5, reverseprob = 0.5, Ndist = 4,
 
 \item{nspread}{This is the spread of the number of incidentals in total.}
 
-\item{reverseprob}{This calculates how you want to divide the comparison terms.}
+\item{distprob}{This calculates how you much comparison variation you want for the distractors.}
 
 \item{Ndist}{This returns the number of distractors per question.}
 
 \item{incidentals}{This tells the function whether the item features are 'names' or 'objects'.}
 
-\item{dist}{This allows you to select the type of distractors. The number of false distractors must be less than the number of clues.}
+\item{dist}{This allows you to select the type of distractors. You have three options ('mixed', 'invalid','false'). If dist='false', then the number of false distractors must be less than the number of clues.}
 
 \item{itemSet}{This is the choice of itemset you want. If itemset='random' then the generator will randomly select one (People, Fruits, Superheroes). Change itemset='own' if you are using your own item set.}
+
+\item{direct}{This determine if the clues are organised in an ordered("of" = ordered forward / "ob" = ordered backward) or unordered ('alt' = alternative) fashion. 'alt' can only be used when ninfer is 3 or greater.}
+
+\item{terms}{This determine whether you want to use both comparsion terms ('both') or only one type ("forward" or "backward").}
+
+\item{ninfer}{This generate answers that requires a X amount of inference from the items.}
 
 \item{items}{This inputs your own item type. At least 10 items.}
 
@@ -38,53 +45,54 @@ There are several things to bear in mind. To use own item set, please have at le
 When nspread and nclue is = 3. This means that there are 3 sentences, and only 3 names. This makes it impossible to generate an invalid distractor. As such, only the false distractors will be created. Since there are only three clues, then 3 false distractors will be created.
 
 When nspread and nclues are the same. All the names of the invalid distractors will be taken from the names that are used in the clues. As nspread value increases, the likelihood of having names not taken from the clues increases.
+
+When ninfer == 1 and the terms is declared as either forward or backward, then the correct answer will always be the opposite of the comparing statements in the sentence. When ninfer == 2, the correct answer will be in the right direction. 
+
+When distprob = 0.5, the distribution of the comparsion terms for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two comparison terms will be used. 
+
+This function only generates items that requires up to 3 inferences. As the required inferences increases, then number of clues increases. Inference is the implied comparison between sentences which allows you to make select the correct answer.  
+
+Direct is the direction of the line of thought. If direct = "ob" it means that solving the items require you work 'ordered backwards'. If it is 'of', it means 'ordered  forwards' and finally if it is 'alt', then it means the clues are not inorder.
 }
 \examples{
 \dontrun{
 
+#Generate an item
+lisy(seed=4,nclues=5,nspread=5,Ndist=4, incidental='names',dist="false",distprob=.5,
+   itemSet='random',direct='of', terms="backward",ninfer = 2,items= NULL,scales = NULL)
+   
+#Save csv file
+write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
+ 
+#Test with data set     
+library("babynames")
+bNames <- sapply(babynames[,3], as.character)
+compare <- c("taller","shorter", "older", "younger", "smaller", "bigger","stronger", "weaker")
 
- # Generate an item
- item <-  lisy(seed=4, nclues=5, nspread=5,reverseprob=.5,
- Ndist=4, incidentals='names', dist="false",
- itemSet='random',items= NULL, scales = NULL)
+lisy(seed=4, nclues=4, nspread=5,Ndist=4, incidentals= 'names',dist="mixed", distprob=.5, 
+     itemSet='own',direct='of',terms="backward",ninfer = 2,items= bNames, scales = compare)
 
- # Generate 100 items
- nitems <- 100
-
- # Use different number of names and clues
- params <- data.frame(seed=1:nitems,
- nclues=ceiling((1:nitems)/20)+3,
- nspread=ceiling((1:nitems)/15)+4)
-
- # Loop through
- qtable <- NULL
- for (i in 1:nitems) {
- runs <- lisy(seed=i,
- nclues=params$nclues[i],
- nspread=params$nspread[i],
- reverseprob=.5,  Ndist=4, incidentals='names',
- dist="mixed",itemSet='random',items= NULL, scales = NULL)
- qtable[[i]] <- runs
- }
- qtable
-
- # Save csv file
- write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
-
- #############
- # Example using own item set
- library("babynames")
- bNames <- sapply(babynames[,3], as.character)
- compare <- c("taller", "older", "smaller", "bigger","stronger", "weaker")
-
- #Generate items
- lisy(seed=4, nclues=5, nspread=7,reverseprob=.5, Ndist=2,
- incidentals= 'names',dist="false",
- itemSet='own',items= bNames, scales = compare)
-
- item
+#loop through 30 items
+nitems <- 30
+params <- data.frame(seed=1:nitems,
+                     nclues=ceiling((1:nitems)/20)+3,
+                     nspread=ceiling((1:nitems)/15)+4)
+params$nclues
+params$nspread
+qtable <- NULL
+for (i in 1:nitems) {
+  runs <- lisy(seed=i,
+               nclues=params$nclues[i],
+               nspread=params$nspread[i],
+               Ndist=4, incidentals= 'names',dist="mixed", distprob=.5, 
+               itemSet='own',direct='of',terms="backward",ninfer = 2,
+               items= bNames, scales = compare)
+  qtable[[i]] <- runs
 }
 
+qtable
+write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
+}
 
 
 }
