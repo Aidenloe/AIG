@@ -502,7 +502,7 @@ lisy <- function( seed=1,
                               forward=TRUE),'.'))
     }
   }else{
-    stop("Please select declare either 'mixed', 'forward' or 'backward' comparison.")
+    stop("Please select declare either 'both', 'forward' or 'backward' comparison.")
   }
   
   
@@ -604,7 +604,7 @@ lisy <- function( seed=1,
       if (i<nrow(iclues)) q <- p(q, ', ')
     }
   }else{
-    stop("Please select declare either 'mixed', 'forward' or 'backward' comparison.")
+    stop("Please select declare either 'both', 'forward' or 'backward' comparison.")
   }
   q
   q <- p(q, '. Which of the following is implied?')
