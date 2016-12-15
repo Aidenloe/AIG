@@ -5,7 +5,7 @@
 \title{lisy}
 \usage{
 lisy(seed = 1, nclues = 4, nspread = 5, distprob = 0.5, Ndist = 4,
-  incidentals = "names", dist = "mixed", itemSet = "random",
+  incidental = "names", dist = "mixed", itemSet = "random",
   direct = "of", terms = "both", ninfer = 1, items = NULL,
   scales = NULL)
 }
@@ -20,8 +20,6 @@ lisy(seed = 1, nclues = 4, nspread = 5, distprob = 0.5, Ndist = 4,
 
 \item{Ndist}{This returns the number of distractors per question.}
 
-\item{incidentals}{This tells the function whether the item features are 'names' or 'objects'.}
-
 \item{dist}{This allows you to select the type of distractors. You have three options ('mixed', 'invalid','false'). If dist='false', then the number of false distractors must be less than the number of clues.}
 
 \item{itemSet}{This is the choice of itemset you want. If itemset='random' then the generator will randomly select one (People, Fruits, Superheroes). Change itemset='own' if you are using your own item set.}
@@ -35,6 +33,8 @@ lisy(seed = 1, nclues = 4, nspread = 5, distprob = 0.5, Ndist = 4,
 \item{items}{This inputs your own item type. At least 10 items.}
 
 \item{scales}{This is the comparison terms. At least 2 comparison terms (i.e."bigger","smaller")}
+
+\item{incidentals}{This tells the function whether the item features are 'names' or 'objects'.}
 }
 \description{
 This function generates linear syllogistic reasoning items.
@@ -69,7 +69,7 @@ library("babynames")
 bNames <- sapply(babynames[,3], as.character)
 compare <- c("taller","shorter", "older", "younger", "smaller", "bigger","stronger", "weaker")
 
-lisy(seed=4, nclues=4, nspread=5,Ndist=4, incidentals= 'names',dist="mixed", distprob=.5, 
+lisy(seed=4, nclues=4, nspread=5,Ndist=4, incidental= 'names',dist="mixed", distprob=.5, 
      itemSet='own',direct='of',terms="backward",ninfer = 2,items= bNames, scales = compare)
 
 #loop through 30 items
@@ -84,7 +84,7 @@ for (i in 1:nitems) {
   runs <- lisy(seed=i,
                nclues=params$nclues[i],
                nspread=params$nspread[i],
-               Ndist=4, incidentals= 'names',dist="mixed", distprob=.5, 
+               Ndist=4, incidental= 'names',dist="mixed", distprob=.5, 
                itemSet='own',direct='of',terms="backward",ninfer = 2,
                items= bNames, scales = compare)
   qtable[[i]] <- runs

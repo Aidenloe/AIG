@@ -45,7 +45,7 @@
 #' bNames <- sapply(babynames[,3], as.character)
 #' compare <- c("taller","shorter", "older", "younger", "smaller", "bigger","stronger", "weaker")
 #' 
-#' lisy(seed=4, nclues=4, nspread=5,Ndist=4, incidentals= 'names',dist="mixed", distprob=.5, 
+#' lisy(seed=4, nclues=4, nspread=5,Ndist=4, incidental= 'names',dist="mixed", distprob=.5, 
 #'      itemSet='own',direct='of',terms="backward",ninfer = 2,items= bNames, scales = compare)
 #'
 #' #loop through 30 items
@@ -60,7 +60,7 @@
 #'   runs <- lisy(seed=i,
 #'                nclues=params$nclues[i],
 #'                nspread=params$nspread[i],
-#'                Ndist=4, incidentals= 'names',dist="mixed", distprob=.5, 
+#'                Ndist=4, incidental= 'names',dist="mixed", distprob=.5, 
 #'                itemSet='own',direct='of',terms="backward",ninfer = 2,
 #'                items= bNames, scales = compare)
 #'   qtable[[i]] <- runs
@@ -78,7 +78,7 @@ lisy <- function( seed=1,
                   nspread = 5,
                   distprob=.5,
                   Ndist=4,
-                  incidentals='names',
+                  incidental='names',
                   dist="mixed",
                   itemSet='random',
                   direct= 'of',
@@ -96,7 +96,7 @@ lisy <- function( seed=1,
     stop("Please declare either 'mixed', 'invalid' or 'false' distractors.")
   }
   
-  if(incidentals != 'names' && incidentals !='objects'){
+  if(incidental != 'names' && incidental !='objects'){
     stop("Please declare either 'names' or 'objects'.")
   }
   
@@ -148,26 +148,7 @@ lisy <- function( seed=1,
     stop("The current generator can only create up to 3 inferences per items.")
   }
   
-  
-  
-  # lisy(seed=4,nclues=4,nspread=6,Ndist=5,
-  #      incidentals='names',dist="mixed",distprob=0.5,itemSet='random',direct='ob',
-  #      terms="backward",ninfer = 2,items= NULL,scales = NULL)
-  # 
-  # 
-  #  seed=4
-  #  nclues=4
-  #  nspread=6
-  #  Ndist=5
-  #  incidentals='names'
-  #  dist="mixed"
-  #  distprob=0.5
-  #  itemSet='random'
-  #  direct='ob'
-  #  terms="backward"
-  #  ninfer = 2
-  #  items= NULL
-  #  scales = NULL
+
   
   set.seed(seed)
   p <- paste0
@@ -199,13 +180,13 @@ lisy <- function( seed=1,
     scales <- list(own=matrix(c(scales),nrow=2))
   }
   
-  if(incidentals == 'objects' && itemSet == 'random'){
+  if(incidental == 'objects' && itemSet == 'random'){
     articles <- list(fruit='the', superheroes='the')
-  }else if(incidentals=="names" && itemSet == 'random'){
+  }else if(incidental=="names" && itemSet == 'random'){
     articles <- list(people='')
-  }else if(incidentals == "objects" && itemSet == 'own'){
+  }else if(incidental == "objects" && itemSet == 'own'){
     articles <- list(own="the")
-  }else if(incidentals == "objects" && itemSet == 'own'){
+  }else if(incidental == "objects" && itemSet == 'own'){
     articles <- list(own='')
   }else{
     stop("Please select either 'objects' or 'names'")
