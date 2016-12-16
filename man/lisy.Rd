@@ -34,23 +34,23 @@ lisy(seed = 1, nclues = 4, nspread = 5, distprob = 0.5, Ndist = 4,
 
 \item{items}{This inputs your own item type. At least 10 items.}
 
-\item{scales}{This is the comparison terms. At least 2 comparison terms (i.e."bigger","smaller")}
+\item{scales}{This are the comparison terms. At least 2 comparison terms (i.e."bigger","smaller")}
 }
 \description{
 This function generates linear syllogistic reasoning items.This is for research purposes.
 }
 \details{
-There are several things to bear in mind. To use own item set, please have at least 10 items within the itemset. In order for scale comparison to make sure. Please ensure that you have at least 2 comparisons. The function will stop if the criteria is not met. The genearation of items are slower if you have a huge item set.
+There are several things to bear in mind. To use own item set, please have at least 10 items within the itemset. In order for scale comparison to work, please ensure that you have at least 2 comparisons. The function will stop if the criteria is not met. The genearation of items are slower if you have a huge item set (e.g. In the millions!).
 
 When nspread and nclue is = 3. This means that there are 3 sentences, and only 3 names. This makes it impossible to generate an invalid distractor. As such, only the false distractors will be created. Since there are only three clues, then 3 false distractors will be created.
 
 When nspread and nclues are the same. All the names of the invalid distractors will be taken from the names that are used in the clues. As nspread value increases, the likelihood of having names not taken from the clues increases.
 
-When ninfer = 1 and the terms is declared as either 'forward' or 'backward', then the correct answer will always be the opposite of the comparing statements in the sentence. When ninfer = 2, the correct answer will be in the right direction. 
+When ninfer = 1 and the terms is declared as either 'forward' or 'backward', then the correct answer will always be the opposite of the comparing statements in the sentence. When ninfer = 2, the correct answer will be in the right direction.
 
-When distprob = 0.5, the distribution of the comparsion terms for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two comparison terms will be used. 
+When distprob = 0.5, the distribution of the comparsion terms for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two comparison terms will be used.
 
-This function only generates items that requires up to 3 inferences. As the required inferences increases, then number of clues increases. Inference is the implied comparison between sentences which allows you to make select the correct answer.  
+This function only generates items that requires up to 3 inferences. As the required inferences increases, then number of clues increases. Inference is the implied comparison between sentences which allows you to make select the correct answer.
 
 Direct is the direction of the line of thought. If direct = "ob" it means that solving the items require you work 'ordered backwards'. If it is 'of', it means 'ordered  forwards' and finally if it is 'alt', then it means the clues are not inorder.
 }
@@ -60,16 +60,16 @@ Direct is the direction of the line of thought. If direct = "ob" it means that s
 #Generate an item
 item <- lisy(seed=4,nclues=5,nspread=5,Ndist=4, incidental='names',dist="false",distprob=.5,
    itemSet='random',direct='of', terms="backward",ninfer = 2,items= NULL,scales = NULL)
-   
+
 #Save csv file
 write.csv(item, file="~/desktop/test.csv"  )
- 
-#Test with data set     
+
+#Test with data set
 library("babynames")
 bNames <- sapply(babynames[,3], as.character)
 compare <- c("taller","shorter", "older", "younger", "smaller", "bigger","stronger", "weaker")
 
-lisy(seed=4, nclues=4, nspread=5,Ndist=4, incidental= 'names',dist="mixed", distprob=.5, 
+lisy(seed=4, nclues=4, nspread=5,Ndist=4, incidental= 'names',dist="mixed", distprob=.5,
      itemSet='own',direct='of',terms="backward",ninfer = 2,items= bNames, scales = compare)
 
 #loop through 30 items
@@ -84,7 +84,7 @@ for (i in 1:nitems) {
   runs <- lisy(seed=i,
                nclues=params$nclues[i],
                nspread=params$nspread[i],
-               Ndist=4, incidental= 'names',dist="mixed", distprob=.5, 
+               Ndist=4, incidental= 'names',dist="mixed", distprob=.5,
                itemSet='own',direct='of',terms="backward",ninfer = 2,
                items= bNames, scales = compare)
   qtable[[i]] <- runs
