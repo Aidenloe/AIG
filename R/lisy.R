@@ -12,7 +12,7 @@
 #' @param Ndist This returns the number of distractors per question.
 #' @param incidental This tells the function whether the item features are 'names' or 'objects'.
 #' @param dist This allows you to select the type of distractors. You have three options ('mixed', 'invalid','false'). If dist='false', then the number of false distractors must be less than the number of clues.
-#' @param itemSet This is the choice of itemset you want. If itemset='random' then the generator will randomly select one (People, Fruits, Superheroes). Change itemset='own' if you are using your own item set.
+#' @param itemSet This is the choice of itemset you want. If itemSet='random' then the generator will randomly select one (People, Fruits, Superheroes). Change itemset='own' if you are using your own item set.
 #' @param direct This determine if the clues are organised in an ordered("of" = ordered forward / "ob" = ordered backward) or unordered ('alt' = alternative) fashion. 'alt' can only be used when ninfer is 3 or greater.
 #' @param terms This determine whether you want to use both comparsion terms ('both') or only one type ("first" or "second").
 #' @param ninfer This generate answers that requires a X amount of inference from the items.

@@ -24,7 +24,7 @@ lisy(seed = 1, nclues = 4, nspread = 5, distprob = 0.5, Ndist = 4,
 
 \item{dist}{This allows you to select the type of distractors. You have three options ('mixed', 'invalid','false'). If dist='false', then the number of false distractors must be less than the number of clues.}
 
-\item{itemSet}{This is the choice of itemset you want. If itemset='random' then the generator will randomly select one (People, Fruits, Superheroes). Change itemset='own' if you are using your own item set.}
+\item{itemSet}{This is the choice of itemset you want. If itemSet='random' then the generator will randomly select one (People, Fruits, Superheroes). Change itemset='own' if you are using your own item set.}
 
 \item{direct}{This determine if the clues are organised in an ordered("of" = ordered forward / "ob" = ordered backward) or unordered ('alt' = alternative) fashion. 'alt' can only be used when ninfer is 3 or greater.}
 
