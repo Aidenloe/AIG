@@ -5,8 +5,7 @@ Version: 0.1
 Date: 2015-10-13
 Author: Aiden Loe
 Maintainer: Aiden Loe <bsl28@cam.ac.uk>
-Description: Creating psychological items based on cognitive models and
-    measuring reliability and validity of items.
+Description: A collection of Automatic Item Generators. This is only for research purposes. 
 License: GPL-3
 Imports:
     igraph,

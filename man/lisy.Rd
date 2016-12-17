@@ -18,7 +18,7 @@ lisy(seed = 1, nclues = 4, nspread = 5, incidental = "names",
 
 \item{incidental}{Tells the function whether the item features are 'names' or 'objects'.}
 
-\item{antonym}{Determine whether to use both antonym  ('both') or only one type ("first" or "second").}
+\item{antonym}{Determine whether to use both antonyms ('both') or only one type ("first" or "second").}
 
 \item{ninfer}{Generate answers that requires a X amount of inference from the items. Up to 3 is the maximum.}
 
@@ -34,13 +34,13 @@ lisy(seed = 1, nclues = 4, nspread = 5, incidental = "names",
 
 \item{items}{Input own item type. At least 10 items. Default items are used when items = NULL.}
 
-\item{scales}{Input own antonym. At least 2 antonym (i.e."bigger","smaller"). Default antonym are used when scales = NULL.}
+\item{scales}{Input own antonyms. At least 2 antonyms (i.e."bigger","smaller"). Default antonyms are used when scales = NULL.}
 }
 \description{
 This function generates linear syllogistic reasoning items. This is for research purposes.
 }
 \details{
-There are several things to note. To use own item set, please have at least 10 items within the itemset. In order for antonym comparison to work, please ensure that you have at least 2 antonym. The function will stop if the criteria is not met. The genearation of items are slower if you have a huge item set (e.g. In the millions!).
+There are several things to note. To use own item set, please have at least 10 items within the itemset. In order for antonyms comparison to work, please ensure that you have at least 2 antonyms The function will stop if the criteria is not met. The genearation of items are slower if you have a huge item set (e.g. In the millions!).
 
 When nspread and nclue is = 3. This means that there are 3 sentences, and only 3 names. This makes it impossible to generate an invalid distractor. As such, only the false distractors will be created. Since there are only three clues, then at most 2 false distractors can be created.
 When nspread and nclues are the same, all the names of the invalid distractors will be taken from the names that are used in the clues. As nspread value increases, the likelihood of having names not taken from the clues increases. Making the distractors fairly easy as there is a higher likelihood that the names taken from the matrix might not appear in the clues. Hence, keeping the value of nspread and nclue as close as possible is recommended.
@@ -49,33 +49,35 @@ When nspread and nclues are the same, all the names of the invalid distractors w
 This function only generates items that requires up to 3 inferences. As the required inferences increases, then number of clues needed also increases. Inference is the implied comparison between sentences which allows the test taker to make an inform decision. When ninfer = 1 and the antonym is declared as either 'first' or 'second', then the correct answer will always be the opposite of the antonym used in the sentence. When ninfer = 2, the correct answer will be in the right direction.
 
 
-Direct is the direction of the line of thought. If direct = "ob" it means that solving the items requires the taker work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not inorder. direct = 'alt' can only be used when ninfer = 3.
+Direct is the direction of the line of thought. If direct = "ob" it means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not inorder. direct = 'alt' can only be used when ninfer = 3.
 
 When distprob = 0.5, the distribution of the antonym for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two antonym will be used. This is only used if one wishes to study distractor analysis.
 }
 \examples{
 \dontrun{
-#Generate an item
-lisy(seed=10,nclues=4,nspread=6,incidental="names",
-antonym="first",ninfer = 3, direct="ob", Ndist=3,
-dist="mixed",distprob=0.5,itemSet="random",
-items= NULL,scales = NULL)
 
-#' #Save csv file
+#Generate an item
+lisy(seed=10,nclues=4,nspread=6,incidental='names',
+    antonym="first",ninfer = 3, direct='ob', Ndist=3,
+    dist="mixed",distprob=0.5,itemSet='random',
+    items= NULL,scales = NULL)
+
+#Save csv file
 write.csv(item, file="~/desktop/test.csv")
 
-#Test with dataset
+Test with dataset
 library("babynames")
 bNames <- sapply(babynames[,3], as.character)
 compare <- c("taller","shorter", "older", "younger",
-"smaller", "bigger","stronger", "weaker")
+ "smaller", "bigger","stronger", "weaker")
 
-# Generate item
-lisy(seed=10,nclues=4,nspread=6,incidental="names",
-    antonym="first",ninfer = 3, direct="ob", Ndist=3,dist="mixed",
-    distprob=0.5,itemSet="own",items= bNames, scales = compare)
+#Generate item
+lisy(seed=10,nclues=4,nspread=6,incidental='names',
+    antonym="first",ninfer = 3, direct='ob', Ndist=3,
+    dist="mixed",distprob=0.5,
+    itemSet='own',items= bNames, scales = compare)
 
-# loop through 30 items
+#loop through 30 items
 nitems <- 30
 params <- data.frame(seed=1:nitems,
                      nclues=ceiling((1:nitems)/20)+3,
@@ -87,14 +89,13 @@ for (i in 1:nitems) {
                nclues=params$nclues[i],
                nspread=params$nspread[i],
                incidental= 'names',antonym="first",ninfer = 2,
-               direct="of", Ndist=4,dist="mixed",distprob=.5,
-               itemSet="own",items= bNames, scales = compare)
+               direct='of', Ndist=4,dist="mixed",distprob=.5,
+                itemSet='own', items= bNames, scales = compare)
   qtable[[i]] <- runs
 }
 
 qtable
-write.csv(do.call("rbind",qtable), file="~/desktop/test.csv")
-
+write.csv(do.call("rbind",qtable), file="~/desktop/test.csv" )
 }
 }
 \author{
