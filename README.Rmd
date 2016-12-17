@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
     - `lisy`
   
 ## Installation
-`AIG` will be [CRAN](http://cran.r-project.org/) soon, but you can use [devtools](http://cran.r-project.org/web/packages/devtools/index.html) to install the latest and greatest version.
+`AIG` will be in [CRAN](http://cran.r-project.org/) soon, but you can use [devtools](http://cran.r-project.org/web/packages/devtools/index.html) to install the latest and greatest version.
 To do so:
 
 ```{r Installation, eval=FALSE}
