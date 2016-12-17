@@ -2,16 +2,16 @@
 % Please edit documentation in R/AIG.R
 \name{AIG}
 \alias{AIG}
-\title{AIG: A package for studying automatic item generators.}
+\title{AIG: A package for studying Automatic Item Generators.}
 \description{
-The AIG package contains methods for studying automatic item generators.
+The AIG package contains generators for studying Automatic Item Generators.
 }
 \details{
-The package includes several item types generations for research purposes. If the generator has many related functions, then it will be pushed into a new package instead. Other generators include, netGen, mazeGen, numGen.
+The package includes several item types generations for research purposes. Currently, it can only generate linear syllogism items.
 }
 \section{Linear Syllogism Generation}{
 
-This function creates linear syllogsim tasks accordingly to your specifications. \cr
+This function creates linear syllogsim items according to your specifications. \cr
 \code{\link{lisy}}
 }
 

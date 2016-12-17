@@ -5,88 +5,93 @@
 #' @importFrom dplyr sample_n
 #' @importFrom stats rbinom
 #' @export
-#' @param seed This generates the same question again from local computer.
-#' @param nclues This is the number of sentences to make up the item.
-#' @param nspread This is the spread of the number of incidentals in total.
-#' @param distprob This calculates how you much comparison variation you want for the distractors.
-#' @param Ndist This returns the number of distractors per question.
-#' @param incidental This tells the function whether the item features are 'names' or 'objects'.
-#' @param dist This allows you to select the type of distractors. You have three options ('mixed', 'invalid','false'). If dist='false', then the number of false distractors must be less than the number of clues.
-#' @param itemSet This is the choice of itemset you want. If itemSet='random' then the generator will randomly select one (People, Fruits, Superheroes). Change itemset='own' if you are using your own item set.
-#' @param direct This determine if the clues are organised in an ordered("of" = ordered forward / "ob" = ordered backward) or unordered ('alt' = alternative) fashion. 'alt' can only be used when ninfer is 3 or greater.
-#' @param terms This determine whether you want to use both comparsion terms ('both') or only one type ("first" or "second").
-#' @param ninfer This generate answers that requires a X amount of inference from the items.
-#' @param items This inputs your own item type. At least 10 items.
-#' @param scales This are the comparison terms. At least 2 comparison terms (i.e."bigger","smaller")
-#' @description This function generates linear syllogistic reasoning items.This is for research purposes.
-#' @details There are several things to bear in mind. To use own item set, please have at least 10 items within the itemset. In order for scale comparison to work, please ensure that you have at least 2 comparisons. The function will stop if the criteria is not met. The genearation of items are slower if you have a huge item set (e.g. In the millions!).
+#' @param seed Generates the same question again from local computer.
+#' @param nclues Generates the number of sentences to make up the item.
+#' @param nspread Calculates the spread of possible incidentals in total.
+#' @param incidental Tells the function whether the item features are 'names' or 'objects'.
+#' @param antonym Determine whether to use both antonym  ('both') or only one type ("first" or "second").
+#' @param ninfer Generate answers that requires a X amount of inference from the items. Up to 3 is the maximum.
+#' @param direct Deciding on whether the clues are organised in an ordered("of" = ordered forward / "ob" = ordered backward) or unordered ('alt' = alternative) fashion. Note. 'alt' can only be used when ninfer is 3 or greater.
+#' @param Ndist Returns the number of distractors per question.
+#' @param dist Select the type of distractors. You have three options ('mixed', 'invalid','false'). If dist='false', then the number of false distractors must be less than the number of clues by 1.
+#' @param distprob Calculates the number of comparison variation for the distractors.
+#' @param itemSet This is the choice of itemset you want. If itemSet='random' then the generator will randomly select one ('People', 'Fruits', 'Superheroes'). Change itemset='own' if you are using your own item set.
+#' @param items Input own item type. At least 10 items. Default items are used when items = NULL.
+#' @param scales Input own antonym. At least 2 antonym (i.e."bigger","smaller"). Default antonym are used when scales = NULL.
+#' @description This function generates linear syllogistic reasoning items. This is for research purposes.
+#' @details There are several things to note. To use own item set, please have at least 10 items within the itemset. In order for antonym comparison to work, please ensure that you have at least 2 antonym. The function will stop if the criteria is not met. The genearation of items are slower if you have a huge item set (e.g. In the millions!).
 #'
-#' When nspread and nclue is = 3. This means that there are 3 sentences, and only 3 names. This makes it impossible to generate an invalid distractor. As such, only the false distractors will be created. Since there are only three clues, then 3 false distractors will be created.
+#' When nspread and nclue is = 3. This means that there are 3 sentences, and only 3 names. This makes it impossible to generate an invalid distractor. As such, only the false distractors will be created. Since there are only three clues, then at most 2 false distractors can be created.
+#' When nspread and nclues are the same, all the names of the invalid distractors will be taken from the names that are used in the clues. As nspread value increases, the likelihood of having names not taken from the clues increases. Making the distractors fairly easy as there is a higher likelihood that the names taken from the matrix might not appear in the clues. Hence, keeping the value of nspread and nclue as close as possible is recommended.
 #'
-#' When nspread and nclues are the same. All the names of the invalid distractors will be taken from the names that are used in the clues. As nspread value increases, the likelihood of having names not taken from the clues increases.
 #'
-#' When ninfer = 1 and the terms is declared as either 'first' or 'second', then the correct answer will always be the opposite of the comparing terms used in the sentence. When ninfer = 2, the correct answer will be in the right direction.
+#' This function only generates items that requires up to 3 inferences. As the required inferences increases, then number of clues needed also increases. Inference is the implied comparison between sentences which allows the test taker to make an inform decision. When ninfer = 1 and the antonym is declared as either 'first' or 'second', then the correct answer will always be the opposite of the antonym used in the sentence. When ninfer = 2, the correct answer will be in the right direction.
 #'
-#' When distprob = 0.5, the distribution of the comparsion terms for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two comparison terms will be used.
 #'
-#' This function only generates items that requires up to 3 inferences. As the required inferences increases, then number of clues increases. Inference is the implied comparison between sentences which allows you to make select the correct answer.
+#' Direct is the direction of the line of thought. If direct = "ob" it means that solving the items requires the taker work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not inorder. direct = 'alt' can only be used when ninfer = 3.
 #'
-#' Direct is the direction of the line of thought. If direct = "ob" it means that solving the items require you work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not inorder.
+#'When distprob = 0.5, the distribution of the antonym for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two antonym will be used. This is only used if one wishes to study distractor analysis.
+#'
 #' @author Aiden Loe and Francis Smart
 #' @title lisy
 #' @examples \dontrun{
-#'
 #' #Generate an item
-#' item <- lisy(seed=4,nclues=5,nspread=5,Ndist=4, incidental='names',dist="false",distprob=.5,
-#'    itemSet='random',direct='of', terms="backward",ninfer = 2,items= NULL,scales = NULL)
+#' lisy(seed=10,nclues=4,nspread=6,incidental="names",
+#' antonym="first",ninfer = 3, direct="ob", Ndist=3,
+#' dist="mixed",distprob=0.5,itemSet="random",
+#' items= NULL,scales = NULL)
 #'
-#' #Save csv file
-#' write.csv(item, file="~/desktop/test.csv"  )
+#'#' #Save csv file
+#' write.csv(item, file="~/desktop/test.csv")
 #'
-#' #Test with data set
+#' #Test with dataset
 #' library("babynames")
 #' bNames <- sapply(babynames[,3], as.character)
-#' compare <- c("taller","shorter", "older", "younger", "smaller", "bigger","stronger", "weaker")
+#' compare <- c("taller","shorter", "older", "younger",
+#' "smaller", "bigger","stronger", "weaker")
 #'
-#' lisy(seed=4, nclues=4, nspread=5,Ndist=4, incidental= 'names',dist="mixed", distprob=.5,
-#'      itemSet='own',direct='of',terms="backward",ninfer = 2,items= bNames, scales = compare)
+#' # Generate item
+#' lisy(seed=10,nclues=4,nspread=6,incidental="names",
+#'     antonym="first",ninfer = 3, direct="ob", Ndist=3,dist="mixed",
+#'     distprob=0.5,itemSet="own",items= bNames, scales = compare)
 #'
-#' #loop through 30 items
+#' # loop through 30 items
 #' nitems <- 30
 #' params <- data.frame(seed=1:nitems,
 #'                      nclues=ceiling((1:nitems)/20)+3,
 #'                      nspread=ceiling((1:nitems)/15)+4)
-#' params$nclues
-#' params$nspread
+#'
 #' qtable <- NULL
 #' for (i in 1:nitems) {
 #'   runs <- lisy(seed=i,
 #'                nclues=params$nclues[i],
 #'                nspread=params$nspread[i],
-#'                Ndist=4, incidental= 'names',dist="mixed", distprob=.5,
-#'                itemSet='own',direct='of',terms="backward",ninfer = 2,
-#'                items= bNames, scales = compare)
+#'                incidental= 'names',antonym="first",ninfer = 2,
+#'                direct="of", Ndist=4,dist="mixed",distprob=.5,
+#'                itemSet="own",items= bNames, scales = compare)
 #'   qtable[[i]] <- runs
 #' }
 #'
 #' qtable
-#' write.csv(do.call("rbind",qtable), file="~/desktop/test.csv"  )
+#' write.csv(do.call("rbind",qtable), file="~/desktop/test.csv")
+#'
 #' }
-#'
-#'
+
+
+
 
 
 lisy <- function( seed=1,
                   nclues=4,
                   nspread = 5,
-                  distprob=.5,
-                  Ndist=4,
                   incidental='names',
-                  dist="mixed",
-                  itemSet='random',
-                  direct= 'of',
-                  terms = "both",
+                  antonym = "both",
                   ninfer = 1,
+                  direct= 'of',
+                  Ndist=4,
+                  dist="mixed",
+                  distprob=.5,
+                  itemSet='random',
                   items=NULL,
                   scales = NULL
 ){
@@ -158,8 +163,6 @@ lisy <- function( seed=1,
   if(ninfer > 3){
     stop("The current generator can only create up to 3 inferences per items.")
   }
-
-
 
   set.seed(seed)
   p <- paste0
@@ -497,10 +500,10 @@ lisy <- function( seed=1,
   maxitems <- itemlist[as.numeric(maxinfer[1:2])] # subsuite numbers for names.
 
 
-  if(terms=='both'){
+  if(antonym=='both'){
     maxanswer <- cap(p(join(maxitems, thescale, article,
                             forward=rbinom(1, 1, distprob)==1),'.'))
-  }else if(terms == 'first'){
+  }else if(antonym == 'first'){
     maxanswer <- cap(p(join(maxitems, thescale, article,
                             forward=TRUE),'.'))
     if(ninfer == 1){
@@ -508,7 +511,7 @@ lisy <- function( seed=1,
                               forward=FALSE),'.'))
     }
 
-  }else if (terms == "second"){
+  }else if (antonym == "second"){
     maxanswer <- cap(p(join(maxitems, thescale, article,
                             forward=FALSE),'.'))
     if(ninfer == 1){
@@ -600,21 +603,21 @@ lisy <- function( seed=1,
   # iclues all come from the same clues now.
 
   q <- NULL
-  if(terms=='both'){
+  if(antonym=='both'){
     for (i in 1:nrow(iclues)) {
       q <- p(q, join(iclues[i,], thescale, article,
                      forward=rbinom(1, 1, distprob)==1))
       if (i<nrow(iclues)) q <- p(q, ', ')
       q
     }
-  }else if(terms == 'first'){
+  }else if(antonym == 'first'){
     # there is a chance that all the sentence might be in the same direction.
     for (i in 1:nrow(iclues)) {
       q <- p(q, join(iclues[i,], thescale, article,
                      forward=TRUE))
       if (i<nrow(iclues)) q <- p(q, ', ')
     }
-  }else if (terms == "second"){
+  }else if (antonym == "second"){
     for (i in 1:nrow(iclues)) {
       q <- p(q, join(iclues[i,], thescale, article,
                      forward=FALSE))
@@ -726,3 +729,7 @@ lisy <- function( seed=1,
 
 }
 ### End Logical Item
+
+### generate item ####
+
+
