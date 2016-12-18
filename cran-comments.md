@@ -15,9 +15,9 @@ This is a new release, so there are no reverse dependencies.
 
 ---
 
-* I have run R CMD check on the NUMBER downstream dependencies.
-  (Summary at ...). 
+* I have run R CMD check on the downstream dependencies of AIG
+  (https://github.com/Aidenloe/AIG/blob/master/revdep/problems.md)
   
-* FAILURE SUMMARY
+* “There were no ERRORs, WARNINGs or NOTEs.”
 
-* All revdep maintainers were notified of the release on RELEASE DATE.
+
