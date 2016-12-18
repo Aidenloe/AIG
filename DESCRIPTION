@@ -1,7 +1,7 @@
 Package: AIG
 Type: Package
 Title: Automatic Item Generator
-Version: 0.1
+Version: 0.1.0
 Date: 2016-12-17
 Author: Aiden Loe
 Maintainer: Aiden Loe <bsl28@cam.ac.uk>
