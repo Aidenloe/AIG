@@ -8,7 +8,6 @@ Maintainer: Aiden Loe <bsl28@cam.ac.uk>
 Description: A collection of Automatic Item Generators. This is only for research purposes. 
 License: GPL-3
 Imports:
-    igraph,
     mgcv,
     stats,
     dplyr
