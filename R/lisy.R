@@ -177,12 +177,10 @@ lisy <- function( seed=1,
   set.seed(seed)
   p <- paste0
   cap <- function(x) paste0(
-    #take the first words and make upper case, combine the lower case of the remaining words
     toupper(substr(x,1,1)), substr(x,2,nchar(x)))
 
 
   if(is.null(items)  | is.null(scales)){
-    # we sets of items in a list item features
     sets <- c('people', 'fruit', 'superheroes')
     items <- list(people=c('Amy', 'Susan', 'Bob', 'Mary', 'Robert', 'Ernest', 'Henry', 'Peter','Jake','Jenny',
                            'Edward','Sam','Marcus','Mario'),
@@ -190,7 +188,6 @@ lisy <- function( seed=1,
                   superheroes=c('Spiderman','Superman','Batman','Wolverine','Catwoman','Thor','The Shadow','Silver Surfer',
                                 'Captain America','Hurcleus','Harry Potter','Hulk','Gandalf'))
 
-    # scale comparison
     scales <- list(people=matrix(c('taller', 'shorter','older', 'younger','faster', 'slower'),
                                  nrow=2),
                    fruit = matrix(c('more fresh', 'less fresh','bigger', 'smaller',
@@ -215,12 +212,10 @@ lisy <- function( seed=1,
     stop("Please select either 'objects' or 'names'")
   }
 
-  # Choose a random set if the argument of set == random. Here we can change item type
   if(itemSet== 'random' | itemSet== "own"){
     set <- sample(sets,1)
   }
 
-  # randomly place Nouns in selected itemset
   itemlist <- sample(items[[set]])
 
   if(length(itemlist) < nspread){
@@ -648,7 +643,7 @@ lisy <- function( seed=1,
   dlist <- NULL
   if(dist=="mixed"){
     if(all(is.na(iinvkeeps)) == TRUE){
-      warning(paste0("This results because all the combinations in the matrix are possible. \n Invalid distractors cannot be created. \n Return only False distractors. \n Caution when studying distractors.\n This is located in question ", seed ,".\n Solution: Try increasing nspread."))
+      warning(paste0("This results because all the combinations in the matrix are possible. \nInvalid distractors cannot be created. \nReturn only False distractors. \nCaution when studying distractors.\nThis is located in question ", seed ,".\nSolution: Try increasing nspread."))
       suppressWarnings(dlist <- rbind(cbind(iinvkeeps, type='invalid'),
                                       cbind(ifalses, type='false')))
     }else{
