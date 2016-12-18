@@ -81,7 +81,6 @@
 
 
 
-
 lisy <- function( seed=1,
                   nclues=4,
                   nspread = 5,
@@ -212,6 +211,7 @@ lisy <- function( seed=1,
     stop("Please select either 'objects' or 'names'")
   }
 
+
   if(itemSet== 'random' | itemSet== "own"){
     set <- sample(sets,1)
   }
@@ -221,20 +221,14 @@ lisy <- function( seed=1,
   if(length(itemlist) < nspread){
     stop("There is insufficient unique names. Either reduce nspread, or add more items into the item set.")
   }
-  # articles
+
+
   article  <- articles[[set]]
-
-  # all syllogism based on selected item set
   scaleset <- scales[[set]]
-
-  #randomly select syllogism column wise
   thescale <- scaleset[,sample(ncol(scaleset),1)]
 
   # List of possible clues
-  # column wise, ascending order.
-  # row wise, second digit always smaller than first digit. So that we can create invalid or false distractors.
-  # pclues determine the direction of the rclues. aka, linear or non linear solving of the items.
-  pclues <- NULL #possible clues
+  pclues <- NULL
   if(direct=="of" | direct == 'alt'){
     for (i in 2:nspread) for (ii in (i-1):1) {
       pclues <- rbind(pclues, c(i,ii))
@@ -248,84 +242,69 @@ lisy <- function( seed=1,
   }
 
 
-  # Require that the solution is from the infer df
-  # kill if nclues is more than nspread
+
   if(nclues > nspread){
     stop("Please make sure that the value of nclues is smaller or equal to nspread")
   }else{
-    nclues <- uclues <- nclues  #given by user
+    nclues <- uclues <- nclues
   }
 
-  #if(nspread == 3 && minsteps == 3){ stop("Please increase nspread in order to find a suitable logical combination")}
-  #if(minsteps > 4) {warning("The function may be in an infinite because it cannot find a suitable logical combination. \n Recommend setting minstep of less than 4.")}
   if(nspread > uclues +3 ){ warning("The large combinatorics value of nspread may result in making the distractors obviously wrong. \nSuggest making  nspread at most + 1 > nclues.")}
-  thought<- "NON-linear"
-  # keep repeating until there is a max 3 inference step.
+
+
   if(ninfer == 2){
     redo <- 1
     while(redo==1){
       clues<- NULL
-      #At least one value from the 2nd col exist in the 1st col
+
       while(any(clues[,1] %in% clues[,2]) == FALSE){
         nclues <- sample(nrow(pclues), uclues)
-        #extract the pclues rows based on the random sample of nclues given by user.
         clues<-pclues[nclues,]
-        clues <- uniquecombs(clues)  # keep unique rows only
+        clues <- uniquecombs(clues)
         any(clues[,1] %in% clues[,2]) == TRUE
       }
 
-      # 1 step
-      infer <- data.frame(left =pclues[nclues,1],  #nclues first column become left
-                          right=pclues[nclues,2],  #nclues second column become right
+
+      infer <- data.frame(left =pclues[nclues,1],
+                          right=pclues[nclues,2],
                           steps=1,
-                          rclues=sapply(nclues,toString), #change values to string type #row clues
-                          stringsAsFactors=FALSE) # don't convert strings to factor
+                          rclues=sapply(nclues,toString),
+                          stringsAsFactors=FALSE)
 
       minstep <- nrow(infer)
       i <- 1
-      # while i is less than nrow() + 1
+
       while (i< minstep) {
-        #check for all values in first column that is equals to second column 1st cell value
-        #selecting a row within the matrix
-        #the row is based on whether the element is a match with the element within the vector
-        # i.e. if the infer[,2] == 2, it will extract all rows where the first column value == 2
-        # It may extract more than one row, or no rows
-        # this will repeat until the while loop is fulfilled
-        #sub <- infer[infer[,1]==infer[i,2],]
+
         sub <- infer[infer[,1]==infer[i,2],]
 
-        # if nrow(sub) is greater than 0
-        # so if no sub is extracted, then don't do this step. if not, do this step.
         if (nrow(sub) > 0) {
-          sub[,1] <- infer[i,1] #first value of sub changes to value depending on first column values
+          sub[,1] <- infer[i,1]
 
-          #pasting the infer clues in the sub clues
           sub$rclues <- paste0(infer$rclues[i],'.',sub$rclues)
 
-          # check if sub already exist in previous case
           exist <- paste0(sub[,1],sub[,2]) %in% paste0(infer[,1],infer[,2])
 
 
-          # remove those that exists
+
           if(any(exist)==TRUE){
             dup <- which(exist == TRUE, arr.ind=TRUE)
             sub <- sub[-dup,]
             if(all(is.na(sub))==FALSE){
               for(k in 1:nrow(sub)){
-                infer[nrow(infer)+1,] <- c(sub$left[k],  # repeat
-                                           sub$right[k], # repeat
-                                           as.numeric(sub$step[k])+1,  #Achieve maximum steps]
+                infer[nrow(infer)+1,] <- c(sub$left[k],
+                                           sub$right[k],
+                                           as.numeric(sub$step[k])+1,
                                            sub$rclues[k])
               }
             }
           }
 
-          # If values does not exist
           if(all(exist==FALSE) == TRUE){
             for(k in 1:nrow(sub)){
-              infer[nrow(infer)+1,] <- c(sub$left[k],  # repeat
-                                         sub$right[k], # repeat
-                                         as.numeric(sub$step[k])+1,  #Achieve maximum steps]
+              infer[nrow(infer)+1,] <- c(sub$left[k],
+                                         sub$right[k],
+                                         as.numeric(sub$step[k])+1,
                                          sub$rclues[k])
             }
           }
@@ -343,21 +322,18 @@ lisy <- function( seed=1,
   }
   if(ninfer==1){
     clues<- NULL
-    #At least one value from the 2nd col exist in the 1st col
     while(any(clues[,1] %in% clues[,2]) == FALSE){
       nclues <- sample(nrow(pclues), uclues)
-      #extract the pclues rows based on the random sample of nclues given by user.
       clues<-pclues[nclues,]
-      clues <- uniquecombs(clues)  # keep unique rows only
+      clues <- uniquecombs(clues)
       any(clues[,1] %in% clues[,2]) == TRUE
     }
 
-    # 1 step
-    infer <- data.frame(left =pclues[nclues,1],  #nclues first column become left
-                        right=pclues[nclues,2],  #nclues second column become right
+    infer <- data.frame(left =pclues[nclues,1],
+                        right=pclues[nclues,2],
                         steps=1,
-                        rclues=sapply(nclues,toString), #change values to string type #row clues
-                        stringsAsFactors=FALSE) # don't convert strings to factor
+                        rclues=sapply(nclues,toString),
+                        stringsAsFactors=FALSE)
 
 
   }
@@ -365,69 +341,56 @@ lisy <- function( seed=1,
     redo <- 1
     while(redo==1){
       clues<- NULL
-      #At least one value from the 2nd col exist in the 1st col
+
       while(any(clues[,1] %in% clues[,2]) == FALSE){
         nclues <- sample(nrow(pclues), uclues)
-        #extract the pclues rows based on the random sample of nclues given by user.
         clues<-pclues[nclues,]
-        clues <- uniquecombs(clues)  # keep unique rows only
+        clues <- uniquecombs(clues)
         any(clues[,1] %in% clues[,2]) == TRUE
       }
 
-
-      # 1 step
-      infer <- data.frame(left =pclues[nclues,1],  #nclues first column become left
-                          right=pclues[nclues,2],  #nclues second column become right
+      infer <- data.frame(left =pclues[nclues,1],
+                          right=pclues[nclues,2],
                           steps=1,
-                          rclues=sapply(nclues,toString), #change values to string type #row clues
-                          stringsAsFactors=FALSE) # don't convert strings to factor
+                          rclues=sapply(nclues,toString),
+                          stringsAsFactors=FALSE)
 
       minstep <- nrow(infer)
 
       i <- 1
-      # while i is less than nrow() + 1
+
       while (i< minstep) {
-        #check for all values in first column that is equals to second column 1st cell value
-        #selecting a row within the matrix
-        #the row is based on whether the element is a match with the element within the vector
-        # i.e. if the infer[,2] == 2, it will extract all rows where the first column value == 2
-        # It may extract more than one row, or no rows
-        # this will repeat until the while loop is fulfilled
-        #sub <- infer[infer[,1]==infer[i,2],]
+
         sub <- infer[infer[,1]==infer[i,2],]
 
-        # if nrow(sub) is greater than 0
-        # so if no sub is extracted, then don't do this step. if not, do this step.
         if (nrow(sub) > 0) {
-          sub[,1] <- infer[i,1] #first value of sub changes to value depending on first column values
+          sub[,1] <- infer[i,1]
 
-          #pasting the infer clues in the sub clues
           sub$rclues <- paste0(infer$rclues[i],'.',sub$rclues)
 
-          # check if sub already exist in previous case
           exist <- paste0(sub[,1],sub[,2]) %in% paste0(infer[,1],infer[,2])
 
 
-          # remove those that exists
+
           if(any(exist)==TRUE){
             dup <- which(exist == TRUE, arr.ind=TRUE)
             sub <- sub[-dup,]
             if(all(is.na(sub))==FALSE){
               for(k in 1:nrow(sub)){
-                infer[nrow(infer)+1,] <- c(sub$left[k],  # repeat
-                                           sub$right[k], # repeat
-                                           as.numeric(sub$step[k])+1,  #Achieve maximum steps]
+                infer[nrow(infer)+1,] <- c(sub$left[k],
+                                           sub$right[k],
+                                           as.numeric(sub$step[k])+1,
                                            sub$rclues[k])
               }
             }
           }
 
-          # If values does not exist
+
           if(all(exist==FALSE) == TRUE){
             for(k in 1:nrow(sub)){
-              infer[nrow(infer)+1,] <- c(sub$left[k],  # repeat
-                                         sub$right[k], # repeat
-                                         as.numeric(sub$step[k])+1,  #Achieve maximum steps]
+              infer[nrow(infer)+1,] <- c(sub$left[k],
+                                         sub$right[k],
+                                         as.numeric(sub$step[k])+1,
                                          sub$rclues[k])
             }
           }
@@ -436,7 +399,7 @@ lisy <- function( seed=1,
 
         i <- i+1
       }
-      infer
+
       if(any(infer$steps==3) == TRUE ){
         redo <- 3
       }
@@ -450,26 +413,21 @@ lisy <- function( seed=1,
   (infer <- infer[order(infer[,1], decreasing=TRUE),])
 
   ############# VALID RESPONSES ##############
-  valid    <- paste0(infer[,1] ,'.',infer[,2]) #combine left / right #those selected within pclues
-  possible <- paste0(pclues[,1],'.',pclues[,2]) #combine all pclues combination together
+  valid    <- paste0(infer[,1] ,'.',infer[,2])
+  possible <- paste0(pclues[,1],'.',pclues[,2])
 
-
-  #search for number of possible in valid
   (Nval <- (1:length(possible))[possible %in% valid])
 
 
   ############### INVALID RESPONSES ##########
-  (Ninv <- (1:length(possible))[!possible %in% valid]) #search for impossible in valid
-  invalids <- cbind(pclues[Ninv,2],pclues[Ninv,1]) # creating invalid response options.
-  invalids #names different placeholders
+  (Ninv <- (1:length(possible))[!possible %in% valid])
+  invalids <- cbind(pclues[Ninv,2],pclues[Ninv,1])
   ulist    <- unique(c(clues[,1:2]))
-
-  #invkeeps2 <- invalids[invalids[,1] %in% ulist |  invalids[,2] %in% ulist,] #names list
   invkeeps <- invalids
 
   if (length(invkeeps) > 0 ) iinvkeeps <- rbind(
     cbind(itemlist[invkeeps[,1]],itemlist[invkeeps[,2]]),
-    cbind(itemlist[invkeeps[,2]],itemlist[invkeeps[,1]])) # why flip around? [increase more invalids combinations]
+    cbind(itemlist[invkeeps[,2]],itemlist[invkeeps[,1]]))
 
 
   if(length(invkeeps)==0) {
@@ -479,15 +437,15 @@ lisy <- function( seed=1,
 
   ############ FALSE RESPONSES ##########
   falses  <- cbind(pclues[Nval,2],pclues[Nval,1])
-  ifalses <- cbind(itemlist[falses[,1]],itemlist[falses[,2]]) #names
+  ifalses <- cbind(itemlist[falses[,1]],itemlist[falses[,2]])
 
 
 
 
   ##### FUNCTION TO GENERATE ITEM #####
   join <- function(clue, thescale, article, forward=TRUE) {
-    if (forward) return(paste0(article, " " ,clue[1], ' is ', thescale[1], ' than ', article ," ", clue[2])) # Going from Big to small value (scale)
-    if (!forward) return(paste0(article, " ",clue[2], ' is ', thescale[2], ' than ',article ," ", clue[1])) # Going from Small to big value (scale reversed)
+    if (forward) return(paste0(article, " " ,clue[1], ' is ', thescale[1], ' than ', article ," ", clue[2]))
+    if (!forward) return(paste0(article, " ",clue[2], ' is ', thescale[2], ' than ',article ," ", clue[1]))
   }
 
   #### GENERATE CORRECT RESPONSE OPTION #####
@@ -501,8 +459,8 @@ lisy <- function( seed=1,
   if(ninfer ==3){
     (maxinferlist <- infer[infer$steps==3,])
   }
-  maxinfer <- maxinferlist[sample(nrow(maxinferlist), 1),] # here you randomly chose one of the max step row
-  maxitems <- itemlist[as.numeric(maxinfer[1:2])] # subsuite numbers for names.
+  maxinfer <- maxinferlist[sample(nrow(maxinferlist), 1),]
+  maxitems <- itemlist[as.numeric(maxinfer[1:2])]
 
 
   if(antonym=='both'){
@@ -529,58 +487,47 @@ lisy <- function( seed=1,
 
 
   #### ###### #### CLUES ORDERING IN THE SENTENCE ### #### ####
-  #extract the nclues rows based on the random sample of nclues given by user.
-  #ordering clues forces the sentence clues in a linear fashion.
-  # compare the position using, infer, clues, and check.
-  # rclues element correspond to the row position of the connected clues
-  # check correspond to the row position in the clue matrix
-  # we want to find the position of the clues in the clue matrix
   if(direct  == "of"){
     clues<- clues[order(clues[,1], decreasing = TRUE),]
     rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
-    (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues]) # search for row positions
+    (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
     rclues <- infer[rclues,1:4] #clues
 
-    pos    <- paste0(rclues[,1] ,'.',rclues[,2]) #combine left / right #those selected within rclues
-    pos2 <- paste0(clues[,1],'.',clues[,2]) #combine all cclues combination together
+    pos    <- paste0(rclues[,1] ,'.',rclues[,2])
+    pos2 <- paste0(clues[,1],'.',clues[,2])
 
-    #search for row order in sequence of pos characters.
-    # We want to make sure that the clues are not in a ordered fashion.
+
     check<- NULL
     for(i in pos){
       (check[i] <- (1:length(pos2))[pos2 %in% i])
     }
-    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]])) # name list
+    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
   }else if(direct == "ob"){
     clues<- clues[order(clues[,1], decreasing = TRUE),]
     rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
-    (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues]) # search for row positions
+    (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
     rclues <- infer[rclues,1:4] #clues
-    pos    <- paste0(rclues[,1] ,'.',rclues[,2]) #combine left / right #those selected within pclues
-    pos2 <- paste0(clues[,1],'.',clues[,2]) #combine all pclues combination together
+    pos    <- paste0(rclues[,1] ,'.',rclues[,2])
+    pos2 <- paste0(clues[,1],'.',clues[,2])
 
-    #search for row order in sequence of pos characters.
-    # We want to make sure that the clues are not in a ordered fashion.
     check<- NULL
     for(i in pos){
       (check[i] <- (1:length(pos2))[pos2 %in% i])
     }
     check <- rev(check)
-    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]])) # name list
+    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
   }else if(direct == "alt"){
     if(ninfer==3){
       mixed <- FALSE
       while(mixed==FALSE){
         rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
 
-        (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues]) # search for row positions
+        (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
         rclues <- infer[rclues,1:4] #clues
 
-        pos    <- paste0(rclues[,1] ,'.',rclues[,2]) #combine left / right #those selected within pclues
-        pos2 <- paste0(clues[,1],'.',clues[,2]) #combine all pclues combination together
+        pos    <- paste0(rclues[,1] ,'.',rclues[,2])
+        pos2 <- paste0(clues[,1],'.',clues[,2])
 
-        #search for row order in sequence of pos characters.
-        # We want to make sure that the clues are not in a ordered fashion.
         check<- NULL
         for(i in pos){
           (check[i] <- (1:length(pos2))[pos2 %in% i])
@@ -594,7 +541,7 @@ lisy <- function( seed=1,
         }
       }
     }
-    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]])) # name list
+    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
   }else{
     stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
   }
@@ -605,18 +552,14 @@ lisy <- function( seed=1,
   dreturn <- c()
   dtype <- c()
 
-  # iclues all come from the same clues now.
-
   q <- NULL
   if(antonym=='both'){
     for (i in 1:nrow(iclues)) {
       q <- p(q, join(iclues[i,], thescale, article,
                      forward=rbinom(1, 1, distprob)==1))
       if (i<nrow(iclues)) q <- p(q, ', ')
-
     }
   }else if(antonym == 'first'){
-    # there is a chance that all the sentence might be in the same direction.
     for (i in 1:nrow(iclues)) {
       q <- p(q, join(iclues[i,], thescale, article,
                      forward=TRUE))
@@ -633,13 +576,10 @@ lisy <- function( seed=1,
   }
 
   q <- p(q, '. Which of the following is implied?')
-
   if(Ndist > 5) stop("Please choose a lower number of distractors")
 
-  #####
 
-  # create matrix of invalid and false ####
-  #select type of distractors
+  # create matrix of invalid and false distractors ####
   dlist <- NULL
   if(dist=="mixed"){
     if(all(is.na(iinvkeeps)) == TRUE){
@@ -667,21 +607,19 @@ lisy <- function( seed=1,
   }
 
   # Create actual distractors ####
-  #repeat sampling the distractions rows in the dlist matrix that was created previously
   if(dist=="mixed"){
     dlist.df <- as.data.frame(dlist)
-
     if(length(unique(dlist.df$type))==2){ #if 2 = "invalid" and "falses" distractor type
       type <- dlist.df$type
-      dlist.df <- sample_n(group_by(dlist.df,type),ceiling(Ndist/2), 0.5)  #divide by 2 since there are 2 types of distractors
+      dlist.df <- sample_n(group_by(dlist.df,type),ceiling(Ndist/2), 0.5)
 
-      dlist.df <- dlist.df[sample(nrow(dlist.df)),] #randomise position of distractors.
+      dlist.df <- dlist.df[sample(nrow(dlist.df)),]
 
       if(Ndist %% 2 == 0){
-        dtype <- dlist.df[,3] #type
+        dtype <- dlist.df[,3]
 
       }else{
-        dtype <- dlist.df[-nrow(dlist.df),3] # - last row if uneven number
+        dtype <- dlist.df[-nrow(dlist.df),3]
       }
 
       dtype <- as.character(as.matrix(dtype))
@@ -689,11 +627,11 @@ lisy <- function( seed=1,
     }else{ # if only one distractor type
       dlist.df <- as.data.frame(dlist)
       type <- dlist.df$type
-      dlist.df<- sample_n(group_by(dlist.df,type),Ndist, 0.5) #do not divide since only one type of distractor
+      dlist.df<- sample_n(group_by(dlist.df,type),Ndist, 0.5)
       dtype <- dlist.df[,3]
       dtype <- as.character(as.matrix(dtype))
     }
-    dlist.df <- as.matrix(dlist.df) #convert to matrix
+    dlist.df <- as.matrix(dlist.df)
     dreturn<- NULL
     for (i in 1:Ndist){
       dreturn[i] <- cap(p(join(dlist.df[i,1:2], thescale, article,
@@ -711,39 +649,37 @@ lisy <- function( seed=1,
       for (i in 1:Ndist){
         dreturn[i] <- cap(p(join(draw[i,1:2], thescale, article,
                                  forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
-         }
-      }else{
-        dtype <- draw[,3]
-        for (i in 1:Ndist){
-          dreturn[i] <- cap(p(join(draw[i,1:2], thescale, article,
-                                   forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
-        }
-        #if(!is.null(nrow(dlist))) dtype[i] <- dreturn[i] <- '999'
       }
+    }else{
+      dtype <- draw[,3]
+      for (i in 1:Ndist){
+        dreturn[i] <- cap(p(join(draw[i,1:2], thescale, article,
+                                 forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
+      }
+
     }
-
-
-
-    data.frame(seed=seed,
-               Question=q,
-               Answer=maxanswer,
-               dist1=dreturn[1],
-               dtype1=dtype[1],
-               dist2=dreturn[2],
-               dtype2=dtype[2],
-               dist3=dreturn[3],
-               dtype3=dtype[3],
-               dist4=dreturn[4],
-               dtype4=dtype[4],
-               dist5=dreturn[5],
-               dtype5=dtype[5],
-               clues = t(as.numeric(t(check)))
-    )
-
-
   }
-  ### End Logical Item
 
-  ### generate item ####
+
+
+  data.frame(seed=seed,
+             Question=q,
+             Answer=maxanswer,
+             dist1=dreturn[1],
+             dtype1=dtype[1],
+             dist2=dreturn[2],
+             dtype2=dtype[2],
+             dist3=dreturn[3],
+             dtype3=dtype[3],
+             dist4=dreturn[4],
+             dtype4=dtype[4],
+             dist5=dreturn[5],
+             dtype5=dtype[5],
+             clues = t(as.numeric(t(check)))
+  )
+
+
+}
+
 
 
