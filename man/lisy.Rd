@@ -93,7 +93,6 @@ for (i in 1:nitems) {
 }
 
 qtable
-write.csv(do.call("rbind",qtable), file="~/desktop/test.csv")
 
 }
 \author{
