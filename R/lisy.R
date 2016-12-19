@@ -34,28 +34,27 @@
 #'
 #' @author Aiden Loe and Francis Smart
 #' @title lisy
-#' @examples \dontrun{
-#'
-#' #Generate an item
+#' @examples
+#' #Generate an item with default item set
 #' lisy(seed=10,nclues=4,nspread=6,incidental='names',
 #'     antonym="first",ninfer = 3, direct='ob', Ndist=3,
 #'     dist="mixed",distprob=0.5,itemSet='random',
 #'     items= NULL,scales = NULL)
 #'
-#' #Save csv file
-#' write.csv(item, file="~/desktop/test.csv")
+#' #Item set
+#' superheroes <- c('Spider man','Super man','Batman','Wolverine',
+#' 'Catwoman','Thor','The Shadow','Silver Surfer', 'Flash','Wonder woman',
+#' 'Mr. Fantastic', 'Aqua man', "Hawkeye", 'Starfire', 'Venom', "General Zod")
 #'
-#' Test with dataset
-#' library("babynames")
-#' bNames <- sapply(babynames[,3], as.character)
+#' #Antonym
 #' compare <- c("taller","shorter", "older", "younger",
 #'  "smaller", "bigger","stronger", "weaker")
 #'
-#' #Generate item
+#' #Generate item with own dataset
 #' lisy(seed=10,nclues=4,nspread=6,incidental='names',
-#'     antonym="first",ninfer = 3, direct='ob', Ndist=3,
-#'     dist="mixed",distprob=0.5,
-#'     itemSet='own',items= bNames, scales = compare)
+#'     antonym="first",ninfer = 3, direct='ob',
+#'     Ndist=3, dist="mixed",distprob=0.5,
+#'     itemSet='own',items= superheroes, scales = compare)
 #'
 #' #loop through 30 items
 #' nitems <- 30
@@ -70,13 +69,13 @@
 #'                nspread=params$nspread[i],
 #'                incidental= 'names',antonym="first",ninfer = 2,
 #'                direct='of', Ndist=4,dist="mixed",distprob=.5,
-#'                 itemSet='own', items= bNames, scales = compare)
+#'                 itemSet='own', items= superheroes, scales = compare)
 #'   qtable[[i]] <- runs
 #' }
 #'
 #' qtable
-#' write.csv(do.call("rbind",qtable), file="~/desktop/test.csv" )
-#' }
+#' write.csv(do.call("rbind",qtable), file="~/desktop/test.csv")
+#'
 
 
 
