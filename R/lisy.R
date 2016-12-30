@@ -77,8 +77,6 @@
 #'
 
 
-
-
 lisy <- function( seed=1,
                   nclues=4,
                   nspread = 5,
@@ -247,7 +245,7 @@ lisy <- function( seed=1,
     nclues <- uclues <- nclues
   }
 
-  if(nspread > uclues +3 ){ warning("The large combinatorics value of nspread may result in making the distractors obviously wrong. \nSuggest making  nspread at most + 1 > nclues.")}
+  if(nspread > uclues +3 ){ warning("The large combinatorics value of nspread may result in making the distractors obviously wrong. \nSuggest making nspread at most + 1 > nclues.")}
 
 
   if(ninfer == 2){
@@ -480,7 +478,7 @@ lisy <- function( seed=1,
                               forward=TRUE),'.'))
     }
   }else{
-    stop("Please select declare either 'both', 'first' or 'second' comparison.")
+    stop("Please select either 'both', 'first' or 'second' comparison.")
   }
 
 
@@ -544,6 +542,16 @@ lisy <- function( seed=1,
     stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
   }
 
+  inferClues<- (t(as.numeric(check)))
+
+  if(is.na(inferClues[2])){
+    inferClues[2] <- " "
+  }
+  if(is.na(inferClues[3])){
+    inferClues[3] <- " "
+  }
+
+
 
   # CREATE SENTENCE STRUCTURE ####
   q <- 'Clues: '
@@ -576,6 +584,7 @@ lisy <- function( seed=1,
   q <- p(q, '. Which of the following is implied?')
   if(Ndist > 5) stop("Please choose a lower number of distractors")
 
+  q <-   paste(toupper(substring(q, 1,1)),substring(q, 2),sep="", collapse=" ")
 
   # create matrix of invalid and false distractors ####
   dlist <- NULL
@@ -638,7 +647,7 @@ lisy <- function( seed=1,
 
   }else{
     if(Ndist > nrow(dlist)){
-      stop("There is not enough invalid distractors. Please change the arg dist to 'mixed' or 'false'")
+      stop("There are not enough invalid distractors. Please change the arg dist to 'mixed' or 'false'")
     }
     draw  <- dlist[sample(nrow(dlist),Ndist),]
     if(Ndist==1){
@@ -659,9 +668,9 @@ lisy <- function( seed=1,
   }
 
 
-
-  data.frame(seed=seed,
+  finalList <- data.frame(seed=seed,
              Question=q,
+             ninfer=ninfer,
              Answer=maxanswer,
              dist1=dreturn[1],
              dtype1=dtype[1],
@@ -673,8 +682,13 @@ lisy <- function( seed=1,
              dtype4=dtype[4],
              dist5=dreturn[5],
              dtype5=dtype[5],
-             clues = t(as.numeric(t(check)))
+             clues.1 = inferClues[1],
+             clues.2 = inferClues[2],
+             clues.3 = inferClues[3]
   )
+
+  class(finalList) <- "lisy"
+  return(finalList)
 
 
 }
