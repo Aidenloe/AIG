@@ -1,7 +1,3 @@
----
-output: github_document
----
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 # AIG
 AIG is a collection of Automatic Item Generators. Currently, only the linear syllogism generator is in the package. More is to follow soon!
