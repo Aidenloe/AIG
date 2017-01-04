@@ -14,4 +14,3 @@ print.lisy <- function(x,...){
   cat(paste0("\nDistractor 4: ",finalList$dist4, "(",finalList$dtype4 ,")"))
   cat(paste0("\nDistractor 5: ",finalList$dist5, "(",finalList$dtype5 ,")"))
 }
-
