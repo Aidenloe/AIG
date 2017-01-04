@@ -51,7 +51,7 @@
 #'  "smaller", "bigger","stronger", "weaker")
 #'
 #' #Generate item with own dataset
-#' lisy(seed=10,nclues=4,nspread=6,incidental='names',
+#' lisy(seed=1,nclues=4,nspread=6,incidental='names',
 #'     antonym="first",ninfer = 3, direct='ob',
 #'     Ndist=3, dist="mixed",distprob=0.5,
 #'     itemSet='own',items= superheroes, scales = compare)
