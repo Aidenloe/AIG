@@ -14,3 +14,20 @@ print.lisy <- function(x,...){
   cat(paste0("\nDistractor 4: ",finalList$dist4, "(",finalList$dtype4 ,")"))
   cat(paste0("\nDistractor 5: ",finalList$dist5, "(",finalList$dtype5 ,")"))
 }
+
+
+#' @export
+#'
+print.ICARarith <- function(x,...){
+  results<- x
+  cat("Arithmetic Questions:")
+  cat(paste0("\n",results$prompt))
+  cat("\n\nResponse Options:")
+  cat(paste0("\n",results$choices))
+  cat("\n\nAnswers:")
+  cat(paste0("\n",results$answer))
+  cat("\n\nCode:")
+  cat(paste0("\n",results$code))
+}
+
+

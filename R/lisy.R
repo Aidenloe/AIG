@@ -33,7 +33,7 @@
 #'When distprob = 0.5, the distribution of the antonym for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two antonym will be used. This is only used if one wishes to study distractor analysis.
 #'
 #' @author Aiden Loe and Francis Smart
-#' @title lisy
+#' @title Linear Syllogism Generator
 #' @examples
 #' #Generate an item with default item set
 #' lisy(seed=10,nclues=4,nspread=6,incidental='names',

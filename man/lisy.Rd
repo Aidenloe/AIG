@@ -2,7 +2,7 @@
 % Please edit documentation in R/lisy.R
 \name{lisy}
 \alias{lisy}
-\title{lisy}
+\title{Linear Syllogism Generator}
 \usage{
 lisy(seed = 1, nclues = 4, nspread = 5, incidental = "names",
   antonym = "both", ninfer = 1, direct = "of", Ndist = 4,
