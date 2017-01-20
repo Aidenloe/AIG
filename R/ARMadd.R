@@ -228,5 +228,5 @@ if(arithOps == "subtract") (code <- paste(ifelse(stimuliCode < 0, 1, 0), sep="",
 }
 
 
-
+#ICARarith(numProbs=4, numOps = 4, magnitude = 3, arithOps = "subtract",allowNeg = FALSE, sameValue=FALSE, order = "mixed")
 

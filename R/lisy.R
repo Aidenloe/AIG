@@ -169,6 +169,8 @@ lisy <- function( seed=1,
   }
 
 
+
+
   set.seed(seed)
   p <- paste0
   cap <- function(x) paste0(
