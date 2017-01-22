@@ -4,7 +4,7 @@
 \alias{ICARarith}
 \title{ICAR Arithmetic Generator}
 \usage{
-ICARarith(numProbs = 4, numOps = 1, magnitude = 1, arithOps = "add",
+ICARarith(numProbs = 5, numOps = 1, magnitude = 1, arithOps = "add",
   allowNeg = FALSE, sameValue = FALSE, order = "mixed")
 }
 \arguments{
@@ -14,7 +14,7 @@ ICARarith(numProbs = 4, numOps = 1, magnitude = 1, arithOps = "add",
 
 \item{magnitude}{sets the range of values for the integers in the stimuli by powers of 10 (range of values is 1 to 5)}
 
-\item{arithOps}{There are two options in this argument, either 'add' or 'subtract'.}
+\item{arithOps}{There are two options in this argument, either 'add' or 'subtract', "multiply.}
 
 \item{allowNeg}{Allow the use of negative values. Only for "add" arithmetic operator. Not allowed for "subtract".}
 
