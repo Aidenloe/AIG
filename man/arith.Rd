@@ -25,9 +25,9 @@ arith(numProbs = 5, numOps = 1, magnitude = 1, arithOps = "add",
 \value{
 \describe{
 \item{Question}{The arithmetic questions that are automatically generated.}
-\item{Response Options}{Eight response options. }
-\item{Answers}{The answer to the question generated.}
 \item{Code}{First digit is the magnitude. Subsequent digits correspond to the positional values in the question. 0 is positive values, 1 is negative values.}
+\item{Answers}{The answer to the question generated.}
+\item{Response Options}{Eight response options. }
     }
 }
 \description{

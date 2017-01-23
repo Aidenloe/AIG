@@ -31,7 +31,12 @@
 #' Direct is the direction of the line of thought. If direct = "ob" it means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not inorder. direct = 'alt' can only be used when ninfer = 3.
 #'
 #'When distprob = 0.5, the distribution of the antonym for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two antonym will be used. This is only used if one wishes to study distractor analysis.
+#' @references
 #'
+#' Leth-Steensen, C., & Marley, A. A. J. (2000). A model of response time effect in symbolic comparison. \emph{Psychological Review, 107}, 62-100.
+#' Sternberg, R. J. (1980). Representation and process in linear syllogistic reasoning. Journal of Experimental Psychology: General, 109(2), 119.
+#'
+#' Sedek, G., & Von Hecker, U. (2004). Effects of subclinical depression and aging on generative reasoning about linear orders: Same or different processing limitations?. \emph{Journal of Experimental Psychology: General, 133(2)}, 237.
 #' @author Aiden Loe and Francis Smart
 #' @title Linear Syllogism Generator
 #' @examples
