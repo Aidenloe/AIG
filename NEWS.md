@@ -11,3 +11,9 @@
 
 * Change the author\'s name to include the chinese name of the package creator. 
 
+* Added a new function to generate arithmetic items using the `arith()`. 
+
+* Updated the AIG description page to include arithmetic generator. 
+
+* Updated minor grammatical errors.
+

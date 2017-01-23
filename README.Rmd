@@ -6,7 +6,7 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 # AIG
-AIG is a collection of Automatic Item Generators. Currently, only the linear syllogism generator is in the package. More is to follow soon!
+AIG is a collection of Automatic Item Generators. Currently, only the linear syllogism and arithmetic generators are in the package. More is to follow soon!
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 ```
 - AIG
     - `lisy`
+    - `arith`
   
 ## Installation
 `AIG` is in [CRAN](https://cran.r-project.org/), but you can use [devtools](https://cran.r-project.org/package=devtools) to install the latest and greatest version.
