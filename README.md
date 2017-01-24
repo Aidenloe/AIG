@@ -2,10 +2,11 @@
 AIG
 ===
 
-AIG is a collection of Automatic Item Generators. Currently, only the linear syllogism generator is in the package. More is to follow soon!
+AIG is a collection of Automatic Item Generators. Currently, only the linear syllogism and arithmetic generators are in the package. More is to follow soon!
 
 -   AIG
     -   `lisy`
+    -   `arith`
 
 Installation
 ------------

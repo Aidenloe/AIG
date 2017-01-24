@@ -9,6 +9,7 @@
 #' @param nclues Generates the number of sentences to make up the item.
 #' @param nspread Calculates the spread of possible incidentals in total.
 #' @param incidental Tells the function whether the item features are 'names' or 'objects'.
+#' @param linear If linear = TRUE, a matching operator(i.e. name or object) will appear in all the adjacent clues in the sentence.
 #' @param antonym Determine whether to use both antonyms ('both') or only one type ("first" or "second").
 #' @param ninfer Generate answers that requires a X amount of inference from the items. Up to 3 is the maximum.
 #' @param direct Deciding on whether the clues are organised in an ordered("of" = ordered forward / "ob" = ordered backward) or unordered ('alt' = alternative) fashion. Note. 'alt' can only be used when ninfer is 3 or greater.
@@ -42,7 +43,7 @@
 #' @title Linear Syllogism Generator
 #' @examples
 #' #Generate an item with default item set
-#' lisy(seed=10,nclues=4,nspread=6,incidental='names',
+#' lisy(seed=10,nclues=4,nspread=6,incidental='names',linear=FALSE,
 #'     antonym="first",ninfer = 3, direct='ob', Ndist=3,
 #'     dist="mixed",distprob=0.5,itemSet='random',
 #'     items= NULL,scales = NULL)
@@ -57,7 +58,7 @@
 #'  "smaller", "bigger","stronger", "weaker")
 #'
 #' #Generate item with own dataset
-#' lisy(seed=1,nclues=4,nspread=6,incidental='names',
+#' lisy(seed=1,nclues=4,nspread=6,incidental='names',linear=FALSE,
 #'     antonym="first",ninfer = 3, direct='ob',
 #'     Ndist=3, dist="mixed",distprob=0.5,
 #'     itemSet='own',items= superheroes, scales = compare)
@@ -73,7 +74,7 @@
 #'   runs <- lisy(seed=i,
 #'                nclues=params$nclues[i],
 #'                nspread=params$nspread[i],
-#'                incidental= 'names',antonym="first",ninfer = 2,
+#'                incidental= 'names',linear=FALSE,antonym="first",ninfer = 2,
 #'                direct='of', Ndist=4,dist="mixed",distprob=.5,
 #'                 itemSet='own', items= superheroes, scales = compare)
 #'   qtable[[i]] <- runs
@@ -87,6 +88,7 @@ lisy <- function( seed=1,
                   nclues=4,
                   nspread = 5,
                   incidental='names',
+                  linear=FALSE,
                   antonym = "both",
                   ninfer = 1,
                   direct= 'of',
@@ -150,7 +152,7 @@ lisy <- function( seed=1,
     stop("False distractors are only allowed if Ndist is 1 less than the number of clues")
   }
 
-  if(ninfer == 3 && nclues < 3 | ninfer==3 && nspread < 4){
+  if(ninfer == 3 && nclues < 3 ){
     stop("To have 3 inferences you need to generate a minimum of 3 sentence with 4 names ")
   }
 
@@ -174,7 +176,32 @@ lisy <- function( seed=1,
     stop("Please increase the number of distractors.")
   }
 
+if(linear==TRUE && ninfer==3){
+  stop("Please reduce ninfer = 3 or change linear = FALSE")
+}
 
+  # seed=11
+  # nclues=7
+  # nspread = 7
+  # incidental='names'
+  # linear=TRUE
+  # antonym = "second"
+  # ninfer = 2
+  # direct= 'alt'
+  # Ndist=4
+  # dist="mixed"
+  # distprob=.5
+  # itemSet='random'
+  # items=NULL
+  # scales = NULL
+
+#   nnclues <- nclues #clues ordering in the sentence
+#   nnspread <- nspread
+#
+# # if(nclues== 3 && nspread == 4 && linear==TRUE){  #no choice. To remove last sentence
+# #   nclues <- nclues + 1;
+# #   nspread <- nspread + 1;
+# # }
 
 
   set.seed(seed)
@@ -245,7 +272,10 @@ lisy <- function( seed=1,
     stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
   }
 
-
+  # no choice. can't get 3 infer otherwise.
+if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
+    (pclues <- pclues[,c(2,1)])
+  }
 
   if(nclues > nspread){
     stop("Please make sure that the value of nclues is smaller or equal to nspread")
@@ -259,37 +289,35 @@ lisy <- function( seed=1,
   if(ninfer == 2){
     redo <- 1
     while(redo==1){
+      if(linear==TRUE){ #just one model
+        pclues2 <-   as.data.frame(pclues)
+        (nclues <-pclues2[!duplicated(pclues2[,1]),])
+        (nclues <- as.numeric(row.names(nclues)))
+        (clues<-pclues[nclues,])
+        (clues <- uniquecombs(clues))
+      }else{
       clues<- NULL
-
       while(any(clues[,1] %in% clues[,2]) == FALSE){
         nclues <- sample(nrow(pclues), uclues)
         clues<-pclues[nclues,]
         clues <- uniquecombs(clues)
         any(clues[,1] %in% clues[,2]) == TRUE
+       }
       }
-
-
       infer <- data.frame(left =pclues[nclues,1],
                           right=pclues[nclues,2],
                           steps=1,
                           rclues=sapply(nclues,toString),
                           stringsAsFactors=FALSE)
-
-      minstep <- nrow(infer)
+      (infer <- infer[ order(-infer[,1], -infer[,2]), ])
+      (minstep <- nrow(infer))
       i <- 1
-
       while (i< minstep) {
-
         sub <- infer[infer[,1]==infer[i,2],]
-
         if (nrow(sub) > 0) {
           sub[,1] <- infer[i,1]
-
           sub$rclues <- paste0(infer$rclues[i],'.',sub$rclues)
-
           exist <- paste0(sub[,1],sub[,2]) %in% paste0(infer[,1],infer[,2])
-
-
 
           if(any(exist)==TRUE){
             dup <- which(exist == TRUE, arr.ind=TRUE)
@@ -303,7 +331,6 @@ lisy <- function( seed=1,
               }
             }
           }
-
           if(all(exist==FALSE) == TRUE){
             for(k in 1:nrow(sub)){
               infer[nrow(infer)+1,] <- c(sub$left[k],
@@ -313,8 +340,6 @@ lisy <- function( seed=1,
             }
           }
         }
-
-
         i <- i+1
       }
 
@@ -324,13 +349,23 @@ lisy <- function( seed=1,
 
     }
   }
+
   if(ninfer==1){
+
+    if(linear==TRUE){
+    pclues2 <-   as.data.frame(pclues)
+    (nclues <-pclues2[!duplicated(pclues2[,1]),])
+    (nclues <- as.numeric(row.names(nclues)))
+    (clues<-pclues[nclues,])
+    clues <- uniquecombs(clues)
+    }else{
     clues<- NULL
     while(any(clues[,1] %in% clues[,2]) == FALSE){
-      nclues <- sample(nrow(pclues), uclues)
+      (nclues <- sample(nrow(pclues), uclues))
       clues<-pclues[nclues,]
       clues <- uniquecombs(clues)
       any(clues[,1] %in% clues[,2]) == TRUE
+      }
     }
 
     infer <- data.frame(left =pclues[nclues,1],
@@ -338,44 +373,41 @@ lisy <- function( seed=1,
                         steps=1,
                         rclues=sapply(nclues,toString),
                         stringsAsFactors=FALSE)
-
-
+    (infer <- infer[ order(-infer[,1], -infer[,2]), ])
   }
   if(ninfer == 3){
     redo <- 1
     while(redo==1){
+      if(linear==TRUE){ #just one model
+        pclues2 <-   as.data.frame(pclues)
+        (nclues <-pclues2[!duplicated(pclues2[,1]),])
+        (nclues <- as.numeric(row.names(nclues)))
+        (clues<-pclues[nclues,])
+        (clues <- uniquecombs(clues))
+      }else{
       clues<- NULL
-
       while(any(clues[,1] %in% clues[,2]) == FALSE){
         nclues <- sample(nrow(pclues), uclues)
         clues<-pclues[nclues,]
-        clues <- uniquecombs(clues)
+        (clues <- uniquecombs(clues))
         any(clues[,1] %in% clues[,2]) == TRUE
+       }
       }
-
       infer <- data.frame(left =pclues[nclues,1],
                           right=pclues[nclues,2],
                           steps=1,
                           rclues=sapply(nclues,toString),
                           stringsAsFactors=FALSE)
 
+      if(linear==TRUE) (infer <- infer[ order(-infer[,1], -infer[,2]), ])
       minstep <- nrow(infer)
-
       i <- 1
-
       while (i< minstep) {
-
         sub <- infer[infer[,1]==infer[i,2],]
-
         if (nrow(sub) > 0) {
           sub[,1] <- infer[i,1]
-
           sub$rclues <- paste0(infer$rclues[i],'.',sub$rclues)
-
           exist <- paste0(sub[,1],sub[,2]) %in% paste0(infer[,1],infer[,2])
-
-
-
           if(any(exist)==TRUE){
             dup <- which(exist == TRUE, arr.ind=TRUE)
             sub <- sub[-dup,]
@@ -399,11 +431,8 @@ lisy <- function( seed=1,
             }
           }
         }
-
-
         i <- i+1
       }
-
       if(any(infer$steps==3) == TRUE ){
         redo <- 3
       }
@@ -413,7 +442,7 @@ lisy <- function( seed=1,
   }
 
 
-  infer[,1:3] <- sapply(infer[,1:3], as.numeric)
+  (infer[,1:3] <- sapply(infer[,1:3], as.numeric))
   (infer <- infer[order(infer[,1], decreasing=TRUE),])
 
   ############# VALID RESPONSES ##############
@@ -444,8 +473,6 @@ lisy <- function( seed=1,
   ifalses <- cbind(itemlist[falses[,1]],itemlist[falses[,2]])
 
 
-
-
   ##### FUNCTION TO GENERATE ITEM #####
   join <- function(clue, thescale, article, forward=TRUE) {
     if (forward) return(paste0(article, " " ,clue[1], ' is ', thescale[1], ' than ', article ," ", clue[2]))
@@ -463,8 +490,8 @@ lisy <- function( seed=1,
   if(ninfer ==3){
     (maxinferlist <- infer[infer$steps==3,])
   }
-  maxinfer <- maxinferlist[sample(nrow(maxinferlist), 1),]
-  maxitems <- itemlist[as.numeric(maxinfer[1:2])]
+  (maxinfer <- maxinferlist[sample(nrow(maxinferlist), 1),])
+  (maxitems <- itemlist[as.numeric(maxinfer[1:2])])
 
 
   if(antonym=='both'){
@@ -492,20 +519,27 @@ lisy <- function( seed=1,
 
   #### ###### #### CLUES ORDERING IN THE SENTENCE ### #### ####
   if(direct  == "of"){
-    clues<- clues[order(clues[,1], decreasing = TRUE),]
-    rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
+    # if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){ # no choice. can't get 3 infer otherwise.
+    #   (clues <- clues[,c(2,1)])
+    # }
+
+    (clues<- clues[order(clues[,1], decreasing = TRUE),])
+    (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
     (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
     rclues <- infer[rclues,1:4] #clues
 
     pos    <- paste0(rclues[,1] ,'.',rclues[,2])
     pos2 <- paste0(clues[,1],'.',clues[,2])
 
-
     check<- NULL
     for(i in pos){
       (check[i] <- (1:length(pos2))[pos2 %in% i])
     }
+    check
     (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
+    # if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
+    #   ( iclues <- iclues[-nrow(iclues),])
+    # }
   }else if(direct == "ob"){
     clues<- clues[order(clues[,1], decreasing = TRUE),]
     rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
@@ -519,7 +553,12 @@ lisy <- function( seed=1,
       (check[i] <- (1:length(pos2))[pos2 %in% i])
     }
     check <- rev(check)
+    check
     (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
+    # if(nnclues== 3 && nnspread == 4 && linear==TRUE){  #To remove last sentence
+    #   ( iclues <- iclues[-nrow(iclues),])
+    # }
+
   }else if(direct == "alt"){
     if(ninfer==3){
       mixed <- FALSE
@@ -546,11 +585,14 @@ lisy <- function( seed=1,
       }
     }
     (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
+    # if(nnclues== 3 && nnspread == 4 && linear==TRUE){  #To remove last sentence
+    #   message("Alternative inference cannot be made with 3 sentences. A 4 sentence item is created instead.")
+    # }
   }else{
     stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
   }
 
-  inferClues<- (t(as.numeric(check)))
+  (inferClues<- (t(as.numeric(check))))
 
   if(is.na(inferClues[2])){
     inferClues[2] <- " "
@@ -558,6 +600,7 @@ lisy <- function( seed=1,
   if(is.na(inferClues[3])){
     inferClues[3] <- " "
   }
+
 
 
 
@@ -588,6 +631,7 @@ lisy <- function( seed=1,
   }else{
     stop("Please select declare either 'both', 'first' or 'second' comparison.")
   }
+
 
   q <- p(q, '. Which of the following is implied?')
   if(Ndist > 5) stop("Please choose a lower number of distractors")
@@ -698,8 +742,5 @@ lisy <- function( seed=1,
   class(finalList) <- "lisy"
   return(finalList)
 
-
 }
-
-
 

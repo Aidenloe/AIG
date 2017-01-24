@@ -5,9 +5,9 @@
 \title{Linear Syllogism Generator}
 \usage{
 lisy(seed = 1, nclues = 4, nspread = 5, incidental = "names",
-  antonym = "both", ninfer = 1, direct = "of", Ndist = 4,
-  dist = "mixed", distprob = 0.5, itemSet = "random", items = NULL,
-  scales = NULL)
+  linear = FALSE, antonym = "both", ninfer = 1, direct = "of",
+  Ndist = 4, dist = "mixed", distprob = 0.5, itemSet = "random",
+  items = NULL, scales = NULL)
 }
 \arguments{
 \item{seed}{Generates the same question again from local computer.}
@@ -17,6 +17,8 @@ lisy(seed = 1, nclues = 4, nspread = 5, incidental = "names",
 \item{nspread}{Calculates the spread of possible incidentals in total.}
 
 \item{incidental}{Tells the function whether the item features are 'names' or 'objects'.}
+
+\item{linear}{If linear = TRUE, a matching operator(i.e. name or object) will appear in all the adjacent clues in the sentence.}
 
 \item{antonym}{Determine whether to use both antonyms ('both') or only one type ("first" or "second").}
 
@@ -55,7 +57,7 @@ When distprob = 0.5, the distribution of the antonym for the distractors will be
 }
 \examples{
 #Generate an item with default item set
-lisy(seed=10,nclues=4,nspread=6,incidental='names',
+lisy(seed=10,nclues=4,nspread=6,incidental='names',linear=FALSE,
     antonym="first",ninfer = 3, direct='ob', Ndist=3,
     dist="mixed",distprob=0.5,itemSet='random',
     items= NULL,scales = NULL)
@@ -70,7 +72,7 @@ compare <- c("taller","shorter", "older", "younger",
  "smaller", "bigger","stronger", "weaker")
 
 #Generate item with own dataset
-lisy(seed=1,nclues=4,nspread=6,incidental='names',
+lisy(seed=1,nclues=4,nspread=6,incidental='names',linear=FALSE,
     antonym="first",ninfer = 3, direct='ob',
     Ndist=3, dist="mixed",distprob=0.5,
     itemSet='own',items= superheroes, scales = compare)
@@ -86,7 +88,7 @@ for (i in 1:nitems) {
   runs <- lisy(seed=i,
                nclues=params$nclues[i],
                nspread=params$nspread[i],
-               incidental= 'names',antonym="first",ninfer = 2,
+               incidental= 'names',linear=FALSE,antonym="first",ninfer = 2,
                direct='of', Ndist=4,dist="mixed",distprob=.5,
                 itemSet='own', items= superheroes, scales = compare)
   qtable[[i]] <- runs
@@ -100,6 +102,7 @@ Aiden Loe and Francis Smart
 }
 \references{
 Leth-Steensen, C., & Marley, A. A. J. (2000). A model of response time effect in symbolic comparison. \emph{Psychological Review, 107}, 62-100.
+
 Sternberg, R. J. (1980). Representation and process in linear syllogistic reasoning. Journal of Experimental Psychology: General, 109(2), 119.
 
 Sedek, G., & Von Hecker, U. (2004). Effects of subclinical depression and aging on generative reasoning about linear orders: Same or different processing limitations?. \emph{Journal of Experimental Psychology: General, 133(2)}, 237.

@@ -19,4 +19,6 @@
 
 * Added new references. 
 
+* Now the items can generate linear array items for up to 2 inferences. (i.e. Adjacent clues have matching operators.)
+
 
