@@ -5,7 +5,7 @@
 \title{Linear Syllogism Generator}
 \usage{
 lisy(seed = 1, nclues = 4, nspread = 5, incidental = "names",
-  linear = FALSE, antonym = "both", ninfer = 1, direct = "of",
+  linear = FALSE, antonym = "both", ninfer = 1, direct = "ob",
   Ndist = 4, dist = "mixed", distprob = 0.5, itemSet = "random",
   items = NULL, scales = NULL)
 }
@@ -52,6 +52,8 @@ This function only generates items that requires up to 3 inferences. As the requ
 
 
 Direct is the direction of the line of thought. If direct = "ob" it means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not inorder. direct = 'alt' can only be used when ninfer = 3.
+
+When linear = TRUE, the direct and antonym position follow together. i.e. If direct = "of" and antonym = "first". The antonym will be the same for the question and the answer. Same when direct = "of" and antonym = "second". In such suitation, the names will follow in a linear sequence (A > B, B > C, C > D). However, when direct is changed to "ob",  then the sentence structure changes to becomes (A > B, C > A, D > C). When direct = "both", the names most likely not follow a linear sequence, and the antonyms will interchange between sentence (i.e. A > B, C > B, C < E).
 
 When distprob = 0.5, the distribution of the antonym for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two antonym will be used. This is only used if one wishes to study distractor analysis.
 }

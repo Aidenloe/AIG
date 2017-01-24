@@ -31,6 +31,8 @@
 #'
 #' Direct is the direction of the line of thought. If direct = "ob" it means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not inorder. direct = 'alt' can only be used when ninfer = 3.
 #'
+#'When linear = TRUE, the direct and antonym position follow together. i.e. If direct = "of" and antonym = "first". The antonym will be the same for the question and the answer. Same when direct = "of" and antonym = "second". In such suitation, the names will follow in a linear sequence (A > B, B > C, C > D). However, when direct is changed to "ob",  then the sentence structure changes to becomes (A > B, C > A, D > C). When direct = "both", the names most likely not follow a linear sequence, and the antonyms will interchange between sentence (i.e. A > B, C > B, C < E).
+#'
 #'When distprob = 0.5, the distribution of the antonym for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two antonym will be used. This is only used if one wishes to study distractor analysis.
 #' @references
 #'
@@ -91,7 +93,7 @@ lisy <- function( seed=1,
                   linear=FALSE,
                   antonym = "both",
                   ninfer = 1,
-                  direct= 'of',
+                  direct= 'ob',
                   Ndist=4,
                   dist="mixed",
                   distprob=.5,
@@ -179,15 +181,22 @@ lisy <- function( seed=1,
 if(linear==TRUE && ninfer==3){
   stop("Please reduce ninfer = 3 or change linear = FALSE")
 }
+  if(linear==TRUE && direct=="alt"){
+  stop("Cannot be linear when direct ='alt'.")
+  }
 
-  # seed=11
-  # nclues=7
-  # nspread = 7
+  if(linear==TRUE && nclues==nspread){
+    stop("please increase nspread by at least [nclue + 1] when linear = TRUE")
+  }
+
+  #  seed=15
+  #  nclues=5
+  #  nspread = 5
   # incidental='names'
   # linear=TRUE
-  # antonym = "second"
-  # ninfer = 2
-  # direct= 'alt'
+  # antonym = "first"
+  # ninfer = 3
+  # direct= 'ob'
   # Ndist=4
   # dist="mixed"
   # distprob=.5
@@ -195,13 +204,13 @@ if(linear==TRUE && ninfer==3){
   # items=NULL
   # scales = NULL
 
-#   nnclues <- nclues #clues ordering in the sentence
-#   nnspread <- nspread
-#
-# # if(nclues== 3 && nspread == 4 && linear==TRUE){  #no choice. To remove last sentence
-# #   nclues <- nclues + 1;
-# #   nspread <- nspread + 1;
-# # }
+nnclues <- nnspread <- 1
+ if(nclues== 3 && nspread == 4 && linear==TRUE){  #no choice. To remove last sentence
+   nnclues <- nclues #clues ordering in the sentence
+   nnspread <- nspread
+   nclues <- nclues + 1;
+   nspread <- nspread + 1;
+ }
 
 
   set.seed(seed)
@@ -271,6 +280,12 @@ if(linear==TRUE && ninfer==3){
   }else{
     stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
   }
+
+  # if(direct=="ob" && linear == TRUE && ninfer == 2){
+  #   for (i in 2:nspread) for (ii in (i-1):1) {
+  #     pclues <- rbind(pclues, c(i,ii))
+  #   }
+  # }
 
   # no choice. can't get 3 infer otherwise.
 if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
@@ -379,7 +394,7 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
     redo <- 1
     while(redo==1){
       if(linear==TRUE){ #just one model
-        pclues2 <-   as.data.frame(pclues)
+        (pclues2 <-   as.data.frame(pclues))
         (nclues <-pclues2[!duplicated(pclues2[,1]),])
         (nclues <- as.numeric(row.names(nclues)))
         (clues<-pclues[nclues,])
@@ -440,7 +455,7 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
     }
 
   }
-
+infer
 
   (infer[,1:3] <- sapply(infer[,1:3], as.numeric))
   (infer <- infer[order(infer[,1], decreasing=TRUE),])
@@ -493,25 +508,58 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
   (maxinfer <- maxinferlist[sample(nrow(maxinferlist), 1),])
   (maxitems <- itemlist[as.numeric(maxinfer[1:2])])
 
+  # if(ninfer == 2 && linear==TRUE && direct=="of" && antonym == "both" ){
+  #     maxitems  <-rev(maxitems)
+  # }
+
 
   if(antonym=='both'){
-    maxanswer <- cap(p(join(maxitems, thescale, article,
-                            forward=rbinom(1, 1, distprob)==1),'.'))
+    #maxanswer <- cap(p(join(maxitems, thescale, article,
+     #                       forward=rbinom(1, 1, distprob)==1),'.'))
+      maxanswer <- cap(p(join(maxitems, thescale, article,
+                              forward=TRUE),'.'))
+
+
+    if(ninfer == 3 && nnclues== 3 && nnspread == 4 && direct=="ob" && linear==TRUE){
+      maxanswer <- cap(p(join(maxitems, thescale, article,
+                              forward=TRUE),'.'))
+    }
+  maxanswer
   }else if(antonym == 'first'){
     maxanswer <- cap(p(join(maxitems, thescale, article,
                             forward=TRUE),'.'))
+
+
     if(ninfer == 1){
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=FALSE),'.'))
     }
 
+    if(ninfer==3 && nnclues== 3 && nnspread == 4 &&  direct=="of"&& linear==TRUE){
+      maxanswer <- cap(p(join(maxitems, thescale, article,
+                              forward=FALSE),'.'))
+    }
+
+
   }else if (antonym == "second"){
     maxanswer <- cap(p(join(maxitems, thescale, article,
                             forward=FALSE),'.'))
+    maxanswer
     if(ninfer == 1){
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=TRUE),'.'))
     }
+
+    if(ninfer == 2 && linear==TRUE ){
+      maxanswer <- cap(p(join(maxitems, thescale, article,
+                              forward=TRUE),'.'))
+    }
+
+    if(ninfer==3 && nnclues== 3 && nnspread == 4 && direct=="ob"&& linear==TRUE){
+      maxanswer <- cap(p(join(maxitems, thescale, article,
+                              forward=TRUE),'.'))
+    }
+
   }else{
     stop("Please select either 'both', 'first' or 'second' comparison.")
   }
@@ -519,17 +567,17 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
 
   #### ###### #### CLUES ORDERING IN THE SENTENCE ### #### ####
   if(direct  == "of"){
-    # if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){ # no choice. can't get 3 infer otherwise.
+    # if(direct == 'of' && ninfer == 3 &&  nnclues== 3 && nnspread == 4 && linear==TRUE){ # no choice. can't get 3 infer otherwise.
     #   (clues <- clues[,c(2,1)])
     # }
-
+clues
     (clues<- clues[order(clues[,1], decreasing = TRUE),])
     (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
     (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
     rclues <- infer[rclues,1:4] #clues
 
-    pos    <- paste0(rclues[,1] ,'.',rclues[,2])
-    pos2 <- paste0(clues[,1],'.',clues[,2])
+   ( pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
+    (pos2 <- paste0(clues[,1],'.',clues[,2]))
 
     check<- NULL
     for(i in pos){
@@ -537,9 +585,9 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
     }
     check
     (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
-    # if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
-    #   ( iclues <- iclues[-nrow(iclues),])
-    # }
+    if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
+      ( iclues <- iclues[-nrow(iclues),])
+    }
   }else if(direct == "ob"){
     clues<- clues[order(clues[,1], decreasing = TRUE),]
     rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
@@ -555,9 +603,9 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
     check <- rev(check)
     check
     (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
-    # if(nnclues== 3 && nnspread == 4 && linear==TRUE){  #To remove last sentence
-    #   ( iclues <- iclues[-nrow(iclues),])
-    # }
+    if(nnclues== 3 && nnspread == 4 && linear==TRUE){  #To remove last sentence
+      ( iclues <- iclues[-nrow(iclues),])
+    }
 
   }else if(direct == "alt"){
     if(ninfer==3){
@@ -592,6 +640,32 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
     stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
   }
 
+  #if(direct == "alt" && ninfer==3 && nnclues== 3 && nnspread == 4 && linear==TRUE){
+   # message("Cannot be linear when direct =")
+    # clues<- clues[order(clues[,1], decreasing = TRUE),]
+    # rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
+    # (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
+    # rclues <- infer[rclues,1:4] #clues
+    # pos    <- paste0(rclues[,1] ,'.',rclues[,2])
+    # pos2 <- paste0(clues[,1],'.',clues[,2])
+    #
+    # check<- NULL
+    # for(i in pos){
+    #   (check[i] <- (1:length(pos2))[pos2 %in% i])
+    # }
+    # check <- rev(check)
+    # alt1 <- rbind(c(2,1,3),c(3,1,2))
+    # check <- alt1[sample(1:2,1),]
+    # check
+    #
+    # (cclues <- clues[-nrow(clues),])
+    # cclues <- cbind(c(1,2,3),cclues)
+    # cclues<- cclues[match(check, cclues),]
+    # cclues <- cclues[,-1] # To move last sentence
+    # (iclues <- cbind(itemlist[cclues[,1]],itemlist[cclues[,2]]))
+ # }
+
+
   (inferClues<- (t(as.numeric(check))))
 
   if(is.na(inferClues[2])){
@@ -600,7 +674,7 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
   if(is.na(inferClues[3])){
     inferClues[3] <- " "
   }
-
+clues
 
 
 
@@ -625,14 +699,14 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
   }else if (antonym == "second"){
     for (i in 1:nrow(iclues)) {
       q <- p(q, join(iclues[i,], thescale, article,
-                     forward=FALSE))
+                     forward=TRUE))
       if (i<nrow(iclues)) q <- p(q, ', ')
     }
   }else{
     stop("Please select declare either 'both', 'first' or 'second' comparison.")
   }
 
-
+q
   q <- p(q, '. Which of the following is implied?')
   if(Ndist > 5) stop("Please choose a lower number of distractors")
 
@@ -719,7 +793,6 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
     }
   }
 
-
   finalList <- data.frame(seed=seed,
              Question=q,
              ninfer=ninfer,
@@ -741,6 +814,7 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
 
   class(finalList) <- "lisy"
   return(finalList)
-
+finalList
 }
+
 
