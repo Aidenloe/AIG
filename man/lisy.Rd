@@ -4,10 +4,10 @@
 \alias{lisy}
 \title{Linear Syllogism Generator}
 \usage{
-lisy(seed = 1, nclues = 4, nspread = 5, incidental = "names",
-  linear = FALSE, antonym = "both", ninfer = 1, direct = "ob",
-  Ndist = 4, dist = "mixed", distprob = 0.5, itemSet = "random",
-  items = NULL, scales = NULL)
+lisy(seed = 1, nclues = 4, nspread = 5, clone = NULL,
+  incidental = "names", linear = FALSE, antonym = "both", ninfer = 1,
+  direct = "ob", Ndist = 4, dist = "mixed", distprob = 0.5,
+  itemSet = "random", items = NULL, scales = NULL)
 }
 \arguments{
 \item{seed}{Generates the same question again from local computer.}
@@ -15,6 +15,8 @@ lisy(seed = 1, nclues = 4, nspread = 5, incidental = "names",
 \item{nclues}{Generates the number of sentences to make up the item.}
 
 \item{nspread}{Calculates the spread of possible incidentals in total.}
+
+\item{clone}{Null means that every generated item may or may not have a different position in the inference. If given a numeric value, then the items will have the same inference position.}
 
 \item{incidental}{Tells the function whether the item features are 'names' or 'objects'.}
 
@@ -58,7 +60,7 @@ When distprob = 0.5, the distribution of the antonym for the distractors will be
 }
 \examples{
 #Generate an item with default item set
-lisy(seed=10,nclues=4,nspread=6,incidental='names',linear=FALSE,
+lisy(seed=10,nclues=4,nspread=6,clone = NULL,incidental='names',linear=FALSE,
     antonym="first",ninfer = 3, direct='ob', Ndist=3,
     dist="mixed",distprob=0.5,itemSet='random',
     items= NULL,scales = NULL)
@@ -73,7 +75,7 @@ compare <- c("taller","shorter", "older", "younger",
  "smaller", "bigger","stronger", "weaker")
 
 #Generate item with own dataset
-lisy(seed=1,nclues=4,nspread=6,incidental='names',linear=FALSE,
+lisy(seed=1,nclues=4,nspread=6,clone = NULL,incidental='names',linear=FALSE,
     antonym="first",ninfer = 3, direct='ob',
     Ndist=3, dist="mixed",distprob=0.5,
     itemSet='own',items= superheroes, scales = compare)
@@ -89,6 +91,7 @@ for (i in 1:nitems) {
   runs <- lisy(seed=i,
                nclues=params$nclues[i],
                nspread=params$nspread[i],
+               clone = NULL,
                incidental= 'names',linear=FALSE,antonym="first",ninfer = 2,
                direct='of', Ndist=4,dist="mixed",distprob=.5,
                 itemSet='own', items= superheroes, scales = compare)

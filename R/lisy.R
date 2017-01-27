@@ -8,6 +8,7 @@
 #' @param seed Generates the same question again from local computer.
 #' @param nclues Generates the number of sentences to make up the item.
 #' @param nspread Calculates the spread of possible incidentals in total.
+#' @param clone Null means that every generated item may or may not have a different position in the inference. If given a numeric value, then the items will have the same inference position.
 #' @param incidental Tells the function whether the item features are 'names' or 'objects'.
 #' @param linear If linear = TRUE, a matching operator(i.e. name or object) will appear in all the adjacent clues in the sentence.
 #' @param antonym Determine whether to use both antonyms ('both') or only one type ("first" or "second").
@@ -44,7 +45,7 @@
 #' @title Linear Syllogism Generator
 #' @examples
 #' #Generate an item with default item set
-#' lisy(seed=10,nclues=4,nspread=6,incidental='names',linear=FALSE,
+#' lisy(seed=10,nclues=4,nspread=6,clone = NULL,incidental='names',linear=FALSE,
 #'     antonym="first",ninfer = 3, direct='ob', Ndist=3,
 #'     dist="mixed",distprob=0.5,itemSet='random',
 #'     items= NULL,scales = NULL)
@@ -59,7 +60,7 @@
 #'  "smaller", "bigger","stronger", "weaker")
 #'
 #' #Generate item with own dataset
-#' lisy(seed=1,nclues=4,nspread=6,incidental='names',linear=FALSE,
+#' lisy(seed=1,nclues=4,nspread=6,clone = NULL,incidental='names',linear=FALSE,
 #'     antonym="first",ninfer = 3, direct='ob',
 #'     Ndist=3, dist="mixed",distprob=0.5,
 #'     itemSet='own',items= superheroes, scales = compare)
@@ -75,6 +76,7 @@
 #'   runs <- lisy(seed=i,
 #'                nclues=params$nclues[i],
 #'                nspread=params$nspread[i],
+#'                clone = NULL,
 #'                incidental= 'names',linear=FALSE,antonym="first",ninfer = 2,
 #'                direct='of', Ndist=4,dist="mixed",distprob=.5,
 #'                 itemSet='own', items= superheroes, scales = compare)
@@ -88,6 +90,7 @@
 lisy <- function( seed=1,
                   nclues=4,
                   nspread = 5,
+                  clone = NULL,
                   incidental='names',
                   linear=FALSE,
                   antonym = "both",
@@ -187,21 +190,23 @@ if(linear==TRUE && ninfer==3){
   if(linear==TRUE && nclues==nspread){
     stop("please increase nspread by at least [nclue + 1] when linear = TRUE")
   }
+#
+#   seed=20
+#   nclues=3
+#   nspread = 4
+#   clone = 1
+#   incidental='names'
+#   linear=TRUE
+#   antonym = "both"
+#   ninfer = 2
+#   direct= 'ob'
+#   Ndist=4
+#   dist="mixed"
+#   distprob=.5
+#   itemSet='random'
+#   items=NULL
+#   scales = NULL
 
-  #  seed=15
-  #  nclues=3
-  #  nspread = 4
-  # incidental='names'
-  # linear=TRUE
-  # antonym = "both"
-  # ninfer = 2
-  # direct= 'ob'
-  # Ndist=4
-  # dist="mixed"
-  # distprob=.5
-  # itemSet='random'
-  # items=NULL
-  # scales = NULL
 
 nnclues <- nnspread <- 1
  if(nclues== 3 && nspread == 4 && linear==TRUE){  #no choice. To remove last sentence
@@ -311,7 +316,10 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
       }else{
       clues<- NULL
       while(any(clues[,1] %in% clues[,2]) == FALSE){
-        nclues <- sample(nrow(pclues), uclues)
+        if(!is.null(clone)){
+           set.seed(clone)
+        }
+        (nclues <- sample(nrow(pclues), uclues))
         clues<-pclues[nclues,]
         clues <- uniquecombs(clues)
         any(clues[,1] %in% clues[,2]) == TRUE
@@ -374,6 +382,9 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
     }else{
     clues<- NULL
     while(any(clues[,1] %in% clues[,2]) == FALSE){
+      if(!is.null(clone)){
+        set.seed(clone)
+      }
       (nclues <- sample(nrow(pclues), uclues))
       clues<-pclues[nclues,]
       clues <- uniquecombs(clues)
@@ -389,6 +400,9 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
     (infer <- infer[ order(-infer[,1], -infer[,2]), ])
   }
   if(ninfer == 3){
+    if(!is.null(clone)){
+      set.seed(clone)
+    }
     redo <- 1
     while(redo==1){
       if(linear==TRUE){ #just one model
@@ -502,6 +516,9 @@ infer
   }
   if(ninfer ==3){
     (maxinferlist <- infer[infer$steps==3,])
+  }
+  if(!is.null(clone)){
+    set.seed(clone)
   }
   (maxinfer <- maxinferlist[sample(nrow(maxinferlist), 1),])
   (maxitems <- itemlist[as.numeric(maxinfer[1:2])])
@@ -815,8 +832,9 @@ clues
     maxanswerFinal <-maxanswer
   }else{
     maxanswerFinal <- paste(maxanswer,maxanswer2)
+    rm(maxanswer2)
   }
-  rm(maxanswer2)
+
 
   finalList <- data.frame(seed=seed,
              Question=q,
