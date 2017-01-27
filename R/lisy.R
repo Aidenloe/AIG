@@ -31,7 +31,7 @@
 #'
 #' Direct is the direction of the line of thought. If direct = "ob" it means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not inorder. direct = 'alt' can only be used when ninfer = 3.
 #'
-#'When linear = TRUE, the direct and antonym position follow together. i.e. If direct = "of" and antonym = "first". The antonym will be the same for the question and the answer. Same when direct = "of" and antonym = "second". In such suitation, the names will follow in a linear sequence (A > B, B > C, C > D). However, when direct is changed to "ob",  then the sentence structure changes to becomes (A > B, C > A, D > C). When direct = "both", the names most likely not follow a linear sequence, and the antonyms will interchange between sentence (i.e. A > B, C > B, C < E).
+#'When linear = TRUE, the direct and antonym position follow together. i.e. If direct = "of" and antonym = "first". The antonym will be the same for the question and the answer. Same when direct = "of" and antonym = "second". In such suitation, the names will follow in a linear sequence (A > B, B > C, C > D). However, when direct is changed to "ob",  then the sentence structure changes to becomes (C > D, B > C, A > B). For both situations, this is directly looking at the difficulty of mental array. Under such circumstances, 2 answers will be generated. Either one is correct, but they are the inverse antonym of each other. When direct = "both", the names will most likely not follow a linear sequence, and the antonyms will interchange between sentence (i.e. A > B, C > B, C < E).
 #'
 #'When distprob = 0.5, the distribution of the antonym for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two antonym will be used. This is only used if one wishes to study distractor analysis.
 #' @references
@@ -190,12 +190,12 @@ if(linear==TRUE && ninfer==3){
   }
 
   #  seed=15
-  #  nclues=5
-  #  nspread = 5
+  #  nclues=3
+  #  nspread = 4
   # incidental='names'
   # linear=TRUE
-  # antonym = "first"
-  # ninfer = 3
+  # antonym = "both"
+  # ninfer = 2
   # direct= 'ob'
   # Ndist=4
   # dist="mixed"
@@ -519,20 +519,35 @@ infer
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=TRUE),'.'))
 
+      if(ninfer == 2 && linear==TRUE ){
+        maxanswer <- cap(p(join(maxitems, thescale, article,
+                                forward=TRUE),'.'))
+        maxanswer2 <- cap(p(join(maxitems, thescale, article,
+                                 forward=FALSE),'.'))
+
+      }
 
     if(ninfer == 3 && nnclues== 3 && nnspread == 4 && direct=="ob" && linear==TRUE){
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=TRUE),'.'))
     }
-  maxanswer
+
+    maxanswer
   }else if(antonym == 'first'){
     maxanswer <- cap(p(join(maxitems, thescale, article,
                             forward=TRUE),'.'))
 
-
     if(ninfer == 1){
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=FALSE),'.'))
+    }
+
+    if(ninfer == 2 && linear==TRUE ){
+      maxanswer <- cap(p(join(maxitems, thescale, article,
+                              forward=TRUE),'.'))
+      maxanswer2 <- cap(p(join(maxitems, thescale, article,
+                               forward=FALSE),'.'))
+
     }
 
     if(ninfer==3 && nnclues== 3 && nnspread == 4 &&  direct=="of"&& linear==TRUE){
@@ -553,6 +568,9 @@ infer
     if(ninfer == 2 && linear==TRUE ){
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=TRUE),'.'))
+      maxanswer2 <- cap(p(join(maxitems, thescale, article,
+                              forward=FALSE),'.'))
+
     }
 
     if(ninfer==3 && nnclues== 3 && nnspread == 4 && direct=="ob"&& linear==TRUE){
@@ -699,14 +717,15 @@ clues
   }else if (antonym == "second"){
     for (i in 1:nrow(iclues)) {
       q <- p(q, join(iclues[i,], thescale, article,
-                     forward=TRUE))
+                     forward=FALSE))
       if (i<nrow(iclues)) q <- p(q, ', ')
     }
   }else{
     stop("Please select declare either 'both', 'first' or 'second' comparison.")
   }
 
-q
+
+
   q <- p(q, '. Which of the following is implied?')
   if(Ndist > 5) stop("Please choose a lower number of distractors")
 
@@ -793,10 +812,18 @@ q
     }
   }
 
+  #for linear TRUE
+  if(exists("maxanswer2")==FALSE){
+    maxanswerFinal <-maxanswer
+  }else{
+    maxanswerFinal <- paste(maxanswer,maxanswer2)
+  }
+  rm(maxanswer2)
+
   finalList <- data.frame(seed=seed,
              Question=q,
              ninfer=ninfer,
-             Answer=maxanswer,
+             Answer=maxanswerFinal,
              dist1=dreturn[1],
              dtype1=dtype[1],
              dist2=dreturn[2],
