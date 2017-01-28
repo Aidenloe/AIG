@@ -29,5 +29,5 @@ devtools::install_github("Aidenloe/AIG")
 
 
 # To do list
-- Giving two answers rather than one. (i.e. A is greater than B. B is smaller than A). Currently only one answer is provided. 
 - Making a linear array view for up to 3 inferences. 
+- Making a loop so that the function can generate more than 1 item at a time. 
