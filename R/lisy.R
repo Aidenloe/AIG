@@ -191,21 +191,21 @@ if(linear==TRUE && ninfer==3){
     stop("please increase nspread by at least [nclue + 1] when linear = TRUE")
   }
 #
-#   seed=20
-#   nclues=3
-#   nspread = 4
-#   clone = 1
-#   incidental='names'
-#   linear=TRUE
-#   antonym = "both"
-#   ninfer = 2
-#   direct= 'ob'
-#   Ndist=4
-#   dist="mixed"
-#   distprob=.5
-#   itemSet='random'
-#   items=NULL
-#   scales = NULL
+  # seed=1
+  # nclues=3
+  # nspread = 4
+  # clone = NULL
+  # incidental='names'
+  # linear=TRUE
+  # antonym = "first"
+  # ninfer = 2
+  # direct= 'of'
+  # Ndist=3
+  # dist="mixed"
+  # distprob=.5
+  # itemSet='random'
+  # items=NULL
+  # scales = NULL
 
 
 nnclues <- nnspread <- 1
@@ -331,6 +331,9 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
                           rclues=sapply(nclues,toString),
                           stringsAsFactors=FALSE)
       (infer <- infer[ order(-infer[,1], -infer[,2]), ])
+      if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
+        (infer <- infer[-nrow(infer),])
+      }
       (minstep <- nrow(infer))
       i <- 1
       while (i< minstep) {
@@ -363,7 +366,7 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
         }
         i <- i+1
       }
-
+infer
       if(any(infer$steps==2) == TRUE ){
         redo <- 2
       }
@@ -398,6 +401,9 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
                         rclues=sapply(nclues,toString),
                         stringsAsFactors=FALSE)
     (infer <- infer[ order(-infer[,1], -infer[,2]), ])
+    if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
+      (infer <- infer[-nrow(infer),])
+    }
   }
   if(ninfer == 3){
     if(!is.null(clone)){
@@ -534,12 +540,18 @@ infer
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=TRUE),'.'))
 
+      if(ninfer == 1 && linear==TRUE ){
+        maxanswer <- cap(p(join(maxitems, thescale, article,
+                                forward=TRUE),'.'))
+        maxanswer2 <- cap(p(join(maxitems, thescale, article,
+                                 forward=FALSE),'.'))
+      }
+
       if(ninfer == 2 && linear==TRUE ){
         maxanswer <- cap(p(join(maxitems, thescale, article,
                                 forward=TRUE),'.'))
         maxanswer2 <- cap(p(join(maxitems, thescale, article,
                                  forward=FALSE),'.'))
-
       }
 
     if(ninfer == 3 && nnclues== 3 && nnspread == 4 && direct=="ob" && linear==TRUE){
@@ -555,6 +567,13 @@ infer
     if(ninfer == 1){
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=FALSE),'.'))
+    }
+
+    if(ninfer == 1 && linear==TRUE ){
+      maxanswer <- cap(p(join(maxitems, thescale, article,
+                              forward=TRUE),'.'))
+      maxanswer2 <- cap(p(join(maxitems, thescale, article,
+                               forward=FALSE),'.'))
     }
 
     if(ninfer == 2 && linear==TRUE ){
@@ -580,6 +599,14 @@ infer
                               forward=TRUE),'.'))
     }
 
+    if(ninfer == 1 && linear==TRUE ){
+      maxanswer <- cap(p(join(maxitems, thescale, article,
+                              forward=TRUE),'.'))
+      maxanswer2 <- cap(p(join(maxitems, thescale, article,
+                               forward=FALSE),'.'))
+
+    }
+
     if(ninfer == 2 && linear==TRUE ){
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=TRUE),'.'))
@@ -603,15 +630,15 @@ infer
     # if(direct == 'of' && ninfer == 3 &&  nnclues== 3 && nnspread == 4 && linear==TRUE){ # no choice. can't get 3 infer otherwise.
     #   (clues <- clues[,c(2,1)])
     # }
-clues
+
     (clues<- clues[order(clues[,1], decreasing = TRUE),])
     (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
     (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
     rclues <- infer[rclues,1:4] #clues
 
-   ( pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
+    (pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
     (pos2 <- paste0(clues[,1],'.',clues[,2]))
-
+infer
     check<- NULL
     for(i in pos){
       (check[i] <- (1:length(pos2))[pos2 %in% i])
@@ -622,12 +649,13 @@ clues
       ( iclues <- iclues[-nrow(iclues),])
     }
   }else if(direct == "ob"){
-    clues<- clues[order(clues[,1], decreasing = TRUE),]
-    rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
+    maxinfer
+    (clues<- clues[order(clues[,1], decreasing = TRUE),])
+    (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
     (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
-    rclues <- infer[rclues,1:4] #clues
-    pos    <- paste0(rclues[,1] ,'.',rclues[,2])
-    pos2 <- paste0(clues[,1],'.',clues[,2])
+    (rclues <- infer[rclues,1:4]) #clues
+    (pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
+    (pos2 <- paste0(clues[,1],'.',clues[,2]))
 
     check<- NULL
     for(i in pos){
@@ -635,6 +663,7 @@ clues
     }
     check <- rev(check)
     check
+
     (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
     if(nnclues== 3 && nnspread == 4 && linear==TRUE){  #To remove last sentence
       ( iclues <- iclues[-nrow(iclues),])
@@ -672,6 +701,7 @@ clues
   }else{
     stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
   }
+
 
   #if(direct == "alt" && ninfer==3 && nnclues== 3 && nnspread == 4 && linear==TRUE){
    # message("Cannot be linear when direct =")
