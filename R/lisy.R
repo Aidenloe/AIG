@@ -479,22 +479,22 @@ infer
   (infer <- infer[order(infer[,1], decreasing=TRUE),])
 
   ############# VALID RESPONSES ##############
-  valid    <- paste0(infer[,1] ,'.',infer[,2])
-  possible <- paste0(pclues[,1],'.',pclues[,2])
+  (valid    <- paste0(infer[,1] ,'.',infer[,2]))
+  (possible <- paste0(pclues[,1],'.',pclues[,2]))
 
   (Nval <- (1:length(possible))[possible %in% valid])
 
 
   ############### INVALID RESPONSES ##########
   (Ninv <- (1:length(possible))[!possible %in% valid])
-  invalids <- cbind(pclues[Ninv,2],pclues[Ninv,1])
-  ulist    <- unique(c(clues[,1:2]))
+  (invalids <- cbind(pclues[Ninv,2],pclues[Ninv,1]))
+  (ulist    <- unique(c(clues[,1:2])))
   invkeeps <- invalids
 
   if (length(invkeeps) > 0 ) iinvkeeps <- rbind(
     cbind(itemlist[invkeeps[,1]],itemlist[invkeeps[,2]]),
     cbind(itemlist[invkeeps[,2]],itemlist[invkeeps[,1]]))
-
+iinvkeeps
 
   if(length(invkeeps)==0) {
     iinvkeeps<- matrix(NA, nrow=0, ncol=2)
@@ -502,8 +502,8 @@ infer
 
 
   ############ FALSE RESPONSES ##########
-  falses  <- cbind(pclues[Nval,2],pclues[Nval,1])
-  ifalses <- cbind(itemlist[falses[,1]],itemlist[falses[,2]])
+  (falses  <- cbind(pclues[Nval,2],pclues[Nval,1]))
+  (ifalses <- cbind(itemlist[falses[,1]],itemlist[falses[,2]]))
 
 
   ##### FUNCTION TO GENERATE ITEM #####
