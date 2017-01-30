@@ -19,7 +19,6 @@
 
 * Added new references. 
 
-* Now the items can generate linear array items for up to 2 inferences. (i.e. Adjacent clues have matching operators.)
+* Now the items can generate linear array items for up to 3 inferences. (i.e. Adjacent clues have matching operators.)
 
-* Added a new argument to include the creation of item clones for up toe 3 inferences. 
-
+* Added a new argument to include the creation of item clones for up to 3 inferences. 

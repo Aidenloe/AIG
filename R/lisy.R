@@ -29,9 +29,11 @@
 #'
 #' This function only generates items that requires up to 3 inferences. As the required inferences increases, then number of clues needed also increases. Inference is the implied comparison between sentences which allows the test taker to make an inform decision. When ninfer = 1 and the antonym is declared as either 'first' or 'second', then the correct answer will always be the opposite of the antonym used in the sentence. When ninfer = 2, the correct answer will be in the right direction.
 #'
-#' Direct is the direction of the line of thought. If direct = "ob" it means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not inorder. direct = 'alt' can only be used when ninfer = 3.
+#' Direct is the direction of the line of thought. If direct = "ob" it means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not in order. direct = 'alt' can only be used when ninfer = 3.
 #'
 #'When linear = TRUE, the direct and antonym position follow together. i.e. If direct = "of" and antonym = "first". The antonym will be the same for the question and the answer. Same when direct = "of" and antonym = "second". In such suitation, the names will follow in a linear sequence (A > B, B > C, C > D). However, when direct is changed to "ob",  then the sentence structure changes to becomes (C > D, B > C, A > B). For both situations, this is directly looking at the difficulty of mental array. Under such circumstances, 2 answers will be generated. Either one is correct, but they are the inverse antonym of each other. When direct = "both", the names will most likely not follow a linear sequence, and the antonyms will interchange between sentence (i.e. A > B, C > B, C < E).
+#'
+#'When linear = TRUE and infer = 3, the last sentence will always not be one of the clues for the inference. If you want to study distance effect, then what is recommended is to generate the items with ninfer = 3, and remove the last clues in the sentence structure.
 #'
 #'When distprob = 0.5, the distribution of the antonym for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two antonym will be used. This is only used if one wishes to study distractor analysis.
 #' @references
@@ -180,9 +182,10 @@ lisy <- function( seed=1,
     stop("Please increase the number of distractors.")
   }
 
-if(linear==TRUE && ninfer==3){
-  stop("Please reduce ninfer = 3 or change linear = FALSE")
+ if(linear==TRUE && ninfer==3 && nclues==3 ){
+   stop("Please reduce ninfer by 1 or increase nclues + 1 greater than ninfer.")
 }
+
   if(linear==TRUE && direct=="alt"){
   stop("Cannot be linear when direct ='alt'.")
   }
@@ -192,13 +195,13 @@ if(linear==TRUE && ninfer==3){
   }
 #
   # seed=1
-  # nclues=3
-  # nspread = 4
+  # nclues=4
+  # nspread = 5
   # clone = NULL
   # incidental='names'
   # linear=TRUE
   # antonym = "first"
-  # ninfer = 2
+  # ninfer = 3
   # direct= 'of'
   # Ndist=3
   # dist="mixed"
@@ -209,13 +212,6 @@ if(linear==TRUE && ninfer==3){
 
 
 nnclues <- nnspread <- 1
- if(nclues== 3 && nspread == 4 && linear==TRUE){  #no choice. To remove last sentence
-   nnclues <- nclues #clues ordering in the sentence
-   nnspread <- nspread
-   nclues <- nclues + 1;
-   nspread <- nspread + 1;
- }
-
 
   set.seed(seed)
   p <- paste0
@@ -284,12 +280,6 @@ nnclues <- nnspread <- 1
     stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
   }
 
-  # if(direct=="ob" && linear == TRUE && ninfer == 2){
-  #   for (i in 2:nspread) for (ii in (i-1):1) {
-  #     pclues <- rbind(pclues, c(i,ii))
-  #   }
-  # }
-
   # no choice. can't get 3 infer otherwise.
 if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
     (pclues <- pclues[,c(2,1)])
@@ -310,6 +300,7 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
       if(linear==TRUE){ #just one model
         pclues2 <-   as.data.frame(pclues)
         (nclues <-pclues2[!duplicated(pclues2[,1]),])
+        (nclues <- nclues[c(1:uclues),])
         (nclues <- as.numeric(row.names(nclues)))
         (clues<-pclues[nclues,])
         (clues <- uniquecombs(clues))
@@ -325,15 +316,15 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
         any(clues[,1] %in% clues[,2]) == TRUE
        }
       }
-      infer <- data.frame(left =pclues[nclues,1],
+       infer <- data.frame(left =pclues[nclues,1],
                           right=pclues[nclues,2],
                           steps=1,
                           rclues=sapply(nclues,toString),
                           stringsAsFactors=FALSE)
       (infer <- infer[ order(-infer[,1], -infer[,2]), ])
-      if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
-        (infer <- infer[-nrow(infer),])
-      }
+      # if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
+      #   (infer <- infer[-nrow(infer),])
+      # }
       (minstep <- nrow(infer))
       i <- 1
       while (i< minstep) {
@@ -379,6 +370,7 @@ infer
     if(linear==TRUE){
     pclues2 <-   as.data.frame(pclues)
     (nclues <-pclues2[!duplicated(pclues2[,1]),])
+    (nclues <- nclues[c(1:uclues),])
     (nclues <- as.numeric(row.names(nclues)))
     (clues<-pclues[nclues,])
     clues <- uniquecombs(clues)
@@ -401,9 +393,9 @@ infer
                         rclues=sapply(nclues,toString),
                         stringsAsFactors=FALSE)
     (infer <- infer[ order(-infer[,1], -infer[,2]), ])
-    if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
-      (infer <- infer[-nrow(infer),])
-    }
+    # if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
+    #   (infer <- infer[-nrow(infer),])
+    # }
   }
   if(ninfer == 3){
     if(!is.null(clone)){
@@ -414,6 +406,7 @@ infer
       if(linear==TRUE){ #just one model
         (pclues2 <-   as.data.frame(pclues))
         (nclues <-pclues2[!duplicated(pclues2[,1]),])
+        (nclues <- nclues[c(1:uclues),])
         (nclues <- as.numeric(row.names(nclues)))
         (clues<-pclues[nclues,])
         (clues <- uniquecombs(clues))
@@ -433,7 +426,10 @@ infer
                           stringsAsFactors=FALSE)
 
       if(linear==TRUE) (infer <- infer[ order(-infer[,1], -infer[,2]), ])
-      minstep <- nrow(infer)
+      # if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
+      #     (infer <- infer[-nrow(infer),])
+      #     }
+      (minstep <- nrow(infer))
       i <- 1
       while (i< minstep) {
         sub <- infer[infer[,1]==infer[i,2],]
@@ -466,6 +462,7 @@ infer
         }
         i <- i+1
       }
+      infer
       if(any(infer$steps==3) == TRUE ){
         redo <- 3
       }
@@ -554,9 +551,11 @@ iinvkeeps
                                  forward=FALSE),'.'))
       }
 
-    if(ninfer == 3 && nnclues== 3 && nnspread == 4 && direct=="ob" && linear==TRUE){
+    if(ninfer == 3 && linear==TRUE){
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=TRUE),'.'))
+      maxanswer <- cap(p(join(maxitems, thescale, article,
+                              forward=FALSE),'.'))
     }
 
     maxanswer
@@ -584,7 +583,9 @@ iinvkeeps
 
     }
 
-    if(ninfer==3 && nnclues== 3 && nnspread == 4 &&  direct=="of"&& linear==TRUE){
+    if(ninfer==3 && linear==TRUE){
+      maxanswer <- cap(p(join(maxitems, thescale, article,
+                              forward=TRUE),'.'))
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=FALSE),'.'))
     }
@@ -615,9 +616,11 @@ iinvkeeps
 
     }
 
-    if(ninfer==3 && nnclues== 3 && nnspread == 4 && direct=="ob"&& linear==TRUE){
+    if(ninfer==3 && linear==TRUE){
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=TRUE),'.'))
+      maxanswer2 <- cap(p(join(maxitems, thescale, article,
+                               forward=FALSE),'.'))
     }
 
   }else{
@@ -645,9 +648,14 @@ infer
     }
     check
     (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
-    if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
-      ( iclues <- iclues[-nrow(iclues),])
+    # if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
+    #   ( iclues <- iclues[-nrow(iclues),])
+    # }
+
+    if(ninfer==3 && linear==TRUE){ #Flip back the matrix to forward
+          (iclues <- cbind(iclues[,2], iclues[,1]))
     }
+
   }else if(direct == "ob"){
     maxinfer
     (clues<- clues[order(clues[,1], decreasing = TRUE),])
@@ -665,9 +673,9 @@ infer
     check
 
     (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
-    if(nnclues== 3 && nnspread == 4 && linear==TRUE){  #To remove last sentence
-      ( iclues <- iclues[-nrow(iclues),])
-    }
+    # if(nnclues== 3 && nnspread == 4 && linear==TRUE){  #To remove last sentence
+    #   ( iclues <- iclues[-nrow(iclues),])
+    # }
 
   }else if(direct == "alt"){
     if(ninfer==3){
@@ -775,7 +783,7 @@ clues
   if(Ndist > 5) stop("Please choose a lower number of distractors")
 
   q <-   paste(toupper(substring(q, 1,1)),substring(q, 2),sep="", collapse=" ")
-
+q
   # create matrix of invalid and false distractors ####
   dlist <- NULL
   if(dist=="mixed"){
