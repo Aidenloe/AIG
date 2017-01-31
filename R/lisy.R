@@ -195,13 +195,13 @@ lisy <- function( seed=1,
   }
 #
   # seed=1
-  # nclues=4
-  # nspread = 5
-  # clone = NULL
+  # nclues=3
+  # nspread = 4
+  # clone = 3
   # incidental='names'
-  # linear=TRUE
+  # linear=FALSE
   # antonym = "first"
-  # ninfer = 3
+  # ninfer = 2
   # direct= 'of'
   # Ndist=3
   # dist="mixed"
@@ -295,6 +295,9 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
 
 
   if(ninfer == 2){
+    if(!is.null(clone)){
+      set.seed(clone)
+    }
     redo <- 1
     while(redo==1){
       if(linear==TRUE){ #just one model
@@ -307,9 +310,6 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
       }else{
       clues<- NULL
       while(any(clues[,1] %in% clues[,2]) == FALSE){
-        if(!is.null(clone)){
-           set.seed(clone)
-        }
         (nclues <- sample(nrow(pclues), uclues))
         clues<-pclues[nclues,]
         clues <- uniquecombs(clues)
@@ -630,10 +630,6 @@ iinvkeeps
 
   #### ###### #### CLUES ORDERING IN THE SENTENCE ### #### ####
   if(direct  == "of"){
-    # if(direct == 'of' && ninfer == 3 &&  nnclues== 3 && nnspread == 4 && linear==TRUE){ # no choice. can't get 3 infer otherwise.
-    #   (clues <- clues[,c(2,1)])
-    # }
-
     (clues<- clues[order(clues[,1], decreasing = TRUE),])
     (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
     (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
@@ -680,32 +676,29 @@ infer
   }else if(direct == "alt"){
     if(ninfer==3){
       mixed <- FALSE
-      while(mixed==FALSE){
-        rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
-
+      while(mixed==FALSE){ #always get mix
+        (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
         (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
-        rclues <- infer[rclues,1:4] #clues
 
-        pos    <- paste0(rclues[,1] ,'.',rclues[,2])
-        pos2 <- paste0(clues[,1],'.',clues[,2])
+        (rclues <- infer[rclues,1:4]) #clues
+        rclues <- sample_n(rclues, nrow(rclues))
 
+        (pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
+        ((pos2 <- paste0(clues[,1],'.',clues[,2])))
         check<- NULL
         for(i in pos){
           (check[i] <- (1:length(pos2))[pos2 %in% i])
         }
-        if(is.unsorted(check)==TRUE){
+
+        if(is.unsorted(rev(check)) == TRUE| is.unsorted(check)==TRUE)
           mixed <- TRUE
-        }
-        if(is.unsorted(check)==FALSE | is.unsorted(rev(check)) == FALSE){
-          clues <-   clues[sample(nrow(clues)),]
-          mixed<-FALSE
-        }
       }
+
     }
+
     (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
-    # if(nnclues== 3 && nnspread == 4 && linear==TRUE){  #To remove last sentence
-    #   message("Alternative inference cannot be made with 3 sentences. A 4 sentence item is created instead.")
-    # }
+
+
   }else{
     stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
   }
@@ -893,9 +886,9 @@ q
              clues.3 = inferClues[3]
   )
 
-  class(finalList) <- "lisy"
-  return(finalList)
-finalList
-}
 
+  class(finalList) <- c("data.frame" ,"lisy")
+  return(finalList)
+
+}
 
