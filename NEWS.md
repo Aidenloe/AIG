@@ -24,3 +24,5 @@
 * Added a new argument to include the creation of item clones for up to 3 inferences. 
 
 * Items with linear array only returns false distractors. Invalid distractors cannot be created. 
+
+* Reduce to 4 distractors and 1 answer, giving a total of 5 options. More can be created, but it may be more suitable by hand at the moment. 
