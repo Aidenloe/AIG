@@ -574,9 +574,6 @@ if(ninfer==3 && linear==TRUE && direct == "of"){ #Flip back the matrix to forwar
                               forward=FALSE),'.'))
     }
 
-      maxanswer2
-
-    maxanswer
 
   }else if(antonym == 'first'){
     (maxanswer <- cap(p(join(maxitems, thescale, article,
