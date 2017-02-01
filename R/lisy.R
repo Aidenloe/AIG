@@ -31,6 +31,8 @@
 #'
 #' Direct is the direction of the line of thought. If direct = "ob" it means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not in order. direct = 'alt' can only be used when ninfer = 3.
 #'
+#'When linear = FALSE, there might be a possible of having just a single mental model, or having completing models. This is random and will depend on the seed selected.
+#'
 #'When linear = TRUE, the direct and antonym position follow together. i.e. If direct = "of" and antonym = "first". The antonym will be the same for the question and the answer. Same when direct = "of" and antonym = "second". In such suitation, the names will follow in a linear sequence (A > B, B > C, C > D). However, when direct is changed to "ob",  then the sentence structure changes to becomes (C > D, B > C, A > B). For both situations, this is directly looking at the difficulty of mental array. Under such circumstances, 2 answers will be generated. Either one is correct, but they are the inverse antonym of each other. When direct = "both", the names will most likely not follow a linear sequence, and the antonyms will interchange between sentence (i.e. A > B, C > B, C < E).
 #'
 #'When linear = TRUE and infer = 3, the last sentence will always not be one of the clues for the inference. If you want to study distance effect, then what is recommended is to generate the items with ninfer = 3, and remove the last clues in the sentence structure.
@@ -178,9 +180,9 @@ lisy <- function( seed=1,
     stop("The current generator can only create up to 3 inferences per items.")
   }
 
-  if(Ndist <1){
-    stop("Please increase the number of distractors.")
-  }
+  # if(Ndist <1){
+  #   stop("Please increase the number of distractors.")
+  # }
 
  if(linear==TRUE && ninfer==3 && nclues==3 ){
    stop("Please reduce ninfer by 1 or increase nclues + 1 greater than ninfer.")
@@ -193,17 +195,22 @@ lisy <- function( seed=1,
   if(linear==TRUE && nclues==nspread){
     stop("please increase nspread by at least [nclue + 1] when linear = TRUE")
   }
+
+  if(linear==TRUE && dist=="invalid"){
+    stop("Cannot create invalid distractors. Only false. ")
+  }
+
 #
-  # seed=1
+  # seed=2
   # nclues=3
   # nspread = 4
-  # clone = 3
+  # clone = NULL
   # incidental='names'
-  # linear=FALSE
+  # linear=TRUE
   # antonym = "first"
-  # ninfer = 2
-  # direct= 'of'
-  # Ndist=3
+  # ninfer = 1
+  # direct= 'alt'
+  # Ndist=5
   # dist="mixed"
   # distprob=.5
   # itemSet='random'
@@ -218,12 +225,12 @@ nnclues <- nnspread <- 1
   cap <- function(x) paste0(
     toupper(substr(x,1,1)), substr(x,2,nchar(x)))
 
-
+#### DEFAULT ITEM SET ####
   if(is.null(items)  | is.null(scales)){
     sets <- c('people', 'fruit', 'superheroes')
     items <- list(people=c('Amy', 'Susan', 'Bob', 'Mary', 'Robert', 'Ernest', 'Henry', 'Peter','Jake','Jenny',
                            'Edward','Sam','Marcus','Mario'),
-                  fruit=c('apple','pear','netarine','tomato','avocado','lemon','orange','mango','peach','plum','tangerine'),
+                  fruit=c('apple','pear','nectarine','tomato','avocado','lemon','orange','mango','peach','plum','tangerine'),
                   superheroes=c('Spiderman','Superman','Batman','Wolverine','Catwoman','Thor','The Shadow','Silver Surfer',
                                 'Captain America','Hurcleus','Harry Potter','Hulk','Gandalf'))
 
@@ -266,7 +273,7 @@ nnclues <- nnspread <- 1
   scaleset <- scales[[set]]
   thescale <- scaleset[,sample(ncol(scaleset),1)]
 
-  # List of possible clues
+  # List of possible clues ####
   pclues <- NULL
   if(direct=="of" | direct == 'alt'){
     for (i in 2:nspread) for (ii in (i-1):1) {
@@ -301,7 +308,7 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
     redo <- 1
     while(redo==1){
       if(linear==TRUE){ #just one model
-        pclues2 <-   as.data.frame(pclues)
+        (pclues2 <-   as.data.frame(pclues))
         (nclues <-pclues2[!duplicated(pclues2[,1]),])
         (nclues <- nclues[c(1:uclues),])
         (nclues <- as.numeric(row.names(nclues)))
@@ -475,39 +482,45 @@ infer
   (infer[,1:3] <- sapply(infer[,1:3], as.numeric))
   (infer <- infer[order(infer[,1], decreasing=TRUE),])
 
+##### FUNCTION TO GENERATE ITEM #####
+join <- function(clue, thescale, article, forward=TRUE) {
+  if (forward) return(paste0(article, " " ,clue[1], ' is ', thescale[1], ' than ', article ," ", clue[2]))
+  if (!forward) return(paste0(article, " ",clue[2], ' is ', thescale[2], ' than ',article ," ", clue[1]))
+}
+
   ############# VALID RESPONSES ##############
   (valid    <- paste0(infer[,1] ,'.',infer[,2]))
   (possible <- paste0(pclues[,1],'.',pclues[,2]))
 
   (Nval <- (1:length(possible))[possible %in% valid])
-
-
+valid
+infer
   ############### INVALID RESPONSES ##########
-  (Ninv <- (1:length(possible))[!possible %in% valid])
+  (Ninv <- (1:length(possible))[!possible %in% valid]) #checking for invalid
   (invalids <- cbind(pclues[Ninv,2],pclues[Ninv,1]))
   (ulist    <- unique(c(clues[,1:2])))
+  #(invkeeps <- invalids[invalids[,1] %in% ulist | invalids[,2] %in% ulist,])
   invkeeps <- invalids
-
   if (length(invkeeps) > 0 ) iinvkeeps <- rbind(
     cbind(itemlist[invkeeps[,1]],itemlist[invkeeps[,2]]),
     cbind(itemlist[invkeeps[,2]],itemlist[invkeeps[,1]]))
-iinvkeeps
 
-  if(length(invkeeps)==0) {
+if(length(invkeeps)==0) {
     iinvkeeps<- matrix(NA, nrow=0, ncol=2)
   }
-
+if(linear==TRUE){
+  iinvkeeps<- matrix(NA, nrow=0, ncol=2)
+}
 
   ############ FALSE RESPONSES ##########
   (falses  <- cbind(pclues[Nval,2],pclues[Nval,1]))
   (ifalses <- cbind(itemlist[falses[,1]],itemlist[falses[,2]]))
 
+if(ninfer==3 && linear==TRUE && direct == "of"){ #Flip back the matrix to forward
+  (falses  <- cbind(pclues[Nval,1],pclues[Nval,2]))
+  (ifalses <- cbind(itemlist[falses[,1]],itemlist[falses[,2]]))
+}
 
-  ##### FUNCTION TO GENERATE ITEM #####
-  join <- function(clue, thescale, article, forward=TRUE) {
-    if (forward) return(paste0(article, " " ,clue[1], ' is ', thescale[1], ' than ', article ," ", clue[2]))
-    if (!forward) return(paste0(article, " ",clue[2], ' is ', thescale[2], ' than ',article ," ", clue[1]))
-  }
 
   #### GENERATE CORRECT RESPONSE OPTION #####
   (maxsteps <- max(infer$steps))
@@ -523,14 +536,15 @@ iinvkeeps
   if(!is.null(clone)){
     set.seed(clone)
   }
-  (maxinfer <- maxinferlist[sample(nrow(maxinferlist), 1),])
-  (maxitems <- itemlist[as.numeric(maxinfer[1:2])])
 
-  # if(ninfer == 2 && linear==TRUE && direct=="of" && antonym == "both" ){
-  #     maxitems  <-rev(maxitems)
-  # }
+(maxinfer <- maxinferlist[sample(nrow(maxinferlist), 1),])
+(maxitems <- itemlist[as.numeric(maxinfer[1:2])])
+if(ninfer==3 && linear==TRUE && direct == "of"){ #Flip back the matrix to forward
+  (maxitems <- rev(itemlist[as.numeric(maxinfer[1:2])]))# The answer has to flip as well.
+}
 
 
+  ##### Answer ####
   if(antonym=='both'){
     #maxanswer <- cap(p(join(maxitems, thescale, article,
      #                       forward=rbinom(1, 1, distprob)==1),'.'))
@@ -554,14 +568,17 @@ iinvkeeps
     if(ninfer == 3 && linear==TRUE){
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=TRUE),'.'))
-      maxanswer <- cap(p(join(maxitems, thescale, article,
+      maxanswer2 <- cap(p(join(maxitems, thescale, article,
                               forward=FALSE),'.'))
     }
 
+      maxanswer2
+
     maxanswer
+
   }else if(antonym == 'first'){
-    maxanswer <- cap(p(join(maxitems, thescale, article,
-                            forward=TRUE),'.'))
+    (maxanswer <- cap(p(join(maxitems, thescale, article,
+                            forward=TRUE),'.')))
 
     if(ninfer == 1){
       maxanswer <- cap(p(join(maxitems, thescale, article,
@@ -585,9 +602,9 @@ iinvkeeps
 
     if(ninfer==3 && linear==TRUE){
       maxanswer <- cap(p(join(maxitems, thescale, article,
-                              forward=TRUE),'.'))
-      maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=FALSE),'.'))
+      maxanswer2 <- cap(p(join(maxitems, thescale, article,
+                              forward=TRUE),'.'))
     }
 
 
@@ -627,246 +644,300 @@ iinvkeeps
     stop("Please select either 'both', 'first' or 'second' comparison.")
   }
 
-
-  #### ###### #### CLUES ORDERING IN THE SENTENCE ### #### ####
-  if(direct  == "of"){
-    (clues<- clues[order(clues[,1], decreasing = TRUE),])
-    (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
-    (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
-    rclues <- infer[rclues,1:4] #clues
-
-    (pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
-    (pos2 <- paste0(clues[,1],'.',clues[,2]))
-infer
-    check<- NULL
-    for(i in pos){
-      (check[i] <- (1:length(pos2))[pos2 %in% i])
-    }
-    check
-    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
-    # if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
-    #   ( iclues <- iclues[-nrow(iclues),])
-    # }
-
-    if(ninfer==3 && linear==TRUE){ #Flip back the matrix to forward
-          (iclues <- cbind(iclues[,2], iclues[,1]))
+    #for linear TRUE
+    if(exists("maxanswer2")==FALSE){
+      maxanswerFinal <-maxanswer
+    }else{
+      maxanswerFinal <- paste(maxanswer,maxanswer2)
+      rm(maxanswer2)
     }
 
-  }else if(direct == "ob"){
-    maxinfer
-    (clues<- clues[order(clues[,1], decreasing = TRUE),])
-    (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
-    (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
-    (rclues <- infer[rclues,1:4]) #clues
-    (pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
-    (pos2 <- paste0(clues[,1],'.',clues[,2]))
 
-    check<- NULL
-    for(i in pos){
-      (check[i] <- (1:length(pos2))[pos2 %in% i])
+#### ###### #### CLUES ORDERING IN THE SENTENCE ### #### ####
+if(direct  == "of"){
+
+  (clues<- clues[order(clues[,1], decreasing = TRUE),])
+  (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
+  (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
+  rclues <- infer[rclues,1:4] #clues
+
+  (pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
+  (pos2 <- paste0(clues[,1],'.',clues[,2]))
+  infer
+  check<- NULL
+  for(i in pos){
+    (check[i] <- (1:length(pos2))[pos2 %in% i])
+  }
+  check
+  (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
+  # if(nnclues== 3 && nnspread == 4 && linear==TRUE){ #To remove last sentence
+  #   ( iclues <- iclues[-nrow(iclues),])
+  # }
+
+  if(ninfer==3 && linear==TRUE){ #Flip back the matrix to forward
+    (iclues <- cbind(iclues[,2], iclues[,1]))
+  }
+
+}else if(direct == "ob"){
+  maxinfer
+  (clues<- clues[order(clues[,1], decreasing = TRUE),])
+  (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
+  (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
+  (rclues <- infer[rclues,1:4]) #clues
+  (pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
+  (pos2 <- paste0(clues[,1],'.',clues[,2]))
+
+  check<- NULL
+  for(i in pos){
+    (check[i] <- (1:length(pos2))[pos2 %in% i])
+  }
+  check <- rev(check)
+  check
+
+  (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
+  # if(nnclues== 3 && nnspread == 4 && linear==TRUE){  #To remove last sentence
+  #   ( iclues <- iclues[-nrow(iclues),])
+  # }
+
+
+
+}else if(direct == "alt"){
+  if(ninfer==3){
+    mixed <- FALSE
+    while(mixed==FALSE){ #always get mix
+      (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
+      (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
+
+      (rclues <- infer[rclues,1:4]) #clues
+      (rclues <- sample_n(rclues, nrow(rclues)))
+
+      (pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
+      ((pos2 <- paste0(clues[,1],'.',clues[,2])))
+      check<- NULL
+      for(i in pos){
+        (check[i] <- (1:length(pos2))[pos2 %in% i])
+      }
+
+      if(is.unsorted(rev(check)) == TRUE| is.unsorted(check)==TRUE)
+        mixed <- TRUE
     }
-    check <- rev(check)
-    check
 
-    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
-    # if(nnclues== 3 && nnspread == 4 && linear==TRUE){  #To remove last sentence
-    #   ( iclues <- iclues[-nrow(iclues),])
-    # }
+    (pos    <- paste0(rclues[,1] ,'.',rclues[,2])) # check for clues
+    (pos2 <- paste0(clues[,1],'.',clues[,2])) # check for all combination
+    (a <- (1:length(pos2))[!pos2 %in% pos]) # remove left out combination
+    (leftOut <- clues[a,1:2])
+    altclues<- rbind(leftOut, rclues[,1:2]) # rearrange order
 
-  }else if(direct == "alt"){
-    if(ninfer==3){
-      mixed <- FALSE
-      while(mixed==FALSE){ #always get mix
-        (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
-        (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
+    (iclues <- cbind(itemlist[altclues[,1]],itemlist[altclues[,2]])) # new ordering for names
 
-        (rclues <- infer[rclues,1:4]) #clues
-        rclues <- sample_n(rclues, nrow(rclues))
+  }
 
-        (pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
-        ((pos2 <- paste0(clues[,1],'.',clues[,2])))
-        check<- NULL
-        for(i in pos){
-          (check[i] <- (1:length(pos2))[pos2 %in% i])
+  maxinfer
+  (clues<- clues[order(clues[,1], decreasing = TRUE),])
+  (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
+  (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
+  (rclues <- infer[rclues,1:4]) #clues
+  (pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
+  (pos2 <- paste0(clues[,1],'.',clues[,2]))
+
+  check<- NULL
+  for(i in pos){
+    (check[i] <- (1:length(pos2))[pos2 %in% i])
+  }
+
+  (randomised <- sample(1:2,1))
+  if(randomised == 1){
+  (check <- rev(check))
+  }
+
+  (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
+
+
+}else{
+  stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
+}
+
+
+#if(direct == "alt" && ninfer==3 && nnclues== 3 && nnspread == 4 && linear==TRUE){
+# message("Cannot be linear when direct =")
+# clues<- clues[order(clues[,1], decreasing = TRUE),]
+# rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
+# (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
+# rclues <- infer[rclues,1:4] #clues
+# pos    <- paste0(rclues[,1] ,'.',rclues[,2])
+# pos2 <- paste0(clues[,1],'.',clues[,2])
+#
+# check<- NULL
+# for(i in pos){
+#   (check[i] <- (1:length(pos2))[pos2 %in% i])
+# }
+# check <- rev(check)
+# alt1 <- rbind(c(2,1,3),c(3,1,2))
+# check <- alt1[sample(1:2,1),]
+# check
+#
+# (cclues <- clues[-nrow(clues),])
+# cclues <- cbind(c(1,2,3),cclues)
+# cclues<- cclues[match(check, cclues),]
+# cclues <- cclues[,-1] # To move last sentence
+# (iclues <- cbind(itemlist[cclues[,1]],itemlist[cclues[,2]]))
+# }
+
+
+(inferClues<- (t(as.numeric(check))))
+
+if(is.na(inferClues[2])){
+  inferClues[2] <- " "
+}
+if(is.na(inferClues[3])){
+  inferClues[3] <- " "
+}
+inferClues
+
+
+
+# CREATE SENTENCE STRUCTURE ####
+q <- 'Clues: '
+dreturn <- c()
+dtype <- c()
+
+q <- NULL
+if(antonym=='both'){
+  for (i in 1:nrow(iclues)) {
+    q <- p(q, join(iclues[i,], thescale, article,
+                   forward=rbinom(1, 1, distprob)==1))
+    if (i<nrow(iclues)) q <- p(q, ', ')
+  }
+}else if(antonym == 'first'){
+  for (i in 1:nrow(iclues)) {
+    q <- p(q, join(iclues[i,], thescale, article,
+                   forward=TRUE))
+    if (i<nrow(iclues)) q <- p(q, ', ')
+  }
+
+
+}else if (antonym == "second"){
+  for (i in 1:nrow(iclues)) {
+    q <- p(q, join(iclues[i,], thescale, article,
+                   forward=FALSE))
+    if (i<nrow(iclues)) q <- p(q, ', ')
+  }
+}else{
+  stop("Please select declare either 'both', 'first' or 'second' comparison.")
+}
+
+
+q
+q <- p(q, '. Which of the following is implied?')
+if(Ndist > 5) stop("Please choose a lower number of distractors")
+
+q <-   paste(toupper(substring(q, 1,1)),substring(q, 2),sep="", collapse=" ")
+q
+
+
+
+#### DISTRACTORS #####
+    # ###### create matrix of invalid and false distractors ########
+    dlist <- NULL
+    if(dist=="mixed" && linear == FALSE){
+      if(all(is.na(iinvkeeps)) == TRUE ){
+        message(paste0("This results because all the combinations in the matrix are possible. \nInvalid distractors cannot be created. \nReturn only False distractors. \nCaution when studying distractors.\nThis is located in question ", seed ,".\nSolution: Try increasing nspread"))
+        suppressWarnings(dlist <- rbind(cbind(iinvkeeps, type='invalid'),
+                                        cbind(ifalses, type='false')))
+      }else{
+       (dlist <- rbind(cbind(iinvkeeps, type='invalid'),
+                       cbind(ifalses, type='false')))
+      }
+    }
+dlist
+    if(dist=="mixed" && linear==TRUE){
+      if(all(is.na(iinvkeeps)) == TRUE ){
+        message("\nInvalid distractors cannot be created. \nReturn only False distractors.")
+        suppressWarnings(dlist <- rbind(cbind(iinvkeeps, type='invalid'),
+                                        cbind(ifalses, type='false')))
+      }else{
+        dlist <- rbind(cbind(iinvkeeps, type='invalid'),
+                       cbind(ifalses, type='false'))
+      }
+    }
+
+    dlist
+    if(dist == "false"){
+      (dlist <- cbind(ifalses, type='false'))
+    }
+
+    if(dist=="invalid"){
+      if(all(is.na(iinvkeeps)) == TRUE){
+        stop("Please increase nclues and nspread. Impossible to generate invalid distractors.")
+      }
+      if(uclues ==4 && nspread ==4 && dist== "invalid"){
+        warning("Only a maximum of 3 invalid distractors can be generated when nclues is equals to 4.")
+      }
+      dlist <- cbind(iinvkeeps, type='invalid')
+    }
+
+    if(nrow(dlist) < Ndist){
+      stop("Can't create that many distractors. Consider lowing to 3 distractors when infer = 1")
+    }
+
+
+      # Create actual distractors ####
+      if(dist=="mixed"){
+        (dlist.df <- as.data.frame(dlist))
+        if(length(unique(dlist.df$type))==2){ #if 2 = "invalid" and "falses" distractor type
+          (type <- dlist.df$type)
+          (dlist.df <- sample_n(group_by(dlist.df,type),size=ceiling(Ndist/2),replace=FALSE,weight=NULL ,0.5))
+          (dlist.df <- dlist.df[sample(nrow(dlist.df)),])
+
+          if(Ndist %% 2 == 0){
+            (dtype <- dlist.df[,3])
+          }else{
+            dtype <- dlist.df[-nrow(dlist.df),3]
+          }
+
+        (dtype <- as.character(as.matrix(dtype)))
+
+        }else{ # if only one distractor type
+          (dlist.df <- as.data.frame(dlist))
+          (type <- dlist.df$type)
+          (dlist.df <- sample_n(group_by(dlist.df,type), size=Ndist,replace=FALSE,weight=NULL ,0.5))
+          (dtype <- dlist.df[,3])
+          (dtype <- as.character(as.matrix(dtype)))
         }
 
-        if(is.unsorted(rev(check)) == TRUE| is.unsorted(check)==TRUE)
-          mixed <- TRUE
-      }
-
-    }
-
-    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
-
-
-  }else{
-    stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
-  }
-
-
-  #if(direct == "alt" && ninfer==3 && nnclues== 3 && nnspread == 4 && linear==TRUE){
-   # message("Cannot be linear when direct =")
-    # clues<- clues[order(clues[,1], decreasing = TRUE),]
-    # rclues <- unlist(strsplit(maxinfer[,4], "[.]"))
-    # (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
-    # rclues <- infer[rclues,1:4] #clues
-    # pos    <- paste0(rclues[,1] ,'.',rclues[,2])
-    # pos2 <- paste0(clues[,1],'.',clues[,2])
-    #
-    # check<- NULL
-    # for(i in pos){
-    #   (check[i] <- (1:length(pos2))[pos2 %in% i])
-    # }
-    # check <- rev(check)
-    # alt1 <- rbind(c(2,1,3),c(3,1,2))
-    # check <- alt1[sample(1:2,1),]
-    # check
-    #
-    # (cclues <- clues[-nrow(clues),])
-    # cclues <- cbind(c(1,2,3),cclues)
-    # cclues<- cclues[match(check, cclues),]
-    # cclues <- cclues[,-1] # To move last sentence
-    # (iclues <- cbind(itemlist[cclues[,1]],itemlist[cclues[,2]]))
- # }
-
-
-  (inferClues<- (t(as.numeric(check))))
-
-  if(is.na(inferClues[2])){
-    inferClues[2] <- " "
-  }
-  if(is.na(inferClues[3])){
-    inferClues[3] <- " "
-  }
-clues
-
-
-
-  # CREATE SENTENCE STRUCTURE ####
-  q <- 'Clues: '
-  dreturn <- c()
-  dtype <- c()
-
-  q <- NULL
-  if(antonym=='both'){
-    for (i in 1:nrow(iclues)) {
-      q <- p(q, join(iclues[i,], thescale, article,
-                     forward=rbinom(1, 1, distprob)==1))
-      if (i<nrow(iclues)) q <- p(q, ', ')
-    }
-  }else if(antonym == 'first'){
-    for (i in 1:nrow(iclues)) {
-      q <- p(q, join(iclues[i,], thescale, article,
-                     forward=TRUE))
-      if (i<nrow(iclues)) q <- p(q, ', ')
-    }
-  }else if (antonym == "second"){
-    for (i in 1:nrow(iclues)) {
-      q <- p(q, join(iclues[i,], thescale, article,
-                     forward=FALSE))
-      if (i<nrow(iclues)) q <- p(q, ', ')
-    }
-  }else{
-    stop("Please select declare either 'both', 'first' or 'second' comparison.")
-  }
-
-
-
-  q <- p(q, '. Which of the following is implied?')
-  if(Ndist > 5) stop("Please choose a lower number of distractors")
-
-  q <-   paste(toupper(substring(q, 1,1)),substring(q, 2),sep="", collapse=" ")
-q
-  # create matrix of invalid and false distractors ####
-  dlist <- NULL
-  if(dist=="mixed"){
-    if(all(is.na(iinvkeeps)) == TRUE){
-      warning(paste0("This results because all the combinations in the matrix are possible. \nInvalid distractors cannot be created. \nReturn only False distractors. \nCaution when studying distractors.\nThis is located in question ", seed ,".\nSolution: Try increasing nspread."))
-      suppressWarnings(dlist <- rbind(cbind(iinvkeeps, type='invalid'),
-                                      cbind(ifalses, type='false')))
-    }else{
-      dlist <- rbind(cbind(iinvkeeps, type='invalid'),
-                     cbind(ifalses, type='false'))
-    }
-  }
-
-  if(dist == "false"){
-    dlist <- cbind(ifalses, type='false')
-  }
-
-  if(dist=="invalid"){
-    if(all(is.na(iinvkeeps)) == TRUE){
-      stop("Please increase nclues and nspread. Impossible to generate invalid distractors.")
-    }
-    if(uclues ==4 && nspread ==4 && dist== "invalid"){
-      warning("Only a maximum of 3 invalid distractors can be generated when nclues is equals to 4.")
-    }
-    dlist <- cbind(iinvkeeps, type='invalid')
-  }
-
-  # Create actual distractors ####
-  if(dist=="mixed"){
-    dlist.df <- as.data.frame(dlist)
-    if(length(unique(dlist.df$type))==2){ #if 2 = "invalid" and "falses" distractor type
-      type <- dlist.df$type
-      dlist.df <- sample_n(group_by(dlist.df,type),ceiling(Ndist/2), 0.5)
-
-      dlist.df <- dlist.df[sample(nrow(dlist.df)),]
-
-      if(Ndist %% 2 == 0){
-        dtype <- dlist.df[,3]
-
+        (dlist.df <- as.matrix(dlist.df))
+        dreturn<- NULL
+        for (i in 1:Ndist){
+          dreturn[i] <- cap(p(join(dlist.df[i,1:2], thescale, article,
+                                   forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
+        }
+        dreturn
       }else{
-        dtype <- dlist.df[-nrow(dlist.df),3]
+        if(Ndist > nrow(dlist)){
+          stop("There are not enough invalid distractors. Please change the arg dist to 'mixed' or 'false'")
+        }
+        draw  <- dlist[sample(nrow(dlist),Ndist),]
+        if(Ndist==1){
+          draw <- t(as.matrix(draw))
+          dtype <- draw[,3]
+          for (i in 1:Ndist){
+            dreturn[i] <- cap(p(join(draw[i,1:2], thescale, article,
+                                     forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
+          }
+        }else{
+          dtype <- draw[,3]
+          for (i in 1:Ndist){
+            dreturn[i] <- cap(p(join(draw[i,1:2], thescale, article,
+                                     forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
+          }
+        }
       }
-
-      dtype <- as.character(as.matrix(dtype))
-
-    }else{ # if only one distractor type
-      dlist.df <- as.data.frame(dlist)
-      type <- dlist.df$type
-      dlist.df<- sample_n(group_by(dlist.df,type),Ndist, 0.5)
-      dtype <- dlist.df[,3]
-      dtype <- as.character(as.matrix(dtype))
-    }
-    dlist.df <- as.matrix(dlist.df)
-    dreturn<- NULL
-    for (i in 1:Ndist){
-      dreturn[i] <- cap(p(join(dlist.df[i,1:2], thescale, article,
-                               forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
-    }
-
-  }else{
-    if(Ndist > nrow(dlist)){
-      stop("There are not enough invalid distractors. Please change the arg dist to 'mixed' or 'false'")
-    }
-    draw  <- dlist[sample(nrow(dlist),Ndist),]
-    if(Ndist==1){
-      draw <- t(as.matrix(draw))
-      dtype <- draw[,3]
-      for (i in 1:Ndist){
-        dreturn[i] <- cap(p(join(draw[i,1:2], thescale, article,
-                                 forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
-      }
-    }else{
-      dtype <- draw[,3]
-      for (i in 1:Ndist){
-        dreturn[i] <- cap(p(join(draw[i,1:2], thescale, article,
-                                 forward=rbinom(1, 1, distprob)==1),'.')) # create an incorrect sentence
-      }
-
-    }
-  }
-
-  #for linear TRUE
-  if(exists("maxanswer2")==FALSE){
-    maxanswerFinal <-maxanswer
-  }else{
-    maxanswerFinal <- paste(maxanswer,maxanswer2)
-    rm(maxanswer2)
-  }
-
-
+    invkeeps
+    valid
+    iclues
+      q
+      dreturn
+      dtype
   finalList <- data.frame(seed=seed,
              Question=q,
              ninfer=ninfer,
@@ -887,8 +958,8 @@ q
   )
 
 
-  class(finalList) <- c("data.frame" ,"lisy")
+  class(finalList) <- c("lisy")
   return(finalList)
-
+finalList
 }
 
