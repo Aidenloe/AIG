@@ -180,9 +180,11 @@ lisy <- function( seed=1,
     stop("The current generator can only create up to 3 inferences per items.")
   }
 
-  # if(Ndist <1){
-  #   stop("Please increase the number of distractors.")
-  # }
+if(Ndist > 4) stop("Please choose a lower number of distractors")
+
+ if(Ndist <1){
+   stop("Please increase the number of distractors.")
+ }
 
  if(linear==TRUE && ninfer==3 && nclues==3 ){
    stop("Please reduce ninfer by 1 or increase nclues + 1 greater than ninfer.")
@@ -201,21 +203,21 @@ lisy <- function( seed=1,
   }
 
 #
-  # seed=2
-  # nclues=3
-  # nspread = 4
-  # clone = NULL
-  # incidental='names'
-  # linear=TRUE
-  # antonym = "first"
-  # ninfer = 1
-  # direct= 'alt'
-  # Ndist=5
-  # dist="mixed"
-  # distprob=.5
-  # itemSet='random'
-  # items=NULL
-  # scales = NULL
+  seed=2
+  nclues=3
+  nspread = 4
+  clone = NULL
+  incidental='names'
+  linear=TRUE
+  antonym = "first"
+  ninfer = 2
+  direct= 'ob'
+  Ndist=4
+  dist="mixed"
+  distprob=.5
+  itemSet='random'
+  items=NULL
+  scales = NULL
 
 
 nnclues <- nnspread <- 1
@@ -829,8 +831,6 @@ if(antonym=='both'){
 
 q
 q <- p(q, '. Which of the following is implied?')
-if(Ndist > 5) stop("Please choose a lower number of distractors")
-
 q <-   paste(toupper(substring(q, 1,1)),substring(q, 2),sep="", collapse=" ")
 q
 
@@ -855,7 +855,8 @@ dlist
         message("\nInvalid distractors cannot be created. \nReturn only False distractors.")
         suppressWarnings(dlist <- rbind(cbind(iinvkeeps, type='invalid'),
                                         cbind(ifalses, type='false')))
-      }else{
+      dlist
+        }else{
         dlist <- rbind(cbind(iinvkeeps, type='invalid'),
                        cbind(ifalses, type='false'))
       }
@@ -950,8 +951,6 @@ dlist
              dtype3=dtype[3],
              dist4=dreturn[4],
              dtype4=dtype[4],
-             dist5=dreturn[5],
-             dtype5=dtype[5],
              clues.1 = inferClues[1],
              clues.2 = inferClues[2],
              clues.3 = inferClues[3]

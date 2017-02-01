@@ -12,7 +12,7 @@ print.lisy <- function(x,...){
   cat(paste0("\nDistractor 2:",finalList$dist2, "(",finalList$dtype2 ,")"))
   cat(paste0("\nDistractor 3:",finalList$dist3, "(",finalList$dtype3 ,")"))
   cat(paste0("\nDistractor 4: ",finalList$dist4, "(",finalList$dtype4 ,")"))
-  cat(paste0("\nDistractor 5: ",finalList$dist5, "(",finalList$dtype5 ,")"))
+  #cat(paste0("\nDistractor 5: ",finalList$dist5, "(",finalList$dtype5 ,")"))
 }
 
 
