@@ -85,25 +85,13 @@ lisy(seed=1,nclues=4,nspread=6,clone = NULL,incidental='names',linear=FALSE,
     itemSet='own',items= superheroes, scales = compare)
 
 #loop through 30 items
-nitems <- 30
-params <- data.frame(seed=1:nitems,
-                     nclues=ceiling((1:nitems)/20)+3,
-                     nspread=ceiling((1:nitems)/15)+4)
-
-qtable <- NULL
-for (i in 1:nitems) {
-  runs <- lisy(seed=i,
-               nclues=params$nclues[i],
-               nspread=params$nspread[i],
-               clone = NULL,
-               incidental= 'names',linear=FALSE,antonym="first",ninfer = 2,
-               direct='of', Ndist=4,dist="mixed",distprob=.5,
-                itemSet='own', items= superheroes, scales = compare)
-  qtable[[i]] <- runs
+run <- NULL
+for(i in 1:30){
+ run[[i]]<-AIG::lisy(seed=i,nclues=4,nspread=5,clone = 1,incidental='names',linear=TRUE,
+                     dist="false",distprob=0.5,itemSet='random',
+                     antonym="both",ninfer = 3, direct='of', Ndist=3,
+                    items= NULL,scales = NULL)
 }
-
-qtable
-
 }
 \author{
 Aiden Loe and Francis Smart

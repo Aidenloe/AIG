@@ -70,25 +70,14 @@
 #'     itemSet='own',items= superheroes, scales = compare)
 #'
 #' #loop through 30 items
-#' nitems <- 30
-#' params <- data.frame(seed=1:nitems,
-#'                      nclues=ceiling((1:nitems)/20)+3,
-#'                      nspread=ceiling((1:nitems)/15)+4)
-#'
-#' qtable <- NULL
-#' for (i in 1:nitems) {
-#'   runs <- lisy(seed=i,
-#'                nclues=params$nclues[i],
-#'                nspread=params$nspread[i],
-#'                clone = NULL,
-#'                incidental= 'names',linear=FALSE,antonym="first",ninfer = 2,
-#'                direct='of', Ndist=4,dist="mixed",distprob=.5,
-#'                 itemSet='own', items= superheroes, scales = compare)
-#'   qtable[[i]] <- runs
+#' run <- NULL
+#' for(i in 1:30){
+#'  run[[i]]<-AIG::lisy(seed=i,nclues=4,nspread=5,clone = 1,incidental='names',linear=TRUE,
+#'                      dist="false",distprob=0.5,itemSet='random',
+#'                      antonym="both",ninfer = 3, direct='of', Ndist=3,
+#'                     items= NULL,scales = NULL)
 #' }
-#'
-#' qtable
-#'
+
 
 
 lisy <- function( seed=1,
@@ -204,13 +193,13 @@ if(Ndist > 4) stop("Please choose a lower number of distractors")
 
 #
   # seed=2
-  # nclues=3
-  # nspread = 4
+  # nclues=4
+  # nspread = 5
   # clone = NULL
   # incidental='names'
-  # linear=TRUE
-  # antonym = "first"
-  # ninfer = 2
+  # linear=FALSE
+  # antonym = "both"
+  # ninfer = 3
   # direct= 'ob'
   # Ndist=4
   # dist="mixed"
@@ -218,6 +207,7 @@ if(Ndist > 4) stop("Please choose a lower number of distractors")
   # itemSet='random'
   # items=NULL
   # scales = NULL
+
 
 
 nnclues <- nnspread <- 1
@@ -366,7 +356,7 @@ if(direct == 'of' && ninfer == 3 | direct == 'alt' && ninfer == 3){
         }
         i <- i+1
       }
-infer
+
       if(any(infer$steps==2) == TRUE ){
         redo <- 2
       }
@@ -479,7 +469,7 @@ infer
     }
 
   }
-infer
+
 
   (infer[,1:3] <- sapply(infer[,1:3], as.numeric))
   (infer <- infer[order(infer[,1], decreasing=TRUE),])
@@ -495,21 +485,30 @@ join <- function(clue, thescale, article, forward=TRUE) {
   (possible <- paste0(pclues[,1],'.',pclues[,2]))
 
   (Nval <- (1:length(possible))[possible %in% valid])
-valid
-infer
+
   ############### INVALID RESPONSES ##########
   (Ninv <- (1:length(possible))[!possible %in% valid]) #checking for invalid
   (invalids <- cbind(pclues[Ninv,2],pclues[Ninv,1]))
-  (ulist    <- unique(c(clues[,1:2])))
-  #(invkeeps <- invalids[invalids[,1] %in% ulist | invalids[,2] %in% ulist,])
+
   invkeeps <- invalids
+
+  if(ninfer==2 & direct=='ob'){
+    (result = invalids[invalids[, 2] == invalids[, 1] - 1,]) # keep unique rows
+    (invkeeps = result[!duplicated(result[, 1]), ]) # ensure no duplicates
+      }
+  if(ninfer==2 & direct=='of'){
+        (result = invalids[invalids[, 2] == invalids[, 1] + 1,]) # keep unique rows
+        (invkeeps = result[!duplicated(result[, 1]), ]) # ensure no duplicates
+    }
+
   if (length(invkeeps) > 0 ) iinvkeeps <- rbind(
     cbind(itemlist[invkeeps[,1]],itemlist[invkeeps[,2]]),
     cbind(itemlist[invkeeps[,2]],itemlist[invkeeps[,1]]))
 
 if(length(invkeeps)==0) {
     iinvkeeps<- matrix(NA, nrow=0, ncol=2)
-  }
+}
+
 if(linear==TRUE){
   iinvkeeps<- matrix(NA, nrow=0, ncol=2)
 }
@@ -832,7 +831,7 @@ q <-   paste(toupper(substring(q, 1,1)),substring(q, 2),sep="", collapse=" ")
 q
 
 
-
+dist
 #### DISTRACTORS #####
     # ###### create matrix of invalid and false distractors ########
     dlist <- NULL
