@@ -12,7 +12,7 @@
 #' @param sameValue  Deciding if you want the values to be the same or different values.
 #' @param arithOps There are two options in this argument, either 'add' or 'subtract', "multiply.
 #' @param allowNeg Allow the use of negative values. Only for "add" arithmetic operator. Not allowed for "subtract".
-#' @param order There are three options to order the values presented. "mixed", "decreasing", "increasing". Does not matter when same Value = TRUE.
+#' @param order There are three options to order the values presented, ("mixed", "descending", "ascending"). Does not matter when same Value = TRUE.
 #' @return
 #' \describe{
 #' \item{Question}{The arithmetic questions that are automatically generated.}
@@ -192,6 +192,7 @@ arith <- function(numProbs=5, numOps = 1, magnitude = 1, arithOps = "add", allow
 
     if(arithOps=="multiply"){
     dist<- 6 # need to have at least 6 distractors
+      i <- 1
       while(i < 6){
       if(sameValue==FALSE){
           # Distractor Type 2

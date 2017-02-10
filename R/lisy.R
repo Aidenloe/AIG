@@ -145,9 +145,9 @@ lisy <- function( seed=1,
     stop("There isn't enough names to create the sentences.")
   }
 
-  if(Ndist > nclues && dist== "false" | (Ndist == nclues) == TRUE && dist== "false"){
-    stop("False distractors are only allowed if Ndist is 1 less than the number of clues")
-  }
+  # if(Ndist > nclues && dist== "false" | (Ndist == nclues) == TRUE && dist== "false"){
+  #   stop("False distractors are only allowed if Ndist is 1 less than the number of clues")
+  # }
 
   if(ninfer == 3 && nclues < 3 ){
     stop("To have 3 inferences you need to generate a minimum of 3 sentence with 4 names ")
@@ -192,21 +192,21 @@ if(Ndist > 4) stop("Please choose a lower number of distractors")
   }
 
 #
-  # seed=2
-  # nclues=4
-  # nspread = 5
-  # clone = NULL
-  # incidental='names'
-  # linear=FALSE
-  # antonym = "both"
-  # ninfer = 3
-  # direct= 'ob'
-  # Ndist=4
-  # dist="mixed"
-  # distprob=.5
-  # itemSet='random'
-  # items=NULL
-  # scales = NULL
+  seed=2
+  nclues=4
+  nspread = 5
+  clone = NULL
+  incidental='names'
+  linear=FALSE
+  antonym = "both"
+  ninfer = 3
+  direct= 'ob'
+  Ndist=4
+  dist="false"
+  distprob=.5
+  itemSet='random'
+  items=NULL
+  scales = NULL
 
 
 
