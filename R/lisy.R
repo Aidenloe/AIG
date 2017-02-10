@@ -192,21 +192,21 @@ if(Ndist > 4) stop("Please choose a lower number of distractors")
   }
 
 #
-  seed=2
-  nclues=4
-  nspread = 5
-  clone = NULL
-  incidental='names'
-  linear=FALSE
-  antonym = "both"
-  ninfer = 3
-  direct= 'ob'
-  Ndist=4
-  dist="false"
-  distprob=.5
-  itemSet='random'
-  items=NULL
-  scales = NULL
+  # seed=2
+  # nclues=3
+  # nspread = 4
+  # clone = NULL
+  # incidental='names'
+  # linear=FALSE
+  # antonym = "both"
+  # ninfer = 3
+  # direct= 'ob'
+  # Ndist=4
+  # dist="false"
+  # distprob=.5
+  # itemSet='random'
+  # items=NULL
+  # scales = NULL
 
 
 
@@ -929,12 +929,7 @@ dlist
           }
         }
       }
-    invkeeps
-    valid
-    iclues
-      q
-      dreturn
-      dtype
+
   finalList <- data.frame(seed=seed,
              Question=q,
              ninfer=ninfer,
