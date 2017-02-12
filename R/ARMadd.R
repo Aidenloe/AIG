@@ -33,14 +33,6 @@ arith <- function(numProbs=5, numOps = 1, magnitude = 1, arithOps = "add", allow
   # numOps sets the number of operations in the stimuli (range of values is 1 to 5)
   # magnitude sets the range of values for the integers in the stimuli by powers of 10 (range of values is 1 to 5)
 
-   # numProbs= 1000
-   # numOps = 1
-   # magnitude = 1
-   # allowNeg = TRUE
-   # sameValue=FALSE
-   # arithOps = "multiply"
-   # order="mixed"
-
    possible <- c(1:5) #maximum operators allowed
 
    #checks
@@ -99,21 +91,6 @@ arith <- function(numProbs=5, numOps = 1, magnitude = 1, arithOps = "add", allow
     }
   }
 
-
-    # if users wants to have same numeric value
-      # if(sameValue==TRUE){
-      #   # if(arithOps == "subtract"){
-      #   #   stop("The difference is always 0 when you select sameValue = TRUE. Consider changing arithOps = 'add' or sameValue = FALSE")
-      #   # }
-      #   sValue <- 0
-      #     while(sValue < 1 ){
-      #       stimuli <- sample(number_diff,  num_levels, replace=T)
-      #       #message("Larger magnitude and longer number of operators take a long time to search for same value.")
-      #       if(length(unique(stimuli)) == 1){
-      #         sValue <-  2
-      #       }
-      #    }
-      # }
 
       # if users wants to have same numeric value
       if(sameValue==TRUE){
@@ -341,15 +318,6 @@ if(arithOps == "subtract") (code <- paste(ifelse(stimuliCode < 0, 1, 0), sep="",
 if(arithOps == "multiply") (code <- paste(ifelse(stimuli < 0, 1, 0), sep="", collapse=""))
     (code <- paste(magnitude, "_", code, sep=""))
 
-#    (choices <- paste("(1), ", responses[1,], " ,(2), ", responses[2,], ", (3), ", responses[3,], ", (4), ", responses[4,], " ,(5), ", responses[5,], " ,(6), ", responses[6,], " ,(7), None of these ,(8), I don't know", sep=""))
-# (choices <- data.frame(response1 =responses[1,],
-#                       response2 =  responses[2,],
-#                       response3 = responses[3,],
-#                       response4 = responses[4,],
-#                       response5=  responses[5,],
-#                       response6=  responses[6,],
-#                       response7= paste("None of these"),
-#                       response8= paste("I don't know")))
 
     # Write the item response choice text
     (choices<- c(responses[1,],responses[2,],responses[3,],responses[4,],responses[5,],responses[6,],"None of these", "I don't know"))
@@ -359,10 +327,6 @@ if(arithOps == "multiply") (code <- paste(ifelse(stimuli < 0, 1, 0), sep="", col
     (correct <- answer)
 
     ##### Put it all together ####
-        # item <-   data.frame(stimuli = prompt,
-        #                      choices = choices,
-        #                      answer = correct,
-        #                      code = code)
       item <-  c(prompt,code,correct,choices)
       (item <- t(as.data.frame(item)))
         colnames(item) <- c("prompt","code","answer", "option 1","distType1","option 2","distType2","option 3","distType3","option 4","distType4","option 5","distType5","option 6","distType6","option 7","option 8")
@@ -374,16 +338,7 @@ if(arithOps == "multiply") (code <- paste(ifelse(stimuli < 0, 1, 0), sep="", col
   # Now, do some reorganization so the problems are easier to handle
   (results1 <- do.call(rbind,results))
   rownames(results1) <- 1:nrow(results1)
-  #(results2 <- as.data.frame(results1))
-
-  # results <- matrix(results,ncol=numProbs)
-  # (results <- t(results))
-  # colnames(results) <- c("prompt", "choices", "answer", "code")
   class(results1) <- "ICARarith"
   return(results1)
 }
-
-
-#a <- ICARarith(numProbs=10000, numOps = 1, magnitude = 2, arithOps = "multiply",allowNeg = FALSE, sameValue=FALSE, order = "descending")
-
 
