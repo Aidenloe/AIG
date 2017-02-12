@@ -20,7 +20,7 @@ arith(numProbs = 5, numOps = 1, magnitude = 1, arithOps = "add",
 
 \item{sameValue}{Deciding if you want the values to be the same or different values.}
 
-\item{order}{There are three options to order the values presented. "mixed", "decreasing", "increasing". Does not matter when same Value = TRUE.}
+\item{order}{There are three options to order the values presented, ("mixed", "descending", "ascending"). Does not matter when same Value = TRUE.}
 }
 \value{
 \describe{
