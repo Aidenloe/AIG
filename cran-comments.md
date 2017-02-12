@@ -5,13 +5,13 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 note
 
 * This is a updated release.
 
 ## Reverse dependencies
 
-This is a new release, so there are no reverse dependencies.
+This is a updated version, there are no problems with reverse dependencies found.
 
 ---
 
