@@ -7,7 +7,7 @@
 
 0 errors | 0 warnings | 0 note
 
-* This is a updated release.
+* This is a updated release of the AIG package.
 
 ## Reverse dependencies
 
