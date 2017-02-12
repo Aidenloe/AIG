@@ -16,7 +16,7 @@
 #' @return
 #' \describe{
 #' \item{Question}{The arithmetic questions that are automatically generated.}
-#' \item{Code}{First digit is the magnitude. Subsequent digits correspond to the positional values in the question. 0 is positive values, 1 is negative values.}
+#' \item{Code}{First digit is the magnitude. Subsequent digits correspond to the positional values in the question. 0 is positive value, 1 is negative value.}
 #' \item{Answers}{The answer to the question generated.}
 #' \item{Response Options}{Eight response options. }
 #'     }
@@ -40,6 +40,7 @@ arith <- function(numProbs=5, numOps = 1, magnitude = 1, arithOps = "add", allow
    if(!(magnitude %in% possible)) stop(' The only options for magnitude are 1, 2, 3, 4, or 5')
    if(allowNeg == TRUE && arithOps=="subtract") stop("allowNeg must be FALSE when arithOps = 'subtract'")
    if(order !="mixed" && order !="descending" && order !="ascending") stop("Please use either of the 3 options given. " )
+   if(arithOps !="add" && arithOps !="subtract" && arithOps !="multiply") stop("Please use select either 'add', 'subtract' or 'multiply' for the arithOps argument." )
 
 
   (results <- list(numProbs)) #Put item in list
