@@ -8,6 +8,8 @@
 #' @section Arithmetic Generator:
 #' This function creates arithmetic items according to certain specifications given by the arguments. \cr
 #' \code{\link{arith}}
+#' This function creates 2D spatial reasoning items according to certain specifications given by the arguments. \cr
+#' \code{\link{twoD}}
 #' @references
 #' Sternberg, R. J. (1980). Representation and process in linear syllogistic reasoning. Journal of Experimental Psychology: General, 109(2), 119.
 #'
