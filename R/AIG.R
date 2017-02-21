@@ -8,6 +8,7 @@
 #' @section Arithmetic Generator:
 #' This function creates arithmetic items according to certain specifications given by the arguments. \cr
 #' \code{\link{arith}}
+#' @section 2D reasoning Generator:
 #' This function creates 2D spatial reasoning items according to certain specifications given by the arguments. \cr
 #' \code{\link{twoD}}
 #' @references
