@@ -26,3 +26,10 @@
 * Items with linear array only returns false distractors. Invalid distractors cannot be created. 
 
 * Reduce to 4 distractors and 1 answer, giving a total of 5 options. More can be created, but it may be more suitable by hand at the moment. 
+
+---
+# AIG 0.1.2
+
+### MINOR CHANGES
+
+* Added a new function to generate 2D reasoning items using the `twoD()`.
