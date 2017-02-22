@@ -50,4 +50,7 @@ arith(numProbs=4, numOps = 4, magnitude = 3, arithOps = "subtract",
 \author{
 Aiden Loe and David Condon
 }
+\seealso{
+\code{\link{lisy}}, \code{\link{twoD}}
+}
 

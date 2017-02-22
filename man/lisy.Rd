@@ -103,4 +103,7 @@ Sternberg, R. J. (1980). Representation and process in linear syllogistic reason
 
 Sedek, G., & Von Hecker, U. (2004). Effects of subclinical depression and aging on generative reasoning about linear orders: Same or different processing limitations?. \emph{Journal of Experimental Psychology: General, 133(2)}, 237.
 }
+\seealso{
+\code{\link{arith}}, \code{\link{twoD}}
+}
 

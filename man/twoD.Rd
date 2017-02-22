@@ -4,21 +4,23 @@
 \alias{twoD}
 \title{2D Reasoning Items}
 \usage{
-twoD(items, wd = NULL, degree = 360)
+twoD(items, wd = NULL, seed = NULL, degree = 360)
 }
 \arguments{
 \item{items}{The number of items to generate.}
 
 \item{wd}{This is the working directory to save the figures in. If not provided, the file will be saved in the current working directory.}
 
+\item{seed}{To generate the same set of item(s) on the local computer.}
+
 \item{degree}{This allows you to change the rotation of the display figure by increasing or decreasing the value.}
 }
 \value{
 \describe{
 \item{ans}{Return the matrix that generates the display figure and answer.}
-\item{mirror}{Return the matrix that generates the mirror figure.}
+\item{mirror}{Return the matrix that generates a mirror figure.}
 \item{dist3}{Return the matrix that generates the distractor without the first square.}
-\item{dist4}{Return the matrix that generates the distractor that addes an extra square.}
+\item{dist4}{Return the matrix that generates the distractor that adds an extra square.}
     }
 }
 \description{
@@ -31,7 +33,7 @@ By default the actual answer is always at half of the display polar coordinates.
 }
 \examples{
 wd<- "~/desktop"
-twoD(items=1, wd=wd, degree=180)
+twoD(items=1, wd=wd,seed=NULL, degree=360)
 }
 \author{
 Aiden Loe

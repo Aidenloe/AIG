@@ -24,10 +24,10 @@
 #'     }
 #' @examples
 #' wd<- "~/desktop"
-#' twoD(items=1, wd=wd,seed=NULL, degree=180)
+#' twoD(items=1, wd=wd,seed=NULL, degree=360)
 
- wd<- "~/desktop"
- twoD(items=1, wd=wd, seed=1, degree=180)
+ #wd<- "~/desktop"
+ #twoD(items=1, wd=wd, seed=1, degree=360)
 
 twoD <- function(items ,wd=NULL, seed=NULL, degree= 360){
 
