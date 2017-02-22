@@ -33,3 +33,7 @@
 ### MINOR CHANGES
 
 * Added a new function to generate 2D reasoning items using the `twoD()`.
+
+* The `twoD()` generates 4 2D distractors and 1 2D answer. 
+
+* The `twoD()` can generate 2D or 3D (top or bottom perspective) display figures. 

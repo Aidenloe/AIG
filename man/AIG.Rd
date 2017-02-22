@@ -7,7 +7,7 @@
 The AIG package contains generators for studying automatically generated item types.
 }
 \details{
-The package will include several generators for psychological research purposes. Currently, it can only generate linear syllogistic and reasoning and arithmetic items.
+The package will include several generators for psychological research purposes. Currently, it can only generate linear syllogistic reasoning ,arithmetic and 2D spatial reasoning items.
 }
 \section{Linear Syllogism Generator}{
 
