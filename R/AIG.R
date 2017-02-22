@@ -1,7 +1,7 @@
 #' AIG: A package for studying Automatic Item Generators.
 #'
 #' @description The AIG package contains generators for studying automatically generated item types.
-#' @details The package will include several generators for psychological research purposes. Currently, it can only generate linear syllogistic and reasoning and arithmetic items.
+#' @details The package will include several generators for psychological research purposes. Currently, it can only generate linear syllogistic reasoning ,arithmetic and 2D spatial reasoning items.
 #' @section Linear Syllogism Generator:
 #' This function creates linear syllogsitic reasoning items according to certain specifications given by the arguments. \cr
 #' \code{\link{lisy}}
