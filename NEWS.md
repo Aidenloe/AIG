@@ -2,7 +2,7 @@
 
 * Added first function to generate linear syllogism items.
 
----
+
 # AIG 0.1.1
 
 ### MINOR CHANGES
