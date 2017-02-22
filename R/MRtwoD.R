@@ -33,12 +33,10 @@
 #' twoD(items=1, wd=wd,view="2D", seed=NULL, degree=360)
 #'
 #' #3D display figure (top view)
-#' twoD(items=1, wd=wd,view="top", seed=1, degree=320)
+#' #twoD(items=1, wd=wd,view="top", seed=1, degree=320)
 #'
 #' #3D display figure (bottom view)
-#' twoD(items=1, wd=wd,view="bottom", seed=1, degree=320)
-#  wd<- "~/desktop"
-# a <- twoD(items=1, wd=wd, view="bottom",seed=3, degree=150)
+#' #twoD(items=1, wd=wd,view="bottom", seed=1, degree=320)
 
 twoD <- function(items ,wd=NULL, view="2D",seed=NULL, degree= 360){
 
