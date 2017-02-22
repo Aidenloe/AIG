@@ -47,6 +47,7 @@
 #' Sedek, G., & Von Hecker, U. (2004). Effects of subclinical depression and aging on generative reasoning about linear orders: Same or different processing limitations?. \emph{Journal of Experimental Psychology: General, 133(2)}, 237.
 #' @author Aiden Loe and Francis Smart
 #' @title Linear Syllogism Generator
+#' @seealso \code{\link{arith}}, \code{\link{twoD}}
 #' @examples
 #' #Generate an item with default item set
 #' lisy(seed=10,nclues=4,nspread=6,clone = NULL,incidental='names',linear=FALSE,

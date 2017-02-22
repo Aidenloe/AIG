@@ -5,6 +5,7 @@
 #' @importFrom rgl clear3d
 #' @param items The number of items to generate.
 #' @param wd This is the working directory to save the figures in. If not provided, the file will be saved in the current working directory.
+#' @param seed To generate the same set of item(s) on the local computer.
 #' @param degree This allows you to change the rotation of the display figure by increasing or decreasing the value.
 #' @description This function generates a 2 dimensional figure with 4 distractors and 1 answer.
 #' @details By default the actual answer is always at half of the display polar coordinates. The display figure polar coordinates by default is 360. Increasing the degrees will make the figure rotate clock-wise and decreasing the degrees will make the figure rotate anti-clockwise.
@@ -17,18 +18,18 @@
 #' @return
 #' \describe{
 #' \item{ans}{Return the matrix that generates the display figure and answer.}
-#' \item{mirror}{Return the matrix that generates the mirror figure.}
+#' \item{mirror}{Return the matrix that generates a mirror figure.}
 #' \item{dist3}{Return the matrix that generates the distractor without the first square.}
-#' \item{dist4}{Return the matrix that generates the distractor that addes an extra square.}
+#' \item{dist4}{Return the matrix that generates the distractor that adds an extra square.}
 #'     }
 #' @examples
 #' wd<- "~/desktop"
-#' twoD(items=1, wd=wd, degree=180)
+#' twoD(items=1, wd=wd,seed=NULL, degree=180)
 
- #wd<- "~/desktop"
- #twoD(items=4, wd=wd, degree=180)
+ wd<- "~/desktop"
+ twoD(items=1, wd=wd, seed=1, degree=180)
 
-twoD <- function(items ,wd=NULL, degree= 360){
+twoD <- function(items ,wd=NULL, seed=NULL, degree= 360){
 
   ##### From Here (HTML) ####
   if(is.null(wd)){
@@ -47,7 +48,7 @@ rgl.light()
 clear3d(type = "lights") # for 2d
 j <- NULL
 k <- NULL
-set.seed(item)
+set.seed(seed)
 vlist <- c(1,2,2)
 (zlist <- matrix(NA,ncol=3,nrow=15))
 for (i in 1:15) { # 15 is the max. Arbitary number. Can be anything. #Does not take last row
@@ -72,7 +73,7 @@ rgl.postscript(save,"pdf")
 
 #Distractor 1
 #mirror image
-set.seed(item)
+set.seed(seed)
 clear3d()
 mlist <- cbind(zlist[1:15,3],zlist[1:15,2],zlist[1:15,1])
 cube(zlist[1:15,3],zlist[1:15,2],zlist[1:15,1]) #
@@ -82,7 +83,7 @@ rgl.postscript(save,"pdf")
 
 #Distractor 2
 #mirror image
-set.seed(item)
+set.seed(seed)
 clear3d()
 cube(zlist[1:15,3],zlist[1:15,2],zlist[1:15,1]) #
 rgl.viewpoint(theta = 260, phi = 90, fov = 0)
@@ -101,7 +102,7 @@ save <- paste0(wd,"/dist(3)_",item,".pdf")
 rgl.postscript(save,"pdf")
 #Distractor 4
 # Adding an extra cube
-set.seed(item)
+set.seed(seed)
 (dlist4 <- zlist)
 if((dlist4[14,3] == dlist4[15,3])==TRUE){
 dlist4[15,3]<-  dlist4[15,3]+1 # + 1 on the last column

@@ -22,7 +22,7 @@ twoD(items, wd = NULL, degree = 360)
     }
 }
 \description{
-This function generates a 2 dimensional figure with 4 distractors and 1 answer that is
+This function generates a 2 dimensional figure with 4 distractors and 1 answer.
 }
 \details{
 By default the actual answer is always at half of the display polar coordinates. The display figure polar coordinates by default is 360. Increasing the degrees will make the figure rotate clock-wise and decreasing the degrees will make the figure rotate anti-clockwise.

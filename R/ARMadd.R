@@ -21,6 +21,7 @@
 #' \item{Response Options}{Eight response options. }
 #'     }
 #' @title ICAR Arithmetic Generator
+#' @seealso \code{\link{lisy}}, \code{\link{twoD}}
 #' @examples
 #'
 #' arith(numProbs=4, numOps = 4, magnitude = 3, arithOps = "subtract",
