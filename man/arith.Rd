@@ -51,6 +51,6 @@ arith(numProbs=4, numOps = 4, magnitude = 3, arithOps = "subtract",
 Aiden Loe and David Condon
 }
 \seealso{
-\code{\link{lisy}}, \code{\link{twoD}}
+\code{\link{lisy}}, \code{\link{spatial2d}}, \code{\link{spatial3d}}
 }
 

@@ -32,8 +32,12 @@
 
 ### MINOR CHANGES
 
-* Added a new function to generate 2D reasoning items using the `twoD()`.
+* Added a new function to generate spatial 2D reasoning items using the `spatial2d()`.
 
-* The `twoD()` generates 4 2D distractors and 1 2D answer. 
+* The `spatial2d()` generates 4 2D distractors and 1 2D answer. 
 
-* The `twoD()` can generate 2D or 3D (top or bottom perspective) display figures. 
+* The `spatial2d()` can generate 2D or 3D (top or bottom perspective) display figures. 
+
+* Added a new function to generate spatial 3D reasoning items using the `spatial3d()`. 
+
+* Added a new function to generate a mirror image of the spatial 3D reasoning item using the `spatial3d_mirror()`. 

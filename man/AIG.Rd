@@ -7,7 +7,7 @@
 The AIG package contains generators for studying automatically generated item types.
 }
 \details{
-The package will include several generators for psychological research purposes. Currently, it can only generate linear syllogistic reasoning ,arithmetic and 2D spatial reasoning items.
+The package will include several generators for psychological research purposes. Currently, it can only generate linear syllogistic reasoning ,arithmetic, and 2D/3D spatial reasoning items.
 }
 \section{Linear Syllogism Generator}{
 
@@ -21,10 +21,18 @@ This function creates arithmetic items according to certain specifications given
 \code{\link{arith}}
 }
 
-\section{2D reasoning Generator}{
+\section{Spatial 2D Reasoning Generator}{
 
-This function creates 2D spatial reasoning items according to certain specifications given by the arguments. \cr
-\code{\link{twoD}}
+This function creates spatial 2D reasoning items according to certain specifications given by the arguments. \cr
+\code{\link{spatial2d}}
+}
+
+\section{Spatial 3D Reasoning Generator}{
+
+This function creates spatial 3D reasoning items according to certain specifications given by the arguments. \cr
+\code{\link{spatial3d}} \cr
+
+The \code{\link{spatial3d_mirror}} creates the mirror image of the figure created using the spatial3d function.\cr
 }
 \references{
 Sternberg, R. J. (1980). Representation and process in linear syllogistic reasoning. Journal of Experimental Psychology: General, 109(2), 119.

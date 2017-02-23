@@ -20,7 +20,7 @@ cube <- function(x=0,y=0,z=0, bordered=TRUE,
     if (bordered) {
       bcube <- mycube
       bcube$material
-      bcube$material$lwd <-1 # lwd (thickness of the black line)
+      bcube$material$lwd <-1.5 # lwd (thickness of the black line)
       bcube$material$front <- 'line' # lines, points or culls on the material used to render the object
       bcube$material$back <- 'line'
       bcube %>% translate3d(x[i], y[i], z[i]) %>% shade3d # or wire 3d is possible too
