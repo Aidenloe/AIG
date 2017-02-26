@@ -50,7 +50,7 @@ spatial2d <- function(items ,wd=NULL, view="2D",seed=NULL, degree= 360){
 
   res <- try(setwd(wd),silent = TRUE)
   if(class(res) == "try-error"){
-    stop("Working Directory does not exist")
+    stop("Working Directory does not exist.")
   }
 
 #  wd<- "~/desktop"
