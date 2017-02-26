@@ -40,11 +40,17 @@
 
 spatial2d <- function(items ,wd=NULL, view="2D",seed=NULL, degree= 360){
 
+
   if(view !="2D" && view !="top" && view !="bottom") stop("The input for the argument view is incorrect.")
-  ##### From Here (HTML) ####
+  ##### Working Directory ####
   if(is.null(wd)){
     wd = getwd()
     message("Item and distractors saved in current working directory.")
+  }
+
+  res <- try(setwd(wd),silent = TRUE)
+  if(class(res) == "try-error"){
+    stop("Working Directory does not exist")
   }
 
 #  wd<- "~/desktop"
