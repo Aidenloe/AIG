@@ -4,10 +4,15 @@
 \alias{spatial3d_mirror}
 \title{Mirror Spatial 3D Reasoning Item}
 \usage{
-spatial3d_mirror(x)
+spatial3d_mirror(obj, angle = pi/1.3, x = 0.3, y = 3, z = 0.8,
+  axis = TRUE)
 }
 \arguments{
-\item{x}{An object with class of threeD.}
+\item{obj}{An object with class of threeD.}
+
+\item{angle, x, y, z}{See details}
+
+\item{axis}{Showing the axis is helpful when first testing the function.}
 }
 \value{
 \describe{
@@ -18,11 +23,15 @@ spatial3d_mirror(x)
 This function generates the mirror image of the 3 dimensional display figure. It acts as a wrap because the creation of the figure is done using functions from the rgl package.
 }
 \details{
-For 3D figures, some of the cubes may be hidden in sight when automatically generated. Hence, one would need to rotate the display figure several times to ensure that none of the cubes are hidden. You can also rotate the figure manually by clicking on the figure and moving it in different direction.
+For 3D figures, some of the cubes may be hidden in sight when automatically generated. Hence, one would need to rotate the display figure several times to ensure that none of the cubes are hidden.
+
+The arguments angle, x, y, z represents the rotation of angle radians based on the x, y and z axis. This is a wrapper to the rotationMatrix function from the rgl package. Changing the values in the arguments angle, x, y, z coordinates allows one to programmatically change angles to study potential cognitive operators at work.
+
+You can also rotate the figure interactively by clicking on the figure and moving it in different direction.
 }
 \examples{
-display <- spatial3d(seed=4)
-display_mirror <- spatial3d_mirror(display)
+display <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
+display_mirror <- spatial3d_mirror(display, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
 
 #' # To save the figure (not run)
 # wd<- '~/desktop'
@@ -32,6 +41,13 @@ display_mirror <- spatial3d_mirror(display)
 }
 \author{
 Aiden Loe
+}
+\references{
+\url{https://en.wikipedia.org/wiki/Radian}
+
+\url{https://cran.r-project.org/web/packages/rgl/vignettes/rgl.html}
+
+Bejar, I. I. (1990). A generative analysis of a three-dimensional spatial task. \emph{Applied Psychological Measurement}, 14(3), 237-245.
 }
 \seealso{
 \code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial2d}}, \code{\link{spatial3d}}

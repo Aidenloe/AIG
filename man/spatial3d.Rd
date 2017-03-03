@@ -4,14 +4,15 @@
 \alias{spatial3d}
 \title{Spatial 3D Reasoning Item}
 \usage{
-spatial3d(seed = 1, theta = 380, phi = 50)
+spatial3d(seed = 1, angle = pi/1.3, x = 0.3, y = 3, z = 0.8,
+  axis = TRUE)
 }
 \arguments{
 \item{seed}{To generate the same set of item(s) on the local computer.}
 
-\item{theta}{Changes the polar coordinates}
+\item{angle, x, y, z}{See details}
 
-\item{phi}{Changes the polar coordinates}
+\item{axis}{Showing the axis is helpful when first testing the function.}
 }
 \value{
 \describe{
@@ -24,10 +25,12 @@ This function generates a 3 dimensional display figure. It acts as a wrap becaus
 \details{
 For 3D figures, some of the cubes may be hidden in sight when automatically generated. Hence, one would need to rotate the display figure several times to ensure that none of the cubes are hidden. The rotation can be done by changing the theta and phi value in the function. To ensure that the same image is generated again, please provide a seed value. You will need to use the rgl post script function to save the figure. Currently, the function returns the matrix that is used to generate the display figure. The matrix can be used for the \code{\link{spatial3d_mirror}} to generate a mirror image of the display figure.
 
-Apart from changing the polar coordiates (theta and phi), you can also rotate the figure manually by clicking on the figure and moving it in different direction.
+The arguments angle, x, y, z represents the rotation of angle radians based on the x, y and z axis. This is a wrapper to the rotationMatrix function from the rgl package. Changing the values in the arguments angle, x, y, z coordinates allows one to programmatically change angles to study potential cognitive operators at work.
+
+You can also rotate the figure interactively by clicking on the figure and moving it in different direction.
 }
 \examples{
-a <- spatial3d(seed=4)
+a <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
 
 # To save the figure (not run)
 # wd<- '~/desktop'
@@ -37,6 +40,13 @@ a <- spatial3d(seed=4)
 }
 \author{
 Aiden Loe
+}
+\references{
+\url{https://en.wikipedia.org/wiki/Radian}
+
+\url{https://cran.r-project.org/web/packages/rgl/vignettes/rgl.html}
+
+Bejar, I. I. (1990). A generative analysis of a three-dimensional spatial task. \emph{Applied Psychological Measurement}, 14(3), 237-245.
 }
 \seealso{
 \code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial2d}}, \code{\link{spatial3d_mirror}}
