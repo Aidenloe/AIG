@@ -9,7 +9,7 @@
 #' @param angle,x,y,z  See details
 #' @param axis Showing the axis is helpful when first testing the function.
 #' @description This function generates a 3 dimensional display figure. It acts as a wrap because the creation of the figure is done using functions from the rgl package.
-#' @details For 3D figures, some of the cubes may be hidden in sight when automatically generated. Hence, one would need to rotate the display figure several times to ensure that none of the cubes are hidden. The rotation can be done by changing the theta and phi value in the function. To ensure that the same image is generated again, please provide a seed value. You will need to use the rgl post script function to save the figure. Currently, the function returns the matrix that is used to generate the display figure. The matrix can be used for the \code{\link{spatial3d_mirror}} to generate a mirror image of the display figure.
+#' @details For 3D figures, some of the cubes may be hidden in sight when automatically generated. Hence, one would need to rotate the display figure several times to ensure that none of the cubes are hidden. To ensure that the same image is generated again, please provide a seed value. You will need to use the rgl post script function to save the figure. Currently, the function returns the a list object that is used to generate the display figure. The figure matrix in the list object can be used for the \code{\link{spatial3d_mirror}} to generate a mirror image of the display figure.
 #'
 #' The arguments angle, x, y, z represents the rotation of angle radians based on the x, y and z axis. This is a wrapper to the rotationMatrix function from the rgl package. Changing the values in the arguments angle, x, y, z coordinates allows one to programmatically change angles to study potential cognitive operators at work.
 #'
@@ -27,6 +27,7 @@
 #' @return
 #' \describe{
 #' \item{figure}{Return the matrix that generates the display figure.}
+#' \item{rotationMatrix}{Return the cordinates of x,y,z,w}
 #'     }
 #' @examples
 #' a <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)

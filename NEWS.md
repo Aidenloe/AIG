@@ -41,3 +41,5 @@
 * Added a new function to generate spatial 3D reasoning items using the `spatial3d()`. 
 
 * Added a new function to generate a mirror image of the spatial 3D reasoning item using the `spatial3d_mirror()`. 
+
+* Included arguments so that user can interactively change the view of the figure, or programmatically alter the figure rotation.
