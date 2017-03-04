@@ -29,11 +29,11 @@
 #' \item{dist4}{Return the matrix that generates the distractor that adds an extra square.}
 #'     }
 #' @examples
-#' wd<- "~/desktop"
 #'
 #' #2D display figure
-#' spatial2d(items=1, wd=wd,view="2D", seed=NULL, degree=360)
+#' spatial2d(items=1, wd=NULL,view="2D", seed=NULL, degree=360)
 #'
+#' #wd<- "~/desktop"
 #' #3D display figure (top view)
 #' #spatial2d(items=1, wd=wd,view="top", seed=1, degree=320)
 #'

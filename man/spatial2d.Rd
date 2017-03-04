@@ -38,11 +38,11 @@ By default the actual answer is always at half of the display polar coordinates.
 There are occassions where a mirror distractor will not work. In such an instance, the item together with the distractors will not be useful for the test. Hence, it will be a good item to remove the item from the test. It is also a good idea to keep track on your local computer which seed it is so you can avoid having to regenerate the item. That is where the seed will come in handy. The seed correspond to the number position of which the item is created. For example, if you want to recreate item/figure number 19, then all you need do so is to keep the argument = 1, but change the argument seed = 19. This will re generate the number 19th item. However, the created figures will use item 1 as the file name. So be sure to check the file name if not it will be written over once you try to generate the second item with a different seed.
 }
 \examples{
-wd<- "~/desktop"
 
 #2D display figure
-spatial2d(items=1, wd=wd,view="2D", seed=NULL, degree=360)
+spatial2d(items=1, wd=NULL,view="2D", seed=NULL, degree=360)
 
+#wd<- "~/desktop"
 #3D display figure (top view)
 #spatial2d(items=1, wd=wd,view="top", seed=1, degree=320)
 

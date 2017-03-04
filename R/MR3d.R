@@ -17,7 +17,6 @@
 #' @references
 #' \url{https://en.wikipedia.org/wiki/Radian}
 #'
-#' \url{https://cran.r-project.org/web/packages/rgl/vignettes/rgl.html}
 #'
 #' Bejar, I. I. (1990). A generative analysis of a three-dimensional spatial task. \emph{Applied Psychological Measurement}, 14(3), 237-245.
 #'
@@ -94,8 +93,6 @@ spatial3d <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8,axis = TRUE){
 #'
 #' @references
 #' \url{https://en.wikipedia.org/wiki/Radian}
-#'
-#' \url{https://cran.r-project.org/web/packages/rgl/vignettes/rgl.html}
 #'
 #' Bejar, I. I. (1990). A generative analysis of a three-dimensional spatial task. \emph{Applied Psychological Measurement}, 14(3), 237-245.
 #'
