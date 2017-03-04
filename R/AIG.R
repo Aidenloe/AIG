@@ -21,6 +21,8 @@
 #' Sternberg, R. J. (1980). Representation and process in linear syllogistic reasoning. Journal of Experimental Psychology: General, 109(2), 119.
 #'
 #' Embretson, S. E. (1999). Generating items during testing: Psychometric issues and models. Psychometrika, 64(4), 407-433.
+#'
+#' Bejar, I. I. (1990). A generative analysis of a three-dimensional spatial task. \emph{Applied Psychological Measurement}, 14(3), 237-245.
 #' @name AIG
 NULL
 
