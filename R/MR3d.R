@@ -39,14 +39,6 @@
 
 spatial3d <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8,axis = TRUE){
   # This will finalise the item
-  # seed = 2
-  # theta = 210
-  # phi = 20
-  # angle=2.6
-  # x=0.3
-  # y=4
-  # z=1.0
-
   set.seed(seed)
   clear3d()
   rgl.light()
