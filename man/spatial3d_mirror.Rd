@@ -45,8 +45,6 @@ Aiden Loe
 \references{
 \url{https://en.wikipedia.org/wiki/Radian}
 
-\url{https://cran.r-project.org/web/packages/rgl/vignettes/rgl.html}
-
 Bejar, I. I. (1990). A generative analysis of a three-dimensional spatial task. \emph{Applied Psychological Measurement}, 14(3), 237-245.
 }
 \seealso{
