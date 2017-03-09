@@ -27,7 +27,7 @@
 
 * Reduce to 4 distractors and 1 answer, giving a total of 5 options. More can be created, but it may be more suitable by hand at the moment. 
 
----
+
 # AIG 0.1.2
 
 ### MINOR CHANGES
@@ -43,3 +43,12 @@
 * Added a new function to generate a mirror image of the spatial 3D reasoning item using the `spatial3d_mirror()`. 
 
 * Included arguments so that user can interactively change the view of the figure, or programmatically alter the figure rotation.
+
+---
+# AIG 0.1.3
+
+### MINOR CHANGES
+
+* Removed a bug from `lisy()`. 
+
+* Fixed grammatical error.
