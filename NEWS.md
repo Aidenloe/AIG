@@ -49,6 +49,6 @@
 
 ### MINOR CHANGES
 
-* Removed a bug from `lisy()`. 
-
 * Fixed grammatical error.
+
+* Fixed bugs from `lisy()`.

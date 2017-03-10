@@ -495,12 +495,26 @@ join <- function(clue, thescale, article, forward=TRUE) {
 
   if(ninfer==2 & direct=='ob'){
     (result = invalids[invalids[, 2] == invalids[, 1] - 1,]) # keep unique rows
-    (invkeeps = result[!duplicated(result[, 1]), ]) # ensure no duplicates
-      }
-  if(ninfer==2 & direct=='of'){
-        (result = invalids[invalids[, 2] == invalids[, 1] + 1,]) # keep unique rows
-        (invkeeps = result[!duplicated(result[, 1]), ]) # ensure no duplicates
+    if(class(result) == "integer"){
+      result <- t(as.matrix(result))
     }
+    (invkeeps = result[!duplicated(result[, 1]), ]) # ensure no duplicates
+    if(class(invkeeps) == "integer"){
+      invkeeps <- t(as.matrix(invkeeps))
+    }
+  }
+
+  if(ninfer==2 & direct=='of'){
+    (result = invalids[invalids[, 2] == invalids[, 1] + 1,]) # keep unique rows
+    if(class(result) == "integer"){
+      result <- t(as.matrix(result))
+    }
+    (invkeeps = result[!duplicated(result[, 1]), ]) # ensure no duplicates
+    if(class(invkeeps) == "integer"){
+      invkeeps <- t(as.matrix(invkeeps))
+    }
+  }
+
 
   if (length(invkeeps) > 0 ) iinvkeeps <- rbind(
     cbind(itemlist[invkeeps[,1]],itemlist[invkeeps[,2]]),

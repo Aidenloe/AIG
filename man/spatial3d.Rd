@@ -39,9 +39,6 @@ a <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
 # save <- paste0(wd,"/display3d_",item,".pdf")
 # rgl.postscript(save,"pdf")
 }
-\author{
-Aiden Loe
-}
 \references{
 \url{https://en.wikipedia.org/wiki/Radian}
 
@@ -51,4 +48,6 @@ Bejar, I. I. (1990). A generative analysis of a three-dimensional spatial task. 
 \seealso{
 \code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial2d}}, \code{\link{spatial3d_mirror}}
 }
-
+\author{
+Aiden Loe
+}
