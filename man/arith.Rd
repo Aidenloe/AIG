@@ -47,9 +47,10 @@ arith(numProbs=4, numOps = 4, magnitude = 3, arithOps = "subtract",
 
 
 }
-\seealso{
-\code{\link{lisy}}, \code{\link{spatial2d}}, \code{\link{spatial3d}}
-}
 \author{
 Aiden Loe and David Condon
 }
+\seealso{
+\code{\link{lisy}}, \code{\link{spatial2d}}, \code{\link{spatial3d}}
+}
+

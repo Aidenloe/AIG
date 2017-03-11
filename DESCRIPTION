@@ -5,7 +5,10 @@ Version: 0.1.3
 Date: 2017-03-9
 Author: Bao Sheng Loe (Aiden)
 Maintainer: Bao Sheng Loe (Aiden) <bsl28@cam.ac.uk>
-Description: A collection of Automatic Item Generators used mainly for psychological research. This package can generate linear syllogistic reasoning, arithmetic and 2D/3D spatial reasoning items. It is recommended for research purpose only. 
+Description: A collection of Automatic Item Generators used mainly for
+    psychological research. This package can generate linear syllogistic reasoning,
+    arithmetic and 2D/3D spatial reasoning items. It is recommended for research
+    purpose only.
 License: GPL-3
 Imports:
     mgcv,
@@ -14,4 +17,4 @@ Imports:
     rgl,
     magrittr
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1

@@ -49,9 +49,10 @@ spatial2d(items=1, wd=NULL,view="2D", seed=NULL, degree=360)
 #3D display figure (bottom view)
 #spatial2d(items=1, wd=wd,view="bottom", seed=1, degree=320)
 }
-\seealso{
-\code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial3d}}
-}
 \author{
 Aiden Loe
 }
+\seealso{
+\code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial3d}}
+}
+

@@ -34,7 +34,6 @@ This function creates spatial 3D reasoning items according to certain specificat
 
 The \code{\link{spatial3d_mirror}} creates the mirror image of the figure created using the spatial3d function.\cr
 }
-
 \references{
 Sternberg, R. J. (1980). Representation and process in linear syllogistic reasoning. Journal of Experimental Psychology: General, 109(2), 119.
 
@@ -42,3 +41,4 @@ Embretson, S. E. (1999). Generating items during testing: Psychometric issues an
 
 Bejar, I. I. (1990). A generative analysis of a three-dimensional spatial task. \emph{Applied Psychological Measurement}, 14(3), 237-245.
 }
+
