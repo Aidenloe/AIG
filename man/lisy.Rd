@@ -93,9 +93,6 @@ for(i in 1:30){
                     items= NULL,scales = NULL)
 }
 }
-\author{
-Aiden Loe and Francis Smart
-}
 \references{
 Leth-Steensen, C., & Marley, A. A. J. (2000). A model of response time effect in symbolic comparison. \emph{Psychological Review, 107}, 62-100.
 
@@ -106,4 +103,6 @@ Sedek, G., & Von Hecker, U. (2004). Effects of subclinical depression and aging 
 \seealso{
 \code{\link{arith}}, \code{\link{spatial2d}}, \code{\link{spatial3d}}
 }
-
+\author{
+Aiden Loe and Francis Smart
+}
