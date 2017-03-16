@@ -44,7 +44,6 @@
 
 * Included arguments so that user can interactively change the view of the figure, or programmatically alter the figure rotation.
 
----
 # AIG 0.1.3
 
 ### MINOR CHANGES
@@ -52,3 +51,10 @@
 * Fixed grammatical error.
 
 * Fixed bugs from `lisy()`.
+
+---
+# AIG 0.1.4
+
+### MINOR CHANGES
+
+* Improved examples for `spatial3d()`.

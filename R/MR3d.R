@@ -29,9 +29,11 @@
 #' \item{rotationMatrix}{Return the cordinates of x,y,z,w}
 #'     }
 #' @examples
-#' a <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
+#' item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
 #'
 #' # To save the figure (not run)
+#' # library(rgl)
+#' # item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
 #' # wd<- '~/desktop'
 #' # item <- 1
 #' # save <- paste0(wd,"/display3d_",item,".pdf")
@@ -99,7 +101,9 @@ spatial3d <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8,axis = TRUE){
 #' display <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
 #' display_mirror <- spatial3d_mirror(display, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
 #'
-#' #' # To save the figure (not run)
+#' # To save the figure (not run)
+#' # library(rgl)
+#' # display_mirror <- spatial3d_mirror(display, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
 #' # wd<- '~/desktop'
 #' # item <- 1
 #' # save <- paste0(wd,"/mirror3d_",item,".pdf")

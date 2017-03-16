@@ -31,9 +31,11 @@ The arguments angle, x, y, z represents the rotation of angle radians based on t
 You can also rotate the figure interactively by clicking on the figure and moving it in different direction.
 }
 \examples{
-a <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
+item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
 
 # To save the figure (not run)
+# library(rgl)
+# item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
 # wd<- '~/desktop'
 # item <- 1
 # save <- paste0(wd,"/display3d_",item,".pdf")
