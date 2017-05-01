@@ -52,9 +52,16 @@
 
 * Fixed bugs from `lisy()`.
 
----
 # AIG 0.1.4
 
 ### MINOR CHANGES
 
 * Improved examples for `spatial3d()`.
+
+
+---
+# AIG 0.1.5
+
+### MINOR CHANGES
+
+* Improved on `lisy()` description.
