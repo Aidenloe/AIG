@@ -74,4 +74,4 @@
 
 * Updated bugs on 2d items. Now users can generate X number of 2d spatial items at one go. Users can also choose the specific 2d design given the seed number.
 
-* Fixed bugs in lisy to make sure that the argument `direct = alt` can be used when ninfer is 3 or greater. 
+* Fixed bugs in `lisy()` to make sure that the argument `direct = alt` can be used when ninfer is 3 or greater. 
