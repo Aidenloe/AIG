@@ -37,9 +37,15 @@ display_mirror <- spatial3d_mirror(display, angle=pi/1.3, x=0.3,y=4,z=0.8,axis =
 # library(rgl)
 # display_mirror <- spatial3d_mirror(display, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
 # wd<- '~/desktop'
+
+# save in pdf
 # item <- 1
 # save <- paste0(wd,"/mirror3d_",item,".pdf")
 # rgl.postscript(save,"pdf")
+
+# save in png
+# rgl.snapshot(filename="image3D.png",fmt="png")
+
 }
 \references{
 \url{https://en.wikipedia.org/wiki/Radian}
