@@ -65,11 +65,11 @@ spatial2d <- function(items ,wd=NULL, view="2D",seed=NULL, degree= 360, ansDegre
   }
 
 
-# view <- '2D'
-# ansDegree <- 180
-#   wd<- "~/desktop"
-#   items <- 2
-#   degree<- 360
+view <- 'top'
+ansDegree <- 180
+  wd<- "~/desktop"
+  items <- 2
+  degree<- 360
 
 result <- NULL
 for(item in 1:items){
@@ -106,9 +106,19 @@ rgl.snapshot(filename=paste0("display2d_",item,".",fmt="jpg"))
 
 if(view == "top"){
   clear3d()
+   set.seed(item)
+  # vlist <- c(1,2,2)
+  # (zlist <- matrix(NA,ncol=3,nrow=15))
+  # for (i in 1:15) { # 15 is the max. Arbitary number. Can be anything. #Does not take last row
+  #   cube(vlist[1],vlist[2],vlist[3])
+  #   (step <- sample(2, 1))
+  #   (vlist[step] <- vlist[step]+(-1)^rbinom(1,1,.25))
+  #   (zlist[i,] <- vlist)
+  #   zlist
+  # }
   cube(zlist[1:15,1],zlist[1:15,2],zlist[1:15,3]) #
   rgl.light()
-  rgl.viewpoint(theta = degree, phi = 60, fov = 5)
+  rgl.viewpoint(theta = 20, phi = 10, fov = 10)
   rgl.snapshot(filename=paste0("displayTop_",item,".",fmt="jpg"))
 
   #save <- paste0(wd,"/displayTop_",item,".pdf")
@@ -117,6 +127,16 @@ if(view == "top"){
 
 if(view == "bottom"){
   clear3d()
+  set.seed(item)
+  # vlist <- c(1,2,2)
+  # (zlist <- matrix(NA,ncol=3,nrow=15))
+  # for (i in 1:15) { # 15 is the max. Arbitary number. Can be anything. #Does not take last row
+  #   cube(vlist[1],vlist[2],vlist[3])
+  #   (step <- sample(1:3, 1))
+  #   (vlist[step] <- vlist[step]+(-1)^rbinom(1,1,.25))
+  #   (zlist[i,] <- vlist)
+  #   zlist
+  # }
   cube(zlist[1:15,1],zlist[1:15,2],zlist[1:15,3]) #
   rgl.light()
   rgl.viewpoint(theta = degree, phi = -35, fov = 5)
