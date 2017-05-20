@@ -65,3 +65,5 @@
 ### MINOR CHANGES
 
 * Improved on `lisy()` description.
+
+* Added more help to save items in png format for 3d items.
