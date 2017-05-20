@@ -201,7 +201,7 @@ if(Ndist > 4) stop("Please choose a lower number of distractors")
   # linear=FALSE
   # antonym = "both"
   # ninfer = 3
-  # direct= 'ob'
+  # direct= 'alt'
   # Ndist=4
   # dist="false"
   # distprob=.5
@@ -739,7 +739,9 @@ if(direct  == "of"){
     (pos2 <- paste0(clues[,1],'.',clues[,2])) # check for all combination
     (a <- (1:length(pos2))[!pos2 %in% pos]) # remove left out combination
     (leftOut <- clues[a,1:2])
-    altclues<- rbind(leftOut, rclues[,1:2]) # rearrange order
+
+
+    altclues<- rbind(leftOut, as.matrix(rclues[,1:2])) # rearrange order
 
     (iclues <- cbind(itemlist[altclues[,1]],itemlist[altclues[,2]])) # new ordering for names
 
