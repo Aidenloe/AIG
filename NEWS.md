@@ -66,4 +66,8 @@
 
 * Improved on `lisy()` description.
 
-* Added more help to save items in png format for 3d items.
+* Added more help to save items in jpg format for 3d items.
+
+* Included a new argument for 2d spatial items. This will allow users to decide on the rotation degree for the answer. 
+
+* 2d items are saved as jpg rather than pdf now. 

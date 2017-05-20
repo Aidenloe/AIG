@@ -4,7 +4,8 @@
 \alias{spatial2d}
 \title{Spatial 2D Reasoning Items}
 \usage{
-spatial2d(items, wd = NULL, view = "2D", seed = NULL, degree = 360)
+spatial2d(items, wd = NULL, view = "2D", seed = NULL, degree = 360,
+  ansDegree = 180)
 }
 \arguments{
 \item{items}{The number of items to generate.}
@@ -15,7 +16,9 @@ spatial2d(items, wd = NULL, view = "2D", seed = NULL, degree = 360)
 
 \item{seed}{To generate the same set of item(s) on the local computer.}
 
-\item{degree}{This allows you to change the rotation of the display figure by increasing or decreasing the value.}
+\item{degree}{This allows users to change the rotation of the display figure by increasing or decreasing the value.}
+
+\item{ansDegree}{This will allow users to change the degree of rotation for the correct figure.}
 }
 \value{
 \describe{
