@@ -71,3 +71,6 @@
 * Included a new argument for 2d spatial items. This will allow users to decide on the rotation degree for the answer. 
 
 * 2d items are saved as jpg rather than pdf now. 
+
+* updated bugs on 2d items. Now users can generate X number of 2d spatial items at one go. Users can also choose the specific 2d design given the seed number.
+
