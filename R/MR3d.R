@@ -7,6 +7,7 @@
 #' @importFrom rgl title3d
 #' @param seed To generate the same set of item(s) on the local computer.
 #' @param angle,x,y,z  See details
+#' @param cubes The number of connected cubes together.
 #' @param axis Showing the axis is helpful when first testing the function.
 #' @description This function generates a 3 dimensional display figure. It acts as a wrap because the creation of the figure is done using functions from the rgl package.
 #' @details For 3D figures, some of the cubes may be hidden in sight when automatically generated. Hence, one would need to rotate the display figure several times to ensure that none of the cubes are hidden. To ensure that the same image is generated again, please provide a seed value. You will need to use the rgl post script function to save the figure. Currently, the function returns the a list object that is used to generate the display figure. The figure matrix in the list object can be used for the \code{\link{spatial3d_mirror}} to generate a mirror image of the display figure.
@@ -33,7 +34,7 @@
 #'
 #' # To save the figure (not run)
 #' # library(rgl)
-#' # item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
+#' # item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,cubes=9,axis = TRUE)
 #'
 #' # save in pdf
 #' # wd<- '~/desktop'
@@ -45,14 +46,14 @@
 #' # save in png
 #' # rgl.snapshot(filename="image3D.png",fmt="png")
 
-spatial3d <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8,axis = TRUE){
+spatial3d <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axis = TRUE){
   # This will finalise the item
   set.seed(seed)
   clear3d()
   rgl.light()
   vlist <- c(1,2,2)
-  (zlist <- matrix(NA,ncol=3,nrow=8))
-  for (i in 1:8) { # 8 is the max. Arbitary number. Can be anything. #Does not take last row
+  (zlist <- matrix(NA,ncol=3,nrow=cubes))
+  for (i in 1:cubes) { # 8 is the max. Arbitary number. Can be anything.
     cube(vlist[1],vlist[2],vlist[3])
     (step <- sample(1:3, 1))
     (vlist[step] <- vlist[step]+1^rbinom(1,1,.25))
@@ -62,7 +63,7 @@ spatial3d <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8,axis = TRUE){
 
   zlist
   clear3d()
-  cube(zlist[1:8,1],zlist[1:8,2],zlist[1:8,3])
+  cube(zlist[1:cubes,1],zlist[1:cubes,2],zlist[1:cubes,3])
   rgl.viewpoint(fov = 0, userMatrix = rotationMatrix(angle=angle, x=x,y=y,z=z))
   roMatrix <- rotationMatrix(angle=angle, x=x,y=y,z=z)
   if(axis == TRUE){
@@ -137,5 +138,3 @@ spatial3d_mirror <- function(obj, angle=pi/1.3, x=0.3,y=3, z=0.8,axis = TRUE){
   }
   return(mirrorResult)
 }
-
-

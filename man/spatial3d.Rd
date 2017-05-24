@@ -5,12 +5,14 @@
 \title{Spatial 3D Reasoning Item}
 \usage{
 spatial3d(seed = 1, angle = pi/1.3, x = 0.3, y = 3, z = 0.8,
-  axis = TRUE)
+  cubes = 8, axis = TRUE)
 }
 \arguments{
 \item{seed}{To generate the same set of item(s) on the local computer.}
 
 \item{angle, x, y, z}{See details}
+
+\item{cubes}{The number of connected cubes together.}
 
 \item{axis}{Showing the axis is helpful when first testing the function.}
 }
@@ -35,7 +37,7 @@ item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
 
 # To save the figure (not run)
 # library(rgl)
-# item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
+# item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,cubes=9,axis = TRUE)
 
 # save in pdf
 # wd<- '~/desktop'
