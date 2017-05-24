@@ -5,7 +5,7 @@
 \title{Spatial 2D Reasoning Items}
 \usage{
 spatial2d(items, wd = NULL, view = "2D", seed = NULL, degree = 360,
-  ansDegree = 180)
+  ansDegree = 180, test = 1)
 }
 \arguments{
 \item{items}{The number of items to generate.}
@@ -19,6 +19,8 @@ spatial2d(items, wd = NULL, view = "2D", seed = NULL, degree = 360,
 \item{degree}{This allows users to change the rotation of the display figure by increasing or decreasing the value.}
 
 \item{ansDegree}{This will allow users to change the degree of rotation for the correct figure.}
+
+\item{test}{This will generate the specific value in the name of the saved images.}
 }
 \value{
 \describe{
@@ -46,18 +48,18 @@ Finally, to automatically generate more than 1 item, just make sure that the arg
 
 
 #2D display figure (Generate the 19th item given the seed value)
-spatial2d(items=1, wd=NULL,view="2D", seed=19, degree=360, ansDegree= 180)
+spatial2d(items=1, wd=NULL,view="2D", seed=19, degree=360, ansDegree= 180, test = 2)
 
 #2D display figure (Generate 10 items)
 #seed must be NULL
-#spatial2d(items=10, wd=NULL,view="2D", seed=NULL, degree=360, ansDegree= 180)
+#spatial2d(items=10, wd=NULL,view="2D", seed=NULL, degree=360, ansDegree= 180, test = 2)
 
 #wd<- "~/desktop"
 #3D display figure (top view)
-#spatial2d(items=1, wd=wd,view="top", seed=1, degree=320, ansDegree=160)
+#spatial2d(items=1, wd=wd,view="top", seed=1, degree=320, ansDegree=160, test = 2)
 
 #3D display figure (bottom view)
-#spatial2d(items=1, wd=wd,view="bottom", seed=1, degree=320, ansDegree=100)
+#spatial2d(items=1, wd=wd,view="bottom", seed=1, degree=320, ansDegree=100, test = 2)
 }
 \seealso{
 \code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial3d}}

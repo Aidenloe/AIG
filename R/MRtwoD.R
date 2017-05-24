@@ -11,6 +11,7 @@
 #' @param seed To generate the same set of item(s) on the local computer.
 #' @param degree This allows users to change the rotation of the display figure by increasing or decreasing the value.
 #' @param ansDegree This will allow users to change the degree of rotation for the correct figure.
+#' @param test This will generate the specific value in the name of the saved images.
 #' @description This function generates a 2 or 3 dimensional display figure with 4 2D distractors and 1 2D answer.
 #' @details To see the 3D display figure, change the view argument to either 'top' or 'bottom'. For 3D figures, some of the cubes may be hidden in sight. Hence, the 2D answer may not seem correct. So one would need to rotate the display figure several times to ensure that none of the cubes are hidden. The rotation can be done by changing the degree value in the function. To ensure that the same image is generated again, please provide a seed value. Currently angle of the view from the top and the bottom is fixed. It may be better to generate one item at a time for the 3D displayed figures. This is not a problem for 2D items.
 #'
@@ -37,20 +38,20 @@
 #'
 #'
 #' #2D display figure (Generate the 19th item given the seed value)
-#' spatial2d(items=1, wd=NULL,view="2D", seed=19, degree=360, ansDegree= 180)
+#' spatial2d(items=1, wd=NULL,view="2D", seed=19, degree=360, ansDegree= 180, test = 2)
 #'
 #' #2D display figure (Generate 10 items)
 #' #seed must be NULL
-#' #spatial2d(items=10, wd=NULL,view="2D", seed=NULL, degree=360, ansDegree= 180)
+#' #spatial2d(items=10, wd=NULL,view="2D", seed=NULL, degree=360, ansDegree= 180, test = 2)
 #'
 #' #wd<- "~/desktop"
 #' #3D display figure (top view)
-#' #spatial2d(items=1, wd=wd,view="top", seed=1, degree=320, ansDegree=160)
+#' #spatial2d(items=1, wd=wd,view="top", seed=1, degree=320, ansDegree=160, test = 2)
 #'
 #' #3D display figure (bottom view)
-#' #spatial2d(items=1, wd=wd,view="bottom", seed=1, degree=320, ansDegree=100)
+#' #spatial2d(items=1, wd=wd,view="bottom", seed=1, degree=320, ansDegree=100, test = 2)
 
-spatial2d <- function(items ,wd=NULL, view="2D",seed=NULL, degree= 360, ansDegree=180){
+spatial2d <- function(items ,wd=NULL, view="2D",seed=NULL, degree= 360, ansDegree=180, test = 1){
 
   if(view !="2D" && view !="top" && view !="bottom") stop("The input for the argument view is incorrect.")
   ##### Working Directory ####
@@ -99,7 +100,7 @@ if(view == "2D"){
 clear3d()
 cube(zlist[1:15,1],zlist[1:15,2],zlist[1:15,3])
 rgl.viewpoint(theta = degree, phi = 90, fov = 0) # become 2D display item
-rgl.snapshot(filename=paste0("display2d_",item,".",fmt="jpg"))
+rgl.snapshot(filename=paste0("display2d_",item,"-",test,".",fmt="jpg"))
 #save <- paste0(wd,"/display2d_",item,".pdf")
 #rgl.postscript(save,"pdf")
 }
@@ -119,7 +120,7 @@ if(view == "top"){
   cube(zlist[1:15,1],zlist[1:15,2],zlist[1:15,3]) #
   rgl.light()
   rgl.viewpoint(theta = 20, phi = 10, fov = 10)
-  rgl.snapshot(filename=paste0("displayTop_",item,".",fmt="jpg"))
+  rgl.snapshot(filename=paste0("displayTop_",item,"-",test,".",fmt="jpg"))
 
   #save <- paste0(wd,"/displayTop_",item,".pdf")
   #rgl.postscript(save,"pdf")
@@ -140,7 +141,7 @@ if(view == "bottom"){
   cube(zlist[1:15,1],zlist[1:15,2],zlist[1:15,3]) #
   rgl.light()
   rgl.viewpoint(theta = degree, phi = -35, fov = 5)
-  rgl.snapshot(filename=paste0("displayBottom_",item,".",fmt="jpg"))
+  rgl.snapshot(filename=paste0("displayBottom_",item,"-",test,".",fmt="jpg"))
   #save <- paste0(wd,"/displayBottom_",item,".pdf")
   #rgl.postscript(save,"pdf")
 }
@@ -150,7 +151,7 @@ if(view == "bottom"){
 cube(zlist[1:15,1],zlist[1:15,2],zlist[1:15,3]) #
 rgl.clear(type="lights")
 rgl.viewpoint(theta = ansDegree, phi = 90, fov = 0)
-rgl.snapshot(filename=paste0("ans_",item,".",fmt="jpg"))
+rgl.snapshot(filename=paste0("ans_",item,"-",test,".",fmt="jpg"))
 #save <- paste0(wd,"/ans_",item,".pdf")
 #rgl.postscript(save,"pdf")
 
@@ -162,7 +163,7 @@ clear3d()
 mlist <- cbind(zlist[1:15,3],zlist[1:15,2],zlist[1:15,1])
 cube(zlist[1:15,3],zlist[1:15,2],zlist[1:15,1]) #
 rgl.viewpoint(theta = 380, phi = 90, fov = 0)
-rgl.snapshot(filename=paste0("dist(mirror)_",item,".",fmt="jpg"))
+rgl.snapshot(filename=paste0("dist(mirror)_",item,"-",test,".",fmt="jpg"))
 #save <- paste0(wd,"/dist(mirror)_",item,".pdf")
 #rgl.postscript(save,"pdf")
 
@@ -172,7 +173,7 @@ set.seed(item)
 clear3d()
 cube(zlist[1:15,3],zlist[1:15,2],zlist[1:15,1]) #
 rgl.viewpoint(theta = 260, phi = 90, fov = 0)
-rgl.snapshot(filename=paste0("dist(mirror2)_",item,".",fmt="jpg"))
+rgl.snapshot(filename=paste0("dist(mirror2)_",item,"-",test,".",fmt="jpg"))
 #save <- paste0(wd,"/dist(mirror2)_",item,".pdf")
 #rgl.postscript(save,"pdf")
 
@@ -183,7 +184,7 @@ rgl.snapshot(filename=paste0("dist(mirror2)_",item,".",fmt="jpg"))
 dlist3 <- dlist2[!duplicated(dlist2[,c(1,3)]),c(1:3)]
 clear3d()
 cube(dlist3[2:nrow(dlist3),1],dlist3[2:nrow(dlist3),2],dlist3[2:nrow(dlist3),3])
-rgl.snapshot(filename=paste0("dist(3)_",item,".",fmt="jpg"))
+rgl.snapshot(filename=paste0("dist(3)_",item,"-",test,".",fmt="jpg"))
 #save <- paste0(wd,"/dist(3)_",item,".pdf")
 #rgl.postscript(save,"pdf")
 
@@ -205,7 +206,7 @@ dlist4
 zlist
 clear3d()
 cube(dlist4[1:15,1],dlist4[1:15,2],dlist4[1:15,3])
-rgl.snapshot(filename=paste0("dist(4)_",item,".",fmt="jpg"))
+rgl.snapshot(filename=paste0("dist(4)_",item,"-",test,".",fmt="jpg"))
 #save <- paste0(wd,"/dist(4)_",item,".pdf")
 #rgl.postscript(save,"pdf")
 
