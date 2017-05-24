@@ -81,3 +81,5 @@
 ### MINOR CHANGES
 
 * users can decide on how many connected cubes they want in their 3d items. 
+
+* fixed bug in 2d spatial items. 

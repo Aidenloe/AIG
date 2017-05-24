@@ -65,11 +65,11 @@ spatial2d <- function(items ,wd=NULL, view="2D",seed=NULL, degree= 360, ansDegre
   }
 
 
-view <- 'top'
-ansDegree <- 180
-  wd<- "~/desktop"
-  items <- 2
-  degree<- 360
+# view <- 'top'
+# ansDegree <- 180
+#   wd<- "~/desktop"
+#   items <- 2
+#   degree<- 360
 
 result <- NULL
 for(item in 1:items){
