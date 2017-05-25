@@ -33,6 +33,10 @@ This function creates spatial 3D reasoning items according to certain specificat
 \code{\link{spatial3d}} \cr
 
 The \code{\link{spatial3d_mirror}} creates the mirror image of the figure created using the spatial3d function.\cr
+
+The \code{\link{spatial3dDouble}} creates the mirror image of the figure created using the spatial3d function.\cr
+
+The \code{\link{spatial3d_mirrorDouble}} creates the variation of the images of the figure created using the spatial3d function based one four methods.\cr
 }
 
 \references{

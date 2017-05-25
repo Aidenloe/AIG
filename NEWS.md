@@ -83,3 +83,5 @@
 * users can decide on how many connected cubes they want in their 3d items. 
 
 * fixed bug in 2d spatial items. 
+
+* Two new spatial functions are developed to allow 2 figures to be generated per image. 

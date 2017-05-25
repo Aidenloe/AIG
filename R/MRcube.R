@@ -10,7 +10,21 @@ cube <- function(x=0,y=0,z=0, bordered=TRUE,
                  fillcol = gray(.95),
                  bordercol ='black', ...) {
 
-  mycube <- cube3d() #3d cude. There are others i.e., oh3d, qmesh 3d ... read help.
+
+  # x=0;y=0;z=0; bordered=TRUE;
+  # filled = TRUE; lwd=2; scale=1;
+  # fillcol = gray(.95);
+  # bordercol ='black';colored=FALSE
+
+
+  # if(colored==TRUE){
+  #   sam <- sample(1:2,1)
+  #   if(sam==1){
+  # mycube <- cube3d(color="#4c4c4c") #3d cude. There are others i.e., oh3d, qmesh 3d ... read help.
+  #   }else{
+      mycube <- cube3d() #3d cude. There are others i.e., oh3d, qmesh 3d ... read help.
+  #   }
+  # }
 
   # Reduce size to unit
   mycube$vb[4,] <- mycube$vb[4,]/scale*2 # why convert to 2 using scale?
@@ -20,7 +34,7 @@ cube <- function(x=0,y=0,z=0, bordered=TRUE,
     if (bordered) {
       bcube <- mycube
       bcube$material
-      bcube$material$lwd <-1.5 # lwd (thickness of the black line)
+      bcube$material$lwd <-lwd # lwd (thickness of the black line)
       bcube$material$front <- 'line' # lines, points or culls on the material used to render the object
       bcube$material$back <- 'line'
       bcube %>% translate3d(x[i], y[i], z[i]) %>% shade3d # or wire 3d is possible too
@@ -36,3 +50,4 @@ cube <- function(x=0,y=0,z=0, bordered=TRUE,
   }
 }
 
+#cube(filled=TRUE, fillcol='#4c4c4c')
