@@ -60,7 +60,7 @@ display_mirror <- spatial3d_mirrorDouble(display, angle=pi/1.3, x=0.3,y=4,z=0.8,
 Bejar, I. I. (1990). A generative analysis of a three-dimensional spatial task. \emph{Applied Psychological Measurement}, 14(3), 237-245.
 }
 \seealso{
-\code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial2d}}, \code{\link{spatial3d}}
+\code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial2d}}, \code{\link{spatial3dDouble}}
 }
 \author{
 Aiden Loe

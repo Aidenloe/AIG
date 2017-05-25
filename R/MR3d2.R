@@ -24,7 +24,7 @@
 #'
 #' @author Aiden Loe
 #' @title Spatial 3D Reasoning Item (double shapes)
-#' @seealso \code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial2d}}, \code{\link{spatial3d_mirror}}
+#' @seealso \code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial2d}}, \code{\link{spatial3d_mirrorDouble}}
 #' @return
 #' \describe{
 #' \item{figure}{Return the matrix that generates the display figure.}
@@ -153,7 +153,7 @@ spatial3dDouble <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axi
 #'
 #' @author Aiden Loe
 #' @title Mirror Spatial 3D Reasoning Item (2)
-#' @seealso \code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial2d}}, \code{\link{spatial3d}}
+#' @seealso \code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial2d}}, \code{\link{spatial3dDouble}}
 #' @return
 #' \describe{
 #' \item{figure}{Return the matrix that generates the mirror image of the display figure.}

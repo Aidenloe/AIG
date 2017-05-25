@@ -17,9 +17,9 @@
 #'
 #' The \code{\link{spatial3d_mirror}} creates the mirror image of the figure created using the spatial3d function.\cr
 #'
-#' The \code{\link{spatial3dDouble}} creates the mirror image of the figure created using the spatial3d function.\cr
+#' The \code{\link{spatial3dDouble}} creates the 2 figures in the image using the spatial3dDouble function.\cr
 #'
-#' The \code{\link{spatial3d_mirrorDouble}} creates the variation of the images of the figure created using the spatial3d function based one four methods.\cr
+#' The \code{\link{spatial3d_mirrorDouble}} creates variations of the figures in a single image based on one of the four methods.\cr
 #'
 #' @references
 #' Sternberg, R. J. (1980). Representation and process in linear syllogistic reasoning. Journal of Experimental Psychology: General, 109(2), 119.
