@@ -2,14 +2,24 @@
 AIG
 ===
 
-AIG is a collection of Automatic Item Generators. Currently, the generator can create linear syllogistic, arithmetic and 2D/3D spatial reasoning items. More is to follow soon!
+AIG is a collection of Automatic Item Generators. The generator can create several item types.
+- Linear syllogistic reasoning items.
 
--   AIG
+-   Arithmetic (Add, Substract, Multiplication only) items.
+
+-   2D spatial reasoning items
+
+-   3D spatial reasoning items.
+
+-   Double 3D spatial reasoning items.
+
+-   AIG Functions:
     -   `lisy`
     -   `arith`
     -   `spatial2d`
     -   `spatial3d`
     -   `spatial3d_mirror`
+    -   `spatial3dDouble`
 
 Installation
 ------------

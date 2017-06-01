@@ -6,7 +6,17 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 # AIG
-AIG is a collection of Automatic Item Generators. Currently, the generator can create linear syllogistic, arithmetic and 2D/3D spatial reasoning items. More is to follow soon!
+AIG is a collection of Automatic Item Generators. The generator can create several item types.  
+- Linear syllogistic reasoning items.
+
+- Arithmetic (Add, Substract, Multiplication only) items.
+
+- 2D spatial reasoning items
+
+- 3D spatial reasoning items. 
+
+- Double 3D spatial reasoning items.
+
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -14,12 +24,13 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 ```
-- AIG
+- AIG Functions: 
     - `lisy`
     - `arith`
     - `spatial2d`
     - `spatial3d`
     - `spatial3d_mirror`
+    - `spatial3dDouble`
   
 ## Installation
 `AIG` is in [CRAN](https://cran.r-project.org/), but you can use [devtools](https://cran.r-project.org/package=devtools) to install the latest and greatest version.
