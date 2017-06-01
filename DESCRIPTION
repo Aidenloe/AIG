@@ -1,12 +1,12 @@
 Package: AIG
 Type: Package
 Title: Automatic Item Generator
-Version: 0.1.5
+Version: 0.1.6
 Author: Bao Sheng Loe (Aiden) [aut,cre,cph]
 Maintainer: Bao Sheng Loe (Aiden) <bsl28@cam.ac.uk>
 Description: A collection of Automatic Item Generators used mainly for
     psychological research. This package can generate linear syllogistic reasoning,
-    arithmetic and 2D/3D spatial reasoning items. It is recommended for research
+    arithmetic and 2D/3D/Double 3D spatial reasoning items. It is recommended for research
     purpose only.
 License: GPL-3
 Imports:
