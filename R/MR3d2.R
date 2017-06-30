@@ -22,7 +22,7 @@
 #'
 #' Bejar, I. I. (1990). A generative analysis of a three-dimensional spatial task. \emph{Applied Psychological Measurement}, 14(3), 237-245.
 #'
-#' @author Aiden Loe
+#' @author Aiden Loe and Francis Smart
 #' @title Spatial 3D Reasoning Item (double shapes)
 #' @seealso \code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial2d}}, \code{\link{spatial3d_mirrorDouble}}
 #' @return
