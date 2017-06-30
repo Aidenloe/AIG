@@ -75,7 +75,6 @@
 
 * Fixed bugs in `lisy()` to make sure that the argument `direct = alt` can be used when ninfer is 3 or greater. 
 
----
 # AIG 0.1.6
 
 ### MINOR CHANGES
@@ -85,3 +84,10 @@
 * fixed bug in 2d spatial items. 
 
 * Two new spatial functions are developed to allow 2 figures to be generated per image. 
+
+---
+# AIG 0.1.7
+
+### MINOR CHANGES
+
+* Updated contributors and copyright holders to the description file and the corresponding generators. 
