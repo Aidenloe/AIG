@@ -61,5 +61,5 @@ Bejar, I. I. (1990). A generative analysis of a three-dimensional spatial task. 
 \code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial2d}}, \code{\link{spatial3d_mirror}}
 }
 \author{
-Aiden Loe
+Aiden Loe and Francis Smart
 }
