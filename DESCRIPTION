@@ -2,7 +2,10 @@ Package: AIG
 Type: Package
 Title: Automatic Item Generator
 Version: 0.1.6
-Author: Bao Sheng Loe (Aiden) [aut,cre,cph]
+Authors@R: c(person("Bao Sheng (Aiden)", family="Loe", email =
+    "bsl28@cam.ac.uk", role = c("aut", "cre", "cph")),
+    person("David", family="Condon", role=c('ctb','cph')),
+    person("Francis", family="Smart", role=c('ctb','cph')))
 Maintainer: Bao Sheng Loe (Aiden) <bsl28@cam.ac.uk>
 Description: A collection of Automatic Item Generators used mainly for
     psychological research. This package can generate linear syllogistic reasoning,
