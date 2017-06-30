@@ -24,7 +24,7 @@
 #' Finally, to automatically generate more than 1 item, just make sure that the argument seed = NULL, and put in how many values you want in the argument item. See the examples for help.
 #'
 #'
-#' @author Aiden Loe
+#' @author Aiden Loe and Francis Smart
 #' @title Spatial 2D Reasoning Items
 #' @seealso \code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial3d}}
 #' @return

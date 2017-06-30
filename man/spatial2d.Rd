@@ -65,5 +65,5 @@ spatial2d(items=1, wd=NULL,view="2D", seed=19, degree=360, ansDegree= 180, test 
 \code{\link{lisy}}, \code{\link{arith}}, \code{\link{spatial3d}}
 }
 \author{
-Aiden Loe
+Aiden Loe and Francis Smart
 }
