@@ -900,7 +900,7 @@ dlist
         (dlist.df <- as.data.frame(dlist))
         if(length(unique(dlist.df$type))==2){ #if 2 = "invalid" and "falses" distractor type
           (type <- dlist.df$type)
-          (dlist.df <- sample_n(group_by(dlist.df,type),size=ceiling(Ndist/2),replace=FALSE,weight=NULL ,0.5))
+          (dlist.df <- sample_n(group_by(dlist.df,type),size=ceiling(Ndist/2),replace=FALSE,weight=NULL))
           (dlist.df <- dlist.df[sample(nrow(dlist.df)),])
 
           if(Ndist %% 2 == 0){
@@ -914,7 +914,7 @@ dlist
         }else{ # if only one distractor type
           (dlist.df <- as.data.frame(dlist))
           (type <- dlist.df$type)
-          (dlist.df <- sample_n(group_by(dlist.df,type), size=Ndist,replace=FALSE,weight=NULL ,0.5))
+          (dlist.df <- sample_n(group_by(dlist.df,type), size=Ndist,replace=FALSE,weight=NULL))
           (dtype <- dlist.df[,3])
           (dtype <- as.character(as.matrix(dtype)))
         }

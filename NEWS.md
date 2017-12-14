@@ -85,9 +85,16 @@
 
 * Two new spatial functions are developed to allow 2 figures to be generated per image. 
 
----
+
 # AIG 0.1.7
 
 ### MINOR CHANGES
 
 * Updated contributors and copyright holders to the description file and the corresponding generators. 
+
+---
+# AIG 0.1.8
+
+### MINOR CHANGES
+
+* Remove .env from the sample_n() as it was deprecated. Does not affect the logic for the lisy()
