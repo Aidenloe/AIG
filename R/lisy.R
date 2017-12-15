@@ -192,22 +192,23 @@ if(Ndist > 4) stop("Please choose a lower number of distractors")
     stop("Cannot create invalid distractors. Only false. ")
   }
 
-#
-  # seed=2
-  # nclues=6
-  # nspread = 8
-  # clone = NULL
-  # incidental='names'
-  # linear=FALSE
-  # antonym = "both"
-  # ninfer = 3
-  # direct= 'alt'
-  # Ndist=4
-  # dist="false"
-  # distprob=.5
-  # itemSet='random'
-  # items=NULL
-  # scales = NULL
+# #
+#   seed=2
+#   nclues=3
+#   nspread = 4
+#   clone = NULL
+#   incidental='names'
+#   linear=TRUE
+#   antonym = "both"
+#   ninfer = 2
+#   direct= 'of'
+#   Ndist=4
+#   dist="false"
+#   distprob=.5
+#   itemSet='random'
+#   items=NULL
+#   scales = NULL
+
 
 
 
@@ -624,7 +625,7 @@ if(ninfer==3 && linear==TRUE && direct == "of"){ #Flip back the matrix to forwar
   }else if (antonym == "second"){
     maxanswer <- cap(p(join(maxitems, thescale, article,
                             forward=FALSE),'.'))
-    maxanswer
+
     if(ninfer == 1){
       maxanswer <- cap(p(join(maxitems, thescale, article,
                               forward=TRUE),'.'))
@@ -661,9 +662,12 @@ if(ninfer==3 && linear==TRUE && direct == "of"){ #Flip back the matrix to forwar
     if(exists("maxanswer2")==FALSE){
       maxanswerFinal <-maxanswer
     }else{
-      maxanswerFinal <- paste(maxanswer,maxanswer2)
+      # randomly select one of the two answer
+      value <- sample(2,1, prob=c(.5,.5))
+      maxanswerFinal<- cbind(maxanswer,maxanswer2)[value]
       rm(maxanswer2)
     }
+
 
 
 #### ###### #### CLUES ORDERING IN THE SENTENCE ### #### ####

@@ -98,3 +98,5 @@
 ### MINOR CHANGES
 
 * Remove .env from the sample_n() as it was deprecated. Does not affect the logic for the lisy()
+
+* There is only one answer for the lisy function
