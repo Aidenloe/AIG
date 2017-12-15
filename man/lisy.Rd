@@ -20,13 +20,13 @@ lisy(seed = 1, nclues = 4, nspread = 5, clone = NULL,
 
 \item{incidental}{Tells the function whether the item features are 'names' or 'objects'.}
 
-\item{linear}{If linear = TRUE, a matching operator(i.e. name or object) will appear in all the adjacent clues in the sentence.}
+\item{linear}{If linear is the line of thought. If linear is TRUE, then the comparions are going in either forward or backward direction.}
 
 \item{antonym}{Determine whether to use both antonyms ('both') or only one type ("first" or "second").}
 
 \item{ninfer}{Generate answers that requires a X amount of inference from the items. Up to 3 is the maximum.}
 
-\item{direct}{Deciding on whether the clues are organised in an ordered("of" = ordered forward / "ob" = ordered backward) or unordered ('alt' = alternative) fashion. Note. 'alt' can only be used when ninfer is 3 or greater.}
+\item{direct}{Deciding on whether the clues are organised in an ordered("of" = ordered forward / "ob" = ordered backward) or unordered ('alt' = alternative) fashion. Note. 'alt' can only be used when ninfer is 3 or greater. This does not mean the line or thought.}
 
 \item{Ndist}{Returns the number of distractors per question.}
 
@@ -49,16 +49,15 @@ There are several things to note. To use own item set, please have at least 10 i
 When nspread and nclue is = 3. This means that there are 3 sentences, and only 3 names. This makes it impossible to generate an invalid distractor. As such, only the false distractors will be created. Since there are only three clues, then at most 2 false distractors can be created.
 When nspread and nclues are the same, all the names of the invalid distractors will be taken from the names that are used in the clues. As nspread value increases, the likelihood of having names not taken from the clues increases. Making the distractors fairly easy as there is a higher likelihood that the names taken from the matrix might not appear in the clues. Hence, keeping the value of nspread and nclue as close as possible is recommended.
 
-
 This function only generates items that requires up to 3 inferences. As the required inferences increases, then number of clues needed also increases. Inference is the implied comparison between sentences which allows the test taker to make an inform decision. When ninfer = 1 and the antonym is declared as either 'first' or 'second', then the correct answer will always be the opposite of the antonym used in the sentence. When ninfer = 2, the correct answer will be in the right direction.
 
-Direct is the direction of the line of thought. If direct = "ob" it means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not in order. direct = 'alt' can only be used when ninfer = 3.
+Direct is the direction of the clue provided. Then direct = "ob" it means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered  forward' and finally if it is 'alt', then it means the clues are not in order. direct = 'alt' can only be used when ninfer = 3.
 
-When linear = FALSE, there might be a possible of having just a single mental model, or having completing models. This is random and will depend on the seed selected.
-
-When linear = TRUE, the direct and antonym position follow together. i.e. If direct = "of" and antonym = "first". The antonym will be the same for the question and the answer. Same when direct = "of" and antonym = "second". In such suitation, the names will follow in a linear sequence (A > B, B > C, C > D). However, when direct is changed to "ob",  then the sentence structure changes to becomes (C > D, B > C, A > B). For both situations, this is directly looking at the difficulty of mental array. Under such circumstances, 2 answers will be generated. Either one is correct, but they are the inverse antonym of each other. When direct = "alt", the names will most likely not follow a linear sequence, and the antonyms will interchange between sentence (i.e. A > B, C > B, C < E).
+When linear = TRUE, the sentence structure will be in a linear order. i.e. when antonym = "first" or antonym = "second" and direct = "of", the names will follow in a linear sequence (A > B, B > C, C > D). However, when antonym = "first" or antonym = "second" and direct = "ob",  then the sentence structure changes to becomes (C > D, B > C, A > B).  When antonym = "both", the names will still follow a linear sequence either forward or backward, but the antonyms will interchange between sentence (i.e. A > B, C < B, C > D). Nevertheless, 'A' will always be bigger than the 'D'.  The argument direct = 'alt' cannot be used when linear = TRUE.
 
 When linear = TRUE and infer = 3, the last sentence will always not be one of the clues for the inference. If you want to study distance effect, then what is recommended is to generate the items with ninfer = 3, and remove the last clues in the sentence structure.
+
+When linear = FALSE, there might be a possible of having just a single mental model, or having completing models. This is random and will depend on the seed selected. The statements are randomly placed but in the general order of the direct argument provided. The clues remain in the order given based on the direct argument.
 
 When distprob = 0.5, the distribution of the antonym for the distractors will be mixed. When distprob is either 1 or 0, then only one of the two antonym will be used. This is only used if one wishes to study distractor analysis.
 }

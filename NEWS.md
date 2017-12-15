@@ -100,3 +100,7 @@
 * Remove .env from the sample_n() as it was deprecated. Does not affect the logic for the lisy()
 
 * There is only one answer for the lisy function
+
+* antonyms both, will always result in two antonyms. 
+
+* Fixed bug to make sure that the direction changes for when linear= false and ninfer= 3. 
