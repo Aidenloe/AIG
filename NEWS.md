@@ -110,3 +110,5 @@
 * arguments are brought to lower cases. 
 
 * increased the number of incidental features (names, objects and superheros)
+
+* instead mixed in the direct argument. 

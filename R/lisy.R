@@ -29,7 +29,7 @@
 #'
 #' This function only generates items that requires up to 3 inferences. As the required inferences increases, then number of clues needed also increases. Inference is the implied comparison between sentences which allows the test taker to make an inform decision. When ninfer = 1 and the antonym is declared as either 'first' or 'second', then the correct answer will always be the opposite of the antonym used in the sentence. When ninfer = 2, the correct answer will be in the right direction.
 #'
-#' Direct is the direction of the clue provided. In the function, the argument direct = "ob" means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered forward'. Finally, if it is 'alt', then it means the clues are not in order. direct = 'alt' can only be used when ninfer = 3. The clues provided in the question are useful for the first three arguments. However, when direct = "mixed", this means that the sentences are randomly placed. Making it difficult for the participant to form a linear array of the item. In this case, the clues are not useful.
+#' Direct is the direction of the clue provided. In the function, the argument direct = "ob" means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered forward'. Finally, if it is 'alt', then it means the clues are not in order. direct = 'alt' can only be used when ninfer = 3. The clues provided in the question are useful for the first three arguments. However, when direct = "mixed", this means that the sentences are randomly placed. Making it difficult for the participant to form a linear array of the item. In this case, the clues are not useful, so NA is given in the output instead.
 #'
 #'When linear = TRUE, the sentence structure will be in a linear order. i.e. when antonym = "first" or antonym = "second" and direct = "of", the names will follow in a linear sequence (A > B, B > C, C > D). However, when antonym = "first" or antonym = "second" and direct = "ob",  then the sentence structure changes to becomes (C > D, B > C, A > B).  When antonym = "both", the names will still follow a linear sequence either forward or backward, but the antonyms will interchange between sentence (i.e. A > B, C < B, C > D). Nevertheless, 'A' will always be bigger than the 'D'.  The argument direct = 'alt' cannot be used when linear = TRUE.
 #'
@@ -200,22 +200,22 @@ if(Ndist > 4) stop("Please choose a lower number of distractors")
     stop("Cannot create invalid distractors. Only false. ")
   }
 
-#
-  # seed=2
-  # nclues=4
-  # nspread = 5
-  # clone = 1
-  # incidental='names'
-  # linear=FALSE
-  # antonym = "first"
-  # ninfer = 3
-  # direct= 'mixed'
-  # Ndist=4
-  # dist="mixed"
-  # distprob=.5
-  # itemSet='random'
-  # items=NULL
-  # scales = NULL
+# #
+#   seed=2
+#   nclues=4
+#   nspread = 5
+#   clone = 1
+#   incidental='names'
+#   linear=FALSE
+#   antonym = "first"
+#   ninfer = 3
+#   direct= 'mixed'
+#   Ndist=4
+#   dist="mixed"
+#   distprob=.5
+#   itemSet='random'
+#   items=NULL
+#   scales = NULL
 
 
 
@@ -837,13 +837,14 @@ clues
       (check <- rev(check))
     }
 
+    check <- rep('blank', length(check))
 
     ### the clues don't work when we randomised the sentences
     (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
     sampled <- sample(1:nrow(iclues),nrow(iclues))
     (iclues <- iclues[sampled,])
-
-    message("clues are not helpful when distract = mixed")
+    iclues
+    #message("clues are not helpful when distract = mixed")
 
 
 
