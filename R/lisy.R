@@ -241,6 +241,7 @@ nnclues <- nnspread <- 1
                           "grapefruit","papaya", "mango", "coconut", "cucumber","dragon fruit","mangosteen",
                           "pomegranate", "pomelo", "rambutan", "soursop","gooseberry", "cantaloupe", "guava",
                           'tamarind', 'eggplant', 'honeydew','plantain'),
+
                   superheroes=c('Spiderman','Superman','Batman','Wolverine','Catwoman','Thor','Silver Surfer',
                                 'Captain America','Hercules','Harry Potter','Hulk','Gandalf','Ironman', "Wonder Woman",
                                 "Invisible Woman","Elektra", "Supergirl","Dare Devil","Aquaman","Black Canary",
@@ -248,12 +249,12 @@ nnclues <- nnspread <- 1
                                 "Power Girl"))
 
     scales <- list(people=matrix(c('taller', 'shorter','older', 'younger','faster', 'slower',
-                                   "kinder", "less kind", "frank", "less frank", "reliable", "less reliable",
+                                   "kinder", "less kind", "more frank", "less frank", "reliable", "less reliable",
                                    "more sensible", "less sensible", "wittier", "less witty", "more ambitious", "less ambitious"),
                                  nrow=2),
                    fruit = matrix(c('more fresh', 'less fresh','bigger', 'smaller',
                                     'heavier', 'lighter','tastier', 'less tasty',
-                                    'more nutritious', "less nutritious", "easier to buy", "less easy to buy",
+                                    'more nutritious', "less nutritious", "harder to buy", "easier to buy",
                                     "more juicy", "less juicy", "more intense", "less intense",
                                     "sweeter", "less sweet"), nrow=2),
                    superheroes=matrix(c('stronger', 'weaker','cooler', 'less cool','braver',
