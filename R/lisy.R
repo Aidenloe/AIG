@@ -99,6 +99,13 @@ lisy <- function( seed=1,
                   scales = NULL
 ){
 
+  incidental <- tolower(incidental)
+  antonym <- tolower(antonym)
+  direct <- tolower(direct)
+  dist <- tolower(dist)
+  itemSet <- tolower(itemSet)
+
+
   if(itemSet != 'random' && itemSet !='own'){
     stop("Please declare either 'random' or 'own' item set.")
   }
@@ -209,6 +216,7 @@ if(Ndist > 4) stop("Please choose a lower number of distractors")
   # itemSet='random'
   # items=NULL
   # scales = NULL
+
 
 
 

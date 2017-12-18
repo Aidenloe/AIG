@@ -106,3 +106,5 @@
 * Updated details in the lisy function.
 
 * Fixed bug to make sure that the direction changes for when linear= false and ninfer= 3. 
+
+* arguments are brought to lower cases. 
