@@ -10,10 +10,10 @@
 #' @param nspread Calculates the spread of possible incidentals in total.
 #' @param clone Null means that every generated item may or may not have a different position in the inference. If given a numeric value, then the items will have the same inference position.
 #' @param incidental Tells the function whether the item features are 'names' or 'objects'.
-#' @param linear If linear is the line of thought. If linear is TRUE, then the comparions are going in either forward or backward direction.
+#' @param linear Linear is the line of thought. If linear is TRUE, then the comparions are going in either forward or backward direction. The direction is based on the direct argument. When linear is FALSE, some extra incidentals (e.g. random names) that are not useful are also generated in the statement. The hypothesis is that people may have to create two or more mental models, completing with each other to find the correct answer amongst the response options.
 #' @param antonym Determine whether to use both antonyms ('both') or only one type ("first" or "second").
 #' @param ninfer Generate answers that requires a X amount of inference from the items. Up to 3 is the maximum.
-#' @param direct Deciding on whether the clues are organised in an ordered("of" = ordered forward / "ob" = ordered backward) or unordered ('alt' = alternative) fashion. Note. 'alt' can only be used when ninfer is 3 or greater. This does not mean the line or thought.
+#' @param direct Deciding on whether the statements are organised in an ordered ("of" = ordered forward / "ob" = ordered backward), randomly selected ordered  ('alt' = alternative) fashion or unordered('mixed') fashion. Note. 'alt' can only be used when ninfer is equal to 3.
 #' @param Ndist Returns the number of distractors per question.
 #' @param dist Select the type of distractors. You have three options ('mixed', 'invalid','false'). If dist='false', then the number of false distractors must be less than the number of clues by 1.
 #' @param distprob Calculates the number of comparison variation for the distractors.
@@ -29,7 +29,7 @@
 #'
 #' This function only generates items that requires up to 3 inferences. As the required inferences increases, then number of clues needed also increases. Inference is the implied comparison between sentences which allows the test taker to make an inform decision. When ninfer = 1 and the antonym is declared as either 'first' or 'second', then the correct answer will always be the opposite of the antonym used in the sentence. When ninfer = 2, the correct answer will be in the right direction.
 #'
-#' Direct is the direction of the clue provided. In the function, the argument direct = "ob" means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered forward'. Finally, if it is 'alt', then it means the clues are not in order. direct = 'alt' can only be used when ninfer = 3.
+#' Direct is the direction of the clue provided. In the function, the argument direct = "ob" means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered forward'. Finally, if it is 'alt', then it means the clues are not in order. direct = 'alt' can only be used when ninfer = 3. The clues provided in the question are useful for the first three arguments. However, when direct = "mixed", this means that the sentences are randomly placed. Making it difficult for the participant to form a linear array of the item. In this case, the clues are not useful.
 #'
 #'When linear = TRUE, the sentence structure will be in a linear order. i.e. when antonym = "first" or antonym = "second" and direct = "of", the names will follow in a linear sequence (A > B, B > C, C > D). However, when antonym = "first" or antonym = "second" and direct = "ob",  then the sentence structure changes to becomes (C > D, B > C, A > B).  When antonym = "both", the names will still follow a linear sequence either forward or backward, but the antonyms will interchange between sentence (i.e. A > B, C < B, C > D). Nevertheless, 'A' will always be bigger than the 'D'.  The argument direct = 'alt' cannot be used when linear = TRUE.
 #'
@@ -209,7 +209,7 @@ if(Ndist > 4) stop("Please choose a lower number of distractors")
   # linear=FALSE
   # antonym = "first"
   # ninfer = 3
-  # direct= 'ob'
+  # direct= 'mixed'
   # Ndist=4
   # dist="mixed"
   # distprob=.5
@@ -295,7 +295,7 @@ nnclues <- nnspread <- 1
 
   # List of possible clues ####
   pclues <- NULL
-  if(direct=="of" | direct == 'alt'){
+  if(direct=="of" | direct == 'alt' | direct == "mixed"){
     for (i in 2:nspread) for (ii in (i-1):1) {
       pclues <- rbind(pclues, c(i,ii))
     }
@@ -304,7 +304,7 @@ nnclues <- nnspread <- 1
       pclues <- rbind(pclues, c(ii,i))
     }
   }else{
-    stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
+    stop("Please declare 'of', 'ob', 'alt' or 'mixed' for the label arg.")
   }
 
   # no choice. can't get 3 infer otherwise.
@@ -790,7 +790,7 @@ clues
     (leftOut <- clues[a,1:2])
 
 
-    altclues<- rbind(leftOut, as.matrix(rclues[,1:2])) # rearrange order
+    (altclues<- rbind(leftOut, as.matrix(rclues[,1:2]))) # rearrange order
 
     (iclues <- cbind(itemlist[altclues[,1]],itemlist[altclues[,2]])) # new ordering for names
 
@@ -816,9 +816,40 @@ clues
 
   (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
 
+  }else if(direct == "mixed"){
+
+    maxinfer
+    (clues<- clues[order(clues[,1], decreasing = TRUE),])
+    (rclues <- unlist(strsplit(maxinfer[,4], "[.]")))
+    (rclues <- (1:length(infer$rclues))[infer$rclues %in% rclues])
+    (rclues <- infer[rclues,1:4]) #clues
+    (pos    <- paste0(rclues[,1] ,'.',rclues[,2]))
+    (pos2 <- paste0(clues[,1],'.',clues[,2]))
+
+    check<- NULL
+    for(i in pos){
+      (check[i] <- (1:length(pos2))[pos2 %in% i])
+    }
+    check
+
+    (randomised <- sample(1:2,1))
+    if(randomised == 1){
+      (check <- rev(check))
+    }
+
+
+    ### the clues don't work when we randomised the sentences
+    (iclues <- cbind(itemlist[clues[,1]],itemlist[clues[,2]]))
+    sampled <- sample(1:nrow(iclues),nrow(iclues))
+    (iclues <- iclues[sampled,])
+
+    message("clues are not helpful when distract = mixed")
+
+
+
 
 }else{
-  stop("Please declare 'of', 'ob' or 'alt' for the label arg.")
+  stop("Please declare 'of', 'ob', 'alt','mixed' for the label arg.")
 }
 
 

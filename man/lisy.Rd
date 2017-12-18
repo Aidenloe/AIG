@@ -20,13 +20,13 @@ lisy(seed = 1, nclues = 4, nspread = 5, clone = NULL,
 
 \item{incidental}{Tells the function whether the item features are 'names' or 'objects'.}
 
-\item{linear}{If linear is the line of thought. If linear is TRUE, then the comparions are going in either forward or backward direction.}
+\item{linear}{Linear is the line of thought. If linear is TRUE, then the comparions are going in either forward or backward direction. The direction is based on the direct argument. When linear is FALSE, some extra incidentals (e.g. random names) that are not useful are also generated in the statement. The hypothesis is that people may have to create two or more mental models, completing with each other to find the correct answer amongst the response options.}
 
 \item{antonym}{Determine whether to use both antonyms ('both') or only one type ("first" or "second").}
 
 \item{ninfer}{Generate answers that requires a X amount of inference from the items. Up to 3 is the maximum.}
 
-\item{direct}{Deciding on whether the clues are organised in an ordered("of" = ordered forward / "ob" = ordered backward) or unordered ('alt' = alternative) fashion. Note. 'alt' can only be used when ninfer is 3 or greater. This does not mean the line or thought.}
+\item{direct}{Deciding on whether the statements are organised in an ordered ("of" = ordered forward / "ob" = ordered backward), randomly selected ordered  ('alt' = alternative) fashion or unordered('mixed') fashion. Note. 'alt' can only be used when ninfer is equal to 3.}
 
 \item{Ndist}{Returns the number of distractors per question.}
 
@@ -52,7 +52,7 @@ When nspread and nclues are the same, all the names of the distractors will be t
 
 This function only generates items that requires up to 3 inferences. As the required inferences increases, then number of clues needed also increases. Inference is the implied comparison between sentences which allows the test taker to make an inform decision. When ninfer = 1 and the antonym is declared as either 'first' or 'second', then the correct answer will always be the opposite of the antonym used in the sentence. When ninfer = 2, the correct answer will be in the right direction.
 
-Direct is the direction of the clue provided. In the function, the argument direct = "ob" means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered forward'. Finally, if it is 'alt', then it means the clues are not in order. direct = 'alt' can only be used when ninfer = 3.
+Direct is the direction of the clue provided. In the function, the argument direct = "ob" means that solving the items requires the test taker to work 'ordered backward'. If it is 'of', it means 'ordered forward'. Finally, if it is 'alt', then it means the clues are not in order. direct = 'alt' can only be used when ninfer = 3. The clues provided in the question are useful for the first three arguments. However, when direct = "mixed", this means that the sentences are randomly placed. Making it difficult for the participant to form a linear array of the item. In this case, the clues are not useful.
 
 When linear = TRUE, the sentence structure will be in a linear order. i.e. when antonym = "first" or antonym = "second" and direct = "of", the names will follow in a linear sequence (A > B, B > C, C > D). However, when antonym = "first" or antonym = "second" and direct = "ob",  then the sentence structure changes to becomes (C > D, B > C, A > B).  When antonym = "both", the names will still follow a linear sequence either forward or backward, but the antonyms will interchange between sentence (i.e. A > B, C < B, C > D). Nevertheless, 'A' will always be bigger than the 'D'.  The argument direct = 'alt' cannot be used when linear = TRUE.
 
