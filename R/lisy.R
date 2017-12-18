@@ -249,16 +249,16 @@ nnclues <- nnspread <- 1
                                 "Power Girl"))
 
     scales <- list(people=matrix(c('taller', 'shorter','older', 'younger','faster', 'slower',
-                                   "kinder", "less kind", "more frank", "less frank", "reliable", "less reliable",
-                                   "more sensible", "less sensible", "wittier", "less witty", "more ambitious", "less ambitious"),
+                                   "kinder", "not as kind", "more frank", "not as frank", "more reliable", "not as reliable",
+                                   "more sensible", "not as sensible", "wittier", "not as witty", "more ambitious", "not as ambitious"),
                                  nrow=2),
-                   fruit = matrix(c('more fresh', 'less fresh','bigger', 'smaller',
-                                    'heavier', 'lighter','tastier', 'less tasty',
-                                    'more nutritious', "less nutritious", "harder to buy", "easier to buy",
-                                    "more juicy", "less juicy", "more intense", "less intense",
+                   fruit = matrix(c('more fresh', 'not as fresh','bigger', 'smaller',
+                                    'heavier', 'lighter','tastier', 'not as tasty',
+                                    'more nutritious', "not as nutritious", "harder to buy", "easier to buy",
+                                    "more juicy", "not as juicy", "more intense", "not as intense",
                                     "sweeter", "less sweet"), nrow=2),
-                   superheroes=matrix(c('stronger', 'weaker','cooler', 'less cool','braver',
-                                        'less brave','less powerful', 'more powerful'), nrow=2))
+                   superheroes=matrix(c('stronger', 'weaker','cooler', 'not as cool','braver',
+                                        'not as brave','more powerful', 'not as powerful'), nrow=2))
 
   }else{
     sets <- "own"
