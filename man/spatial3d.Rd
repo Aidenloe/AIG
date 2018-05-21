@@ -12,7 +12,7 @@ spatial3d(seed = 1, angle = pi/1.3, x = 0.3, y = 3, z = 0.8,
 
 \item{angle, x, y, z}{See details}
 
-\item{cubes}{The number of connected cubes together.}
+\item{cubes}{The number of connected cubes to generate.}
 
 \item{axis}{Showing the axis is helpful when first testing the function.}
 
@@ -35,11 +35,11 @@ The arguments angle, x, y, z represents the rotation of angle radians based on t
 You can also rotate the figure interactively by clicking on the figure and moving it in different direction.
 }
 \examples{
-item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
+item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,cubes=8,axis = TRUE)
 
 # To save the figure (not run)
 # library(rgl)
-# item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,cubes=9,axis = TRUE)
+# item <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,cubes=8,axis = TRUE)
 
 # save in pdf
 # wd<- '~/desktop'

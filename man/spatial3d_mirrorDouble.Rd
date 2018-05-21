@@ -5,18 +5,16 @@
 \title{Mirror Spatial 3D Reasoning Item (2)}
 \usage{
 spatial3d_mirrorDouble(obj, angle = pi/1.3, x = 0.3, y = 3, z = 0.8,
-  axis = TRUE, method = "one", cubes = 8)
+  method = "one", axis = TRUE)
 }
 \arguments{
 \item{obj}{An object with class of threeD.}
 
 \item{angle, x, y, z}{See details}
 
-\item{axis}{Showing the axis is helpful when first testing the function.}
-
 \item{method}{There are 4 methods. See details.}
 
-\item{cubes}{The number of connected cubes together.}
+\item{axis}{Showing the axis is helpful when first testing the function.}
 }
 \value{
 \describe{
@@ -27,22 +25,23 @@ spatial3d_mirrorDouble(obj, angle = pi/1.3, x = 0.3, y = 3, z = 0.8,
 This function generates the variation of the images of the 3 dimensional display figure. There are four methods in total. See details for more information. It acts as a wrap because the creation of the figure is done using functions from the rgl package.
 }
 \details{
-For 3D figures, some of the cubes may be hidden in sight when automatically generated. Hence, one would need to rotate the display figure several times to ensure that none of the cubes are hidden. This may be even more so when it comes to 2 figures within an image.
+For 3D figures, some of the cubes may be hidden in sight when automatically generated. Hence, one would need to rotate the display figure several times to ensure that none of the cubes are hidden. This may be even more so when it comes to 2 figures within an image. The longer the number of connected cubes, the more likely it will overlap with each other. About 8 is more or less right.
 
 The arguments angle, x, y, z represents the rotation of angle radians based on the x, y and z axis. This is a wrapper to the rotationMatrix function from the rgl package. Changing the values in the arguments angle, x, y, z coordinates allows one to programmatically change angles to study potential cognitive operators at work.
 
 You can also rotate the figure interactively by clicking on the figure and moving it in different direction.
 
-There are 4 methods to create distractors. The first method generates, the first image as a mirror, and the second image as normal. The second method is vice versa from the first method. The third method generates both mirror images. The first method generates correct rotation but the image is always shot of one cube.
+There are 4 methods to create distractors. The first method generates, the first image as a mirror, and the second image as normal. The second method is vice versa from the first method. The third method generates both mirror images. The first method generates correct rotation but the image is always short of one cube.
 }
 \examples{
-display <- spatial3dDouble(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE, cubes=8)
-display_mirror <- spatial3d_mirrorDouble(display, angle=pi/1.3, x=0.3,y=4,z=0.8,
-                                         axis = TRUE, method="one", cubes=8)
+display <- spatial3dDouble(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,cubes=8, axis = TRUE)
+display_mirror <- spatial3d_mirrorDouble(display, angle=pi/1.3, x=0.3, y=4, z=0.8,
+                                         method="one", axis = TRUE)
 
 # To save the figure (not run)
 # library(rgl)
-# display_mirror <- spatial3d_mirrorDouble(display, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
+# display_mirror <- spatial3d_mirrorDouble(display, angle=pi/1.3, x=0.3, y=4, z=0.8,
+#                                           method="one", axis = TRUE)
 # wd<- '~/desktop'
 
 # save in pdf

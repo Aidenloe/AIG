@@ -118,3 +118,7 @@
 ### MINOR CHANGES
 
 * Updated the bug in the spatial3d_mirror().
+
+* spatial3d_mirror() can determine the number of mirror cubes to generate. 
+
+

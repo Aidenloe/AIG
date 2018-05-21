@@ -5,12 +5,14 @@
 \title{Mirror Spatial 3D Reasoning Item}
 \usage{
 spatial3d_mirror(obj, angle = pi/1.3, x = 0.3, y = 3, z = 0.8,
-  axis = TRUE)
+  cubes = 1, axis = TRUE)
 }
 \arguments{
 \item{obj}{An object with class of threeD.}
 
-\item{angle, x, y, z}{See details}
+\item{angle, x, y, z}{See details.}
+
+\item{cubes}{The number of connected cubes to generate.}
 
 \item{axis}{Showing the axis is helpful when first testing the function.}
 }
@@ -30,17 +32,16 @@ The arguments angle, x, y, z represents the rotation of angle radians based on t
 You can also rotate the figure interactively by clicking on the figure and moving it in different direction.
 }
 \examples{
-display <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
-display_mirror <- spatial3d_mirror(display, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
+display <- spatial3d(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8, cubes=9, axis = TRUE)
+display_mirror <- spatial3d_mirror(display, angle=pi/1.3, x=0.3,y=4,z=0.8, cubes=9, axis = TRUE)
 
 # To save the figure (not run)
 # library(rgl)
-# display_mirror <- spatial3d_mirror(display, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
+# display_mirror <- spatial3d_mirror(display, angle=pi/1.3, x=0.3,y=4,z=0.8, cubes=9, axis = TRUE)
 # wd<- '~/desktop'
 
 # save in pdf
 # item <- 1
-# save <- paste0(wd,"/mirror3d_",item,".pdf")
 # rgl.postscript(save,"pdf")
 
 # save in png

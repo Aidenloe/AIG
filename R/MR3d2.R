@@ -9,7 +9,7 @@
 #' @param angle,x,y,z  See details
 #' @param cubes The number of connected cubes together.
 #' @param axis Showing the axis is helpful when first testing the function.
-#' @param filled yes, no, random will determine the colour of the cubes.
+#' @param filled yes, no, random will determine the colour of the cubes. Ignore for now.
 #' @description This function generates a 3 dimensional display figure. It acts as a wrap because the creation of the figure is done using functions from the rgl package.
 #' @details For 3D figures, some of the cubes may be hidden in sight when automatically generated. Hence, one would need to rotate the display figure several times to ensure that none of the cubes are hidden. To ensure that the same image is generated again, please provide a seed value. You will need to use the rgl post script function to save the figure. Currently, the function returns the a list object that is used to generate the display figure. The figure matrix in the list object can be used for the \code{\link{spatial3d_mirror}} to generate a mirror image of the display figure.
 #'
@@ -31,11 +31,11 @@
 #' \item{rotationMatrix}{Return the cordinates of x,y,z,w}
 #'     }
 #' @examples
-#' item <- spatial3dDouble(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
+#' item <- spatial3dDouble(seed=4, angle=pi/1.3, x=0.3, y=4, z=0.8, axis = TRUE)
 #'
 #' # To save the figure (not run)
 #' # library(rgl)
-#' # item <- spatial3dDouble(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,cubes=9,axis = TRUE)
+#' # item <- spatial3dDouble(seed=4, angle=pi/1.3, x=0.3, y=4, z=0.8, cubes=9, axis = TRUE)
 #'
 #' # save in pdf
 #' # wd<- '~/desktop'
@@ -48,7 +48,7 @@
 #' # rgl.snapshot(filename="image3D.png",fmt="png")
 
 spatial3dDouble <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axis = TRUE, filled='yes'){
- # seed=1; angle=pi/1.3; x=0.3;y=3; z=0.8; cubes=8; axis = TRUE; filled='yes'
+
 
   # This will finalise the item
   set.seed(seed)
@@ -113,7 +113,8 @@ spatial3dDouble <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axi
 
   (zxlist <- rbind(zlist, xlist))
   clear3d()
-  cube(zxlist[1:16,1],zxlist[1:16,2],zxlist[1:16,3])
+  cubesDouble <-cubes*2
+  cube(zxlist[1:cubesDouble,1],zxlist[1:cubesDouble,2],zxlist[1:cubesDouble,3])
   rgl.viewpoint(fov = 0, userMatrix = rotationMatrix(angle=angle, x=x,y=y,z=z))
   roMatrix <- rotationMatrix(angle=angle, x=x,y=y,z=z)
   if(axis == TRUE){
@@ -134,17 +135,16 @@ spatial3dDouble <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axi
 #' @importFrom rgl title3d
 #' @param obj An object with class of threeD.
 #' @param angle,x,y,z  See details
-#' @param axis Showing the axis is helpful when first testing the function.
 #' @param method There are 4 methods. See details.
-#' @param cubes The number of connected cubes together.
+#' @param axis Showing the axis is helpful when first testing the function.
 #' @description This function generates the variation of the images of the 3 dimensional display figure. There are four methods in total. See details for more information. It acts as a wrap because the creation of the figure is done using functions from the rgl package.
-#' @details For 3D figures, some of the cubes may be hidden in sight when automatically generated. Hence, one would need to rotate the display figure several times to ensure that none of the cubes are hidden. This may be even more so when it comes to 2 figures within an image.
+#' @details For 3D figures, some of the cubes may be hidden in sight when automatically generated. Hence, one would need to rotate the display figure several times to ensure that none of the cubes are hidden. This may be even more so when it comes to 2 figures within an image. The longer the number of connected cubes, the more likely it will overlap with each other. About 8 is more or less right.
 #'
 #' The arguments angle, x, y, z represents the rotation of angle radians based on the x, y and z axis. This is a wrapper to the rotationMatrix function from the rgl package. Changing the values in the arguments angle, x, y, z coordinates allows one to programmatically change angles to study potential cognitive operators at work.
 #'
 #' You can also rotate the figure interactively by clicking on the figure and moving it in different direction.
 #'
-#' There are 4 methods to create distractors. The first method generates, the first image as a mirror, and the second image as normal. The second method is vice versa from the first method. The third method generates both mirror images. The first method generates correct rotation but the image is always shot of one cube.
+#' There are 4 methods to create distractors. The first method generates, the first image as a mirror, and the second image as normal. The second method is vice versa from the first method. The third method generates both mirror images. The first method generates correct rotation but the image is always short of one cube.
 #'
 #' @references
 #' \url{https://en.wikipedia.org/wiki/Radian}
@@ -159,13 +159,14 @@ spatial3dDouble <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axi
 #' \item{figure}{Return the matrix that generates the mirror image of the display figure.}
 #'     }
 #' @examples
-#' display <- spatial3dDouble(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE, cubes=8)
-#' display_mirror <- spatial3d_mirrorDouble(display, angle=pi/1.3, x=0.3,y=4,z=0.8,
-#'                                          axis = TRUE, method="one", cubes=8)
+#' display <- spatial3dDouble(seed=4, angle=pi/1.3, x=0.3,y=4,z=0.8,cubes=8, axis = TRUE)
+#' display_mirror <- spatial3d_mirrorDouble(display, angle=pi/1.3, x=0.3, y=4, z=0.8,
+#'                                          method="one", axis = TRUE)
 #'
 #' # To save the figure (not run)
 #' # library(rgl)
-#' # display_mirror <- spatial3d_mirrorDouble(display, angle=pi/1.3, x=0.3,y=4,z=0.8,axis = TRUE)
+#' # display_mirror <- spatial3d_mirrorDouble(display, angle=pi/1.3, x=0.3, y=4, z=0.8,
+#' #                                           method="one", axis = TRUE)
 #' # wd<- '~/desktop'
 #'
 #' # save in pdf
@@ -177,8 +178,11 @@ spatial3dDouble <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axi
 #' # rgl.snapshot(filename="image3D.png",fmt="png")
 #'
 
-spatial3d_mirrorDouble <- function(obj, angle=pi/1.3, x=0.3,y=3, z=0.8,axis = TRUE, method="one", cubes=8){
+spatial3d_mirrorDouble <- function(obj, angle=pi/1.3, x=0.3,y=3, z=0.8, method="one", axis = TRUE){
   result <- obj
+  (cubes <- nrow(result$figure)/2)
+  (cubesDouble = nrow(result$figure))
+
   if(class(result)!="threeD"){
     stop("You need to use an object of class threeD.")
   }
@@ -209,14 +213,12 @@ spatial3d_mirrorDouble <- function(obj, angle=pi/1.3, x=0.3,y=3, z=0.8,axis = TR
   if(method=="four"){
     clear3d()
     rgl.light()
-    cube(result$figure[1:(nrow(result$figure)/2-1),1],result$figure[1:(nrow(result$figure)/2-1),2],result$figure[1:(nrow(result$figure)/2-1),3]) # non-mirror
-    cube(result$figure[cubes+2:cubes,1],result$figure[cubes+2:cubes,2],result$figure[cubes+2:cubes,3]) #mirror
+    cube(result$figure[1:(nrow(result$figure)/2-1),1],result$figure[1:(nrow(result$figure)/2-1),2],result$figure[1:(nrow(result$figure)/2-1),3])
+    cube(result$figure[(cubes+2):cubesDouble,1],result$figure[(cubes+2):cubesDouble,2],result$figure[(cubes+2):cubesDouble,3])
   }
 
-
-
   rgl.viewpoint(fov = 0, userMatrix = rotationMatrix(angle=angle, x=x,y=y,z=z))
-  mirrorResult<- cbind(result$figure[1:8,3],result$figure[1:8,2],result$figure[1:8,1])
+  mirrorResult<- cbind(result$figure[1:(nrow(result$figure)/2),3],result$figure[1:(nrow(result$figure)/2),2],result$figure[1:(nrow(result$figure)/2),1])
   if(axis == TRUE){
     axes3d( edges=c("x", "y", "z") )
     title3d(main=NULL, sub=NULL, xlab='xlab', ylab='ylab', zlab='zlab')
