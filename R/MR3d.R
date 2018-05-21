@@ -154,7 +154,7 @@ spatial3d_mirror <- function(obj, angle=pi/1.3, x=0.3,y=3, z=0.8,axis = TRUE){
   rgl.light()
   cube(result$figure[1:nrow(result$figure),3],result$figure[1:nrow(result$figure),2],result$figure[1:nrow(result$figure),1]) #mirror
   rgl.viewpoint(fov = 0, userMatrix = rotationMatrix(angle=angle, x=x,y=y,z=z))
-  mirrorResult<- cbind(result$figure[1:8,3],result$figure[1:8,2],result$figure[1:8,1])
+  mirrorResult<- cbind(result$figure[1:nrow(display$figure),3],result$figure[1:nrow(display$figure),2],result$figure[1:nrow(display$figure),1])
   if(axis == TRUE){
     axes3d( edges=c("x", "y", "z") )
     title3d(main=NULL, sub=NULL, xlab='xlab', ylab='ylab', zlab='zlab')

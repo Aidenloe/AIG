@@ -92,7 +92,6 @@
 
 * Updated contributors and copyright holders to the description file and the corresponding generators. 
 
----
 # AIG 0.1.8
 
 ### MINOR CHANGES
@@ -112,3 +111,10 @@
 * increased the number of incidental features (names, objects and superheros)
 
 * instead mixed in the direct argument. 
+
+---
+# AIG 0.1.9
+
+### MINOR CHANGES
+
+* Updated the bug in the spatial3d_mirror().

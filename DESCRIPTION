@@ -1,8 +1,8 @@
 Package: AIG
 Type: Package
 Title: Automatic Item Generator
-Version: 0.1.8
-Date: 2017-12-18
+Version: 0.1.9
+Date: 2018-05-18
 Authors@R: c(person("Bao Sheng", family="Loe (Aiden)", email =
     "bsl28@cam.ac.uk", role = c("aut", "cre", "cph")),
     person("David", family="Condon", role=c('ctb','cph')),
