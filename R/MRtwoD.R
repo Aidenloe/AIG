@@ -1,9 +1,8 @@
 #' @export
 #' @importFrom rgl rgl.postscript
-#' @importFrom rgl rgl.light
-#' @importFrom rgl rgl.viewpoint
+#' @importFrom rgl light3d
+#' @importFrom rgl view3d
 #' @importFrom rgl clear3d
-#' @importFrom rgl rgl.clear
 #' @importFrom rgl rgl.snapshot
 #' @param items The number of items to generate.
 #' @param wd This is the working directory to save the figures in. If not provided, the file will be saved in the current working directory.
@@ -74,7 +73,7 @@ for(item in 1:items){
 
 # This will finalise the item
 clear3d()
-rgl.light()
+light3d()
 clear3d(type = "lights") # for 2d
 j <- NULL
 k <- NULL
@@ -92,7 +91,7 @@ for (i in 1:15) { # 15 is the max. Arbitary number. Can be anything. #Does not t
 if(view == "2D"){
 clear3d()
 cube(zlist[1:15,1],zlist[1:15,2],zlist[1:15,3])
-rgl.viewpoint(theta = degree, phi = 90, fov = 0) # become 2D display item
+view3d(theta = degree, phi = 90, fov = 0) # become 2D display item
 rgl.snapshot(filename=paste0("display2d_",item,"-",test,".",fmt="jpg"))
 #save <- paste0(wd,"/display2d_",item,".pdf")
 #rgl.postscript(save,"pdf")
@@ -111,8 +110,8 @@ if(view == "top"){
   #   zlist
   # }
   cube(zlist[1:15,1],zlist[1:15,2],zlist[1:15,3]) #
-  rgl.light()
-  rgl.viewpoint(theta = 20, phi = 10, fov = 10)
+  light3d()
+  view3d(theta = 20, phi = 10, fov = 10)
   rgl.snapshot(filename=paste0("displayTop_",item,"-",test,".",fmt="jpg"))
 
   #save <- paste0(wd,"/displayTop_",item,".pdf")
@@ -132,8 +131,8 @@ if(view == "bottom"){
   #   zlist
   # }
   cube(zlist[1:15,1],zlist[1:15,2],zlist[1:15,3]) #
-  rgl.light()
-  rgl.viewpoint(theta = degree, phi = -35, fov = 5)
+  light3d()
+  view3d(theta = degree, phi = -35, fov = 5)
   rgl.snapshot(filename=paste0("displayBottom_",item,"-",test,".",fmt="jpg"))
   #save <- paste0(wd,"/displayBottom_",item,".pdf")
   #rgl.postscript(save,"pdf")
@@ -142,8 +141,8 @@ if(view == "bottom"){
 
 #Answer
 cube(zlist[1:15,1],zlist[1:15,2],zlist[1:15,3]) #
-rgl.clear(type="lights")
-rgl.viewpoint(theta = ansDegree, phi = 90, fov = 0)
+clear3d(type="lights")
+view3d(theta = ansDegree, phi = 90, fov = 0)
 rgl.snapshot(filename=paste0("ans_",item,"-",test,".",fmt="jpg"))
 #save <- paste0(wd,"/ans_",item,".pdf")
 #rgl.postscript(save,"pdf")
@@ -155,7 +154,7 @@ set.seed(item)
 clear3d()
 mlist <- cbind(zlist[1:15,3],zlist[1:15,2],zlist[1:15,1])
 cube(zlist[1:15,3],zlist[1:15,2],zlist[1:15,1]) #
-rgl.viewpoint(theta = 380, phi = 90, fov = 0)
+view3d(theta = 380, phi = 90, fov = 0)
 rgl.snapshot(filename=paste0("dist(mirror)_",item,"-",test,".",fmt="jpg"))
 #save <- paste0(wd,"/dist(mirror)_",item,".pdf")
 #rgl.postscript(save,"pdf")
@@ -165,7 +164,7 @@ rgl.snapshot(filename=paste0("dist(mirror)_",item,"-",test,".",fmt="jpg"))
 set.seed(item)
 clear3d()
 cube(zlist[1:15,3],zlist[1:15,2],zlist[1:15,1]) #
-rgl.viewpoint(theta = 260, phi = 90, fov = 0)
+view3d(theta = 260, phi = 90, fov = 0)
 rgl.snapshot(filename=paste0("dist(mirror2)_",item,"-",test,".",fmt="jpg"))
 #save <- paste0(wd,"/dist(mirror2)_",item,".pdf")
 #rgl.postscript(save,"pdf")

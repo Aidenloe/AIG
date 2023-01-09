@@ -4,8 +4,15 @@
 \alias{spatial2d}
 \title{Spatial 2D Reasoning Items}
 \usage{
-spatial2d(items, wd = NULL, view = "2D", seed = NULL, degree = 360,
-  ansDegree = 180, test = 1)
+spatial2d(
+  items,
+  wd = NULL,
+  view = "2D",
+  seed = NULL,
+  degree = 360,
+  ansDegree = 180,
+  test = 1
+)
 }
 \arguments{
 \item{items}{The number of items to generate.}

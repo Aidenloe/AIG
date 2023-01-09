@@ -4,8 +4,15 @@
 \alias{spatial3d_mirrorDouble}
 \title{Mirror Spatial 3D Reasoning Item (2)}
 \usage{
-spatial3d_mirrorDouble(obj, angle = pi/1.3, x = 0.3, y = 3, z = 0.8,
-  method = "one", axis = TRUE)
+spatial3d_mirrorDouble(
+  obj,
+  angle = pi/1.3,
+  x = 0.3,
+  y = 3,
+  z = 0.8,
+  method = "one",
+  axis = TRUE
+)
 }
 \arguments{
 \item{obj}{An object with class of threeD.}

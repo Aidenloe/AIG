@@ -1,6 +1,6 @@
 #' @export
-#' @importFrom rgl rgl.light
-#' @importFrom rgl rgl.viewpoint
+#' @importFrom rgl light3d
+#' @importFrom rgl view3d
 #' @importFrom rgl clear3d
 #' @importFrom rgl rotationMatrix
 #' @importFrom rgl axes3d
@@ -53,7 +53,7 @@ spatial3dDouble <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axi
   # This will finalise the item
   set.seed(seed)
   clear3d()
-  rgl.light()
+  light3d()
 
   # first one
   vlist <- c(1,2,2)
@@ -115,7 +115,7 @@ spatial3dDouble <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axi
   clear3d()
   cubesDouble <-cubes*2
   cube(zxlist[1:cubesDouble,1],zxlist[1:cubesDouble,2],zxlist[1:cubesDouble,3])
-  rgl.viewpoint(fov = 0, userMatrix = rotationMatrix(angle=angle, x=x,y=y,z=z))
+  view3d(fov = 0, userMatrix = rotationMatrix(angle=angle, x=x,y=y,z=z))
   roMatrix <- rotationMatrix(angle=angle, x=x,y=y,z=z)
   if(axis == TRUE){
     axes3d( edges=c("x", "y", "z") )
@@ -128,7 +128,7 @@ spatial3dDouble <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axi
 
 
 #' @export
-#' @importFrom rgl rgl.light
+#' @importFrom rgl light3d
 #' @importFrom rgl clear3d
 #' @importFrom rgl rotationMatrix
 #' @importFrom rgl axes3d
@@ -190,7 +190,7 @@ spatial3d_mirrorDouble <- function(obj, angle=pi/1.3, x=0.3,y=3, z=0.8, method="
   # first shape mirror, second shape non mirror
   if(method=="one"){
   clear3d()
-  rgl.light()
+  light3d()
   cube(result$figure[1:(nrow(result$figure)/2),3],result$figure[1:(nrow(result$figure)/2),2],result$figure[1:(nrow(result$figure)/2),1]) #mirror
   cube(result$figure[cubes+1:cubes,1],result$figure[cubes+1:cubes,2],result$figure[cubes+1:cubes,3]) # non mirror
   }
@@ -198,7 +198,7 @@ spatial3d_mirrorDouble <- function(obj, angle=pi/1.3, x=0.3,y=3, z=0.8, method="
   # first shape non mirror, second shape mirror
   if(method=="two"){
     clear3d()
-    rgl.light()
+    light3d()
     cube(result$figure[1:(nrow(result$figure)/2),1],result$figure[1:(nrow(result$figure)/2),2],result$figure[1:(nrow(result$figure)/2),3]) # non-mirror
     cube(result$figure[cubes+1:cubes,3],result$figure[cubes+1:cubes,2],result$figure[cubes+1:cubes,1]) #mirror
   }
@@ -206,18 +206,18 @@ spatial3d_mirrorDouble <- function(obj, angle=pi/1.3, x=0.3,y=3, z=0.8, method="
   # both shapes are mirror
   if(method=="three"){
     clear3d()
-    rgl.light()
+    light3d()
     cube(result$figure[1:nrow(result$figure),3],result$figure[1:nrow(result$figure),2],result$figure[1:nrow(result$figure),1]) #mirror
   }
 
   if(method=="four"){
     clear3d()
-    rgl.light()
+    light3d()
     cube(result$figure[1:(nrow(result$figure)/2-1),1],result$figure[1:(nrow(result$figure)/2-1),2],result$figure[1:(nrow(result$figure)/2-1),3])
     cube(result$figure[(cubes+2):cubesDouble,1],result$figure[(cubes+2):cubesDouble,2],result$figure[(cubes+2):cubesDouble,3])
   }
 
-  rgl.viewpoint(fov = 0, userMatrix = rotationMatrix(angle=angle, x=x,y=y,z=z))
+  view3d(fov = 0, userMatrix = rotationMatrix(angle=angle, x=x,y=y,z=z))
   mirrorResult<- cbind(result$figure[1:(nrow(result$figure)/2),3],result$figure[1:(nrow(result$figure)/2),2],result$figure[1:(nrow(result$figure)/2),1])
   if(axis == TRUE){
     axes3d( edges=c("x", "y", "z") )

@@ -4,10 +4,23 @@
 \alias{lisy}
 \title{Linear Syllogism Generator}
 \usage{
-lisy(seed = 1, nclues = 4, nspread = 5, clone = NULL,
-  incidental = "names", linear = FALSE, antonym = "both", ninfer = 1,
-  direct = "ob", Ndist = 4, dist = "mixed", distprob = 0.5,
-  itemSet = "random", items = NULL, scales = NULL)
+lisy(
+  seed = 1,
+  nclues = 4,
+  nspread = 5,
+  clone = NULL,
+  incidental = "names",
+  linear = FALSE,
+  antonym = "both",
+  ninfer = 1,
+  direct = "ob",
+  Ndist = 4,
+  dist = "mixed",
+  distprob = 0.5,
+  itemSet = "random",
+  items = NULL,
+  scales = NULL
+)
 }
 \arguments{
 \item{seed}{Generates the same question again from local computer.}
