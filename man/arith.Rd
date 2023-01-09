@@ -4,8 +4,15 @@
 \alias{arith}
 \title{ICAR Arithmetic Generator}
 \usage{
-arith(numProbs = 5, numOps = 1, magnitude = 1, arithOps = "add",
-  allowNeg = FALSE, sameValue = FALSE, order = "mixed")
+arith(
+  numProbs = 5,
+  numOps = 1,
+  magnitude = 1,
+  arithOps = "add",
+  allowNeg = FALSE,
+  sameValue = FALSE,
+  order = "mixed"
+)
 }
 \arguments{
 \item{numProbs}{Number of desired problems}

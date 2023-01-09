@@ -4,8 +4,16 @@
 \alias{spatial3dDouble}
 \title{Spatial 3D Reasoning Item (double shapes)}
 \usage{
-spatial3dDouble(seed = 1, angle = pi/1.3, x = 0.3, y = 3, z = 0.8,
-  cubes = 8, axis = TRUE, filled = "yes")
+spatial3dDouble(
+  seed = 1,
+  angle = pi/1.3,
+  x = 0.3,
+  y = 3,
+  z = 0.8,
+  cubes = 8,
+  axis = TRUE,
+  filled = "yes"
+)
 }
 \arguments{
 \item{seed}{To generate the same set of item(s) on the local computer.}

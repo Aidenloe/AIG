@@ -1,6 +1,6 @@
 #' @export
-#' @importFrom rgl rgl.light
-#' @importFrom rgl rgl.viewpoint
+#' @importFrom rgl light3d
+#' @importFrom rgl view3d
 #' @importFrom rgl clear3d
 #' @importFrom rgl rotationMatrix
 #' @importFrom rgl axes3d
@@ -53,7 +53,7 @@ spatial3d <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axis = TR
   # This will finalise the item
   set.seed(seed)
   clear3d()
-  rgl.light()
+  light3d()
   vlist <- c(1,2,2)
 
   #vlist <- c(6,2,2)
@@ -85,7 +85,7 @@ spatial3d <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axis = TR
 
   clear3d()
   cube(zlist[1:cubes,1],zlist[1:cubes,2],zlist[1:cubes,3]) # this is the final image to be mirrored
-  rgl.viewpoint(fov = 0, userMatrix = rotationMatrix(angle=angle, x=x,y=y,z=z))
+  view3d(fov = 0, userMatrix = rotationMatrix(angle=angle, x=x,y=y,z=z))
   roMatrix <- rotationMatrix(angle=angle, x=x,y=y,z=z)
   if(axis == TRUE){
   axes3d( edges=c("x", "y", "z") )
@@ -98,7 +98,7 @@ spatial3d <- function(seed=1, angle=pi/1.3, x=0.3,y=3, z=0.8, cubes=8, axis = TR
 
 
 #' @export
-#' @importFrom rgl rgl.light
+#' @importFrom rgl light3d
 #' @importFrom rgl clear3d
 #' @importFrom rgl rotationMatrix
 #' @importFrom rgl axes3d
@@ -154,9 +154,9 @@ spatial3d_mirror <- function(obj, angle=pi/1.3, x=0.3,y=3, z=0.8,cubes=1,axis = 
   }
 
   clear3d()
-  rgl.light()
+  light3d()
   cube(result$figure[1:cubes,3],result$figure[1:cubes,2],result$figure[1:cubes,1]) #mirror
-  rgl.viewpoint(fov = 0, userMatrix = rotationMatrix(angle=angle, x=x,y=y,z=z))
+  view3d(fov = 0, userMatrix = rotationMatrix(angle=angle, x=x,y=y,z=z))
   mirrorResult<- cbind(result$figure[1:cubes,3],result$figure[1:cubes,2],result$figure[1:cubes,1])
 
   if(axis == TRUE){
